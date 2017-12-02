@@ -1,4 +1,4 @@
-package com.mattwiduch.bakeit;
+package com.mattwiduch.bakeit.ui;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -6,23 +6,39 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.model.Recipe;
 import com.mattwiduch.bakeit.rest.RecipeService;
 import com.mattwiduch.bakeit.rest.RetrofitClient;
+import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RecipeListActivity extends AppCompatActivity {
+  @BindView(R.id.recipes_recycler_view)
+  RecyclerView recipesRecyclerView;
 
   private static final String LOG_TAG = RecipeListActivity.class.getSimpleName();
+
   private RecipeService mRecipeService;
+  private RecipeAdapter mRecipeAdapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_recipe_list);
+    ButterKnife.bind(this);
+    mRecipeAdapter = new RecipeAdapter(new ArrayList<Recipe>(0));
+    recipesRecyclerView.setAdapter(mRecipeAdapter);
+    recipesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+    // Initialise recipe service
     mRecipeService = RetrofitClient.createService(RecipeService.class);
 
     if (isConnected()) {
@@ -30,6 +46,7 @@ public class RecipeListActivity extends AppCompatActivity {
         @Override
         public void onResponse(Call<Recipe> call, Response<Recipe> response) {
           if (response.isSuccessful()) {
+            //mRecipeAdapter.updateRecipes(response.body().getRecipes());
             Log.d(LOG_TAG, "Recipes loaded from web");
           } else {
             int statusCode = response.code();
