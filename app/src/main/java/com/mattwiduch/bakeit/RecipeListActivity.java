@@ -1,6 +1,10 @@
 package com.mattwiduch.bakeit;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import com.mattwiduch.bakeit.model.Recipe;
@@ -21,22 +25,40 @@ public class RecipeListActivity extends AppCompatActivity {
     setContentView(R.layout.activity_recipe_list);
     mRecipeService = RetrofitClient.createService(RecipeService.class);
 
-    mRecipeService.getRecipes().enqueue(new Callback<Recipe>() {
-      @Override
-      public void onResponse(Call<Recipe> call, Response<Recipe> response) {
-        if (response.isSuccessful()) {
-          Log.d(LOG_TAG, "Recipes loaded from web");
-        } else {
-          int statusCode = response.code();
-          // handle request errors depending on status code
-          Log.e(LOG_TAG, "Recipes not loaded: " + statusCode);
+    if (isConnected()) {
+      mRecipeService.getRecipes().enqueue(new Callback<Recipe>() {
+        @Override
+        public void onResponse(Call<Recipe> call, Response<Recipe> response) {
+          if (response.isSuccessful()) {
+            Log.d(LOG_TAG, "Recipes loaded from web");
+          } else {
+            int statusCode = response.code();
+            // handle request errors depending on status code
+            Log.e(LOG_TAG, "Recipes not loaded: " + statusCode);
+          }
         }
-      }
 
-      @Override
-      public void onFailure(Call<Recipe> call, Throwable t) {
-        Log.e(LOG_TAG, "Network exception occurred while communicating with the server :(");
-      }
-    });
+        @Override
+        public void onFailure(Call<Recipe> call, Throwable t) {
+          Log.e(LOG_TAG, "Network exception occurred while communicating with the server :(");
+        }
+      });
+    } else {
+      Snackbar.make(findViewById(R.id.layout_recipe_list), R.string.error_not_connected,
+          Snackbar.LENGTH_LONG).show();
+    }
+  }
+
+  /**
+   * Checks if device is connected to the internet.
+   *
+   * @return true if connected
+   */
+  private boolean isConnected() {
+    ConnectivityManager cm =
+        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+    return  activeNetwork != null && activeNetwork.isConnectedOrConnecting();
   }
 }
