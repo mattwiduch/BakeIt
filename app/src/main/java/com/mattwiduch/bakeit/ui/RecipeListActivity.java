@@ -16,6 +16,7 @@ import com.mattwiduch.bakeit.model.Recipe;
 import com.mattwiduch.bakeit.rest.RecipeService;
 import com.mattwiduch.bakeit.rest.RetrofitClient;
 import java.util.ArrayList;
+import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,11 +43,12 @@ public class RecipeListActivity extends AppCompatActivity {
     mRecipeService = RetrofitClient.createService(RecipeService.class);
 
     if (isConnected()) {
-      mRecipeService.getRecipes().enqueue(new Callback<Recipe>() {
+      mRecipeService.getRecipes().enqueue(new Callback<List<Recipe>>() {
         @Override
-        public void onResponse(Call<Recipe> call, Response<Recipe> response) {
+        public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+          Log.v(LOG_TAG, "Status code: " + response.code());
           if (response.isSuccessful()) {
-            //mRecipeAdapter.updateRecipes(response.body().getRecipes());
+            mRecipeAdapter.updateRecipes(response.body());
             Log.d(LOG_TAG, "Recipes loaded from web");
           } else {
             int statusCode = response.code();
@@ -56,8 +58,8 @@ public class RecipeListActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onFailure(Call<Recipe> call, Throwable t) {
-          Log.e(LOG_TAG, "Network exception occurred while communicating with the server :(");
+        public void onFailure(Call<List<Recipe>> call, Throwable t) {
+          Log.e(LOG_TAG, "Network exception occurred: " + t.getMessage());
         }
       });
     } else {
