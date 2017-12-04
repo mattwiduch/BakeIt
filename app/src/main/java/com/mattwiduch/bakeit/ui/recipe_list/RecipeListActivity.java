@@ -1,9 +1,12 @@
 package com.mattwiduch.bakeit.ui.recipe_list;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +15,7 @@ import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.data.database.entries.Recipe;
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeListActivity extends AppCompatActivity {
 
@@ -20,6 +24,7 @@ public class RecipeListActivity extends AppCompatActivity {
 
   private static final String LOG_TAG = RecipeListActivity.class.getSimpleName();
 
+  private RecipeListViewModel mViewModel;
   private RecipeAdapter mRecipeAdapter;
 
   @Override
@@ -30,6 +35,15 @@ public class RecipeListActivity extends AppCompatActivity {
     mRecipeAdapter = new RecipeAdapter(new ArrayList<Recipe>(0));
     recipesRecyclerView.setAdapter(mRecipeAdapter);
     recipesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    mViewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
+
+    mViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
+      @Override
+      public void onChanged(@Nullable List<Recipe> recipes) {
+        mRecipeAdapter.updateRecipes(recipes);
+      }
+    });
+
     //    if (isConnected()) {
     //    } else {
     //      Snackbar.make(findViewById(R.id.layout_recipe_list), R.string.error_not_connected,
