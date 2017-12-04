@@ -1,5 +1,8 @@
 package com.mattwiduch.bakeit.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.PrimaryKey;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,9 +10,15 @@ import com.google.gson.annotations.SerializedName;
  * Recipe step model class..
  */
 
+@Entity(tableName = "steps",
+        foreignKeys = @ForeignKey(
+          entity = Recipe.class,
+          parentColumns = "id",
+          childColumns = "recipe_id"))
 public class Step {
 
   @SerializedName("id")
+  @PrimaryKey
   @Expose
   private Integer id;
   @SerializedName("shortDescription")

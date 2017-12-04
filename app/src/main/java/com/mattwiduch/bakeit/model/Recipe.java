@@ -1,25 +1,32 @@
 package com.mattwiduch.bakeit.model;
 
-import java.util.List;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import java.util.List;
 
 /**
  * Recipe model class.
  */
 
+@Entity(tableName = "recipes")
 public class Recipe {
 
   @SerializedName("id")
+  @PrimaryKey
   @Expose
   private Integer id;
   @SerializedName("name")
   @Expose
   private String name;
   @SerializedName("ingredients")
+  @Ignore
   @Expose
   private List<Ingredient> ingredients = null;
   @SerializedName("steps")
+  @Ignore
   @Expose
   private List<Step> steps = null;
   @SerializedName("servings")
