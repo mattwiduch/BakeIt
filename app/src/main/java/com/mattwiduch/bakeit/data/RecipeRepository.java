@@ -2,6 +2,7 @@ package com.mattwiduch.bakeit.data;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.os.AsyncTask;
 import android.util.Log;
 import com.mattwiduch.bakeit.data.database.RecipeDao;
 import com.mattwiduch.bakeit.data.database.RecipeDatabase;
@@ -23,13 +24,14 @@ public class RecipeRepository {
   private RecipeDao mRecipeDao;
   private LiveData<List<Recipe>> mAllRecipes;
 
-  RecipeRepository(Application application) {
+  public RecipeRepository(Application application) {
     RecipeDatabase db = RecipeDatabase.getDatabase(application);
     mRecipeDao = db.recipeDao();
     mAllRecipes = mRecipeDao.getAllRecipes();
+    insertAllRecipes();
   }
 
-  LiveData<List<Recipe>> getAllRecipes() {
+  public LiveData<List<Recipe>> getAllRecipes() {
     return mAllRecipes;
   }
 
@@ -42,8 +44,9 @@ public class RecipeRepository {
       public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
         Log.v(LOG_TAG, "Status code: " + response.code());
         if (response.isSuccessful()) {
-          mRecipeDao.bulkInsert(response.body());
-
+          Recipe[] recipes = new Recipe[response.body().size()];
+          recipes = response.body().toArray(recipes);
+          new insertAllRecipesAsyncTask(mRecipeDao).execute(recipes);
           Log.d(LOG_TAG, "Recipes loaded from web");
         } else {
           int statusCode = response.code();
@@ -57,5 +60,21 @@ public class RecipeRepository {
         Log.e(LOG_TAG, "Network exception occurred: " + t.getMessage());
       }
     });
+    new insertAllRecipesAsyncTask(mRecipeDao).execute();
+  }
+
+  private static class insertAllRecipesAsyncTask extends AsyncTask<Recipe, Void, Void> {
+    private RecipeDao mAsyncTaskDao;
+
+    insertAllRecipesAsyncTask(RecipeDao dao) {
+      mAsyncTaskDao = dao;
+    }
+
+    @Override
+    protected Void doInBackground(final Recipe... recipes) {
+      mAsyncTaskDao.bulkInsert(recipes);
+      Log.d(LOG_TAG, "Recipes inserted to database");
+      return null;
+    }
   }
 }
