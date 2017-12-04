@@ -1,4 +1,4 @@
-package com.mattwiduch.bakeit.ui;
+package com.mattwiduch.bakeit.ui.recipe_list;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,8 +8,8 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
-import com.mattwiduch.bakeit.model.Recipe;
-import com.mattwiduch.bakeit.ui.RecipeAdapter.RecipeViewHolder;
+import com.mattwiduch.bakeit.data.database.Recipe;
+import com.mattwiduch.bakeit.ui.recipe_list.RecipeAdapter.RecipeViewHolder;
 import java.util.List;
 
 /**

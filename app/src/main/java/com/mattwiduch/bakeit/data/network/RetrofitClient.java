@@ -1,4 +1,4 @@
-package com.mattwiduch.bakeit.rest;
+package com.mattwiduch.bakeit.data.network;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

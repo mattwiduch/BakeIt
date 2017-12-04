@@ -1,4 +1,4 @@
-package com.mattwiduch.bakeit.model;
+package com.mattwiduch.bakeit.data.database;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;

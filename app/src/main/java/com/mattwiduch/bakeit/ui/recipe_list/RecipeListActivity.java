@@ -1,4 +1,4 @@
-package com.mattwiduch.bakeit.ui;
+package com.mattwiduch.bakeit.ui.recipe_list;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -12,9 +12,9 @@ import android.util.Log;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
-import com.mattwiduch.bakeit.model.Recipe;
-import com.mattwiduch.bakeit.rest.RecipeService;
-import com.mattwiduch.bakeit.rest.RetrofitClient;
+import com.mattwiduch.bakeit.data.database.Recipe;
+import com.mattwiduch.bakeit.data.network.RecipeService;
+import com.mattwiduch.bakeit.data.network.RetrofitClient;
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
