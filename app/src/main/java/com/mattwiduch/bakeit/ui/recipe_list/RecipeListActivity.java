@@ -12,7 +12,7 @@ import android.util.Log;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
-import com.mattwiduch.bakeit.data.database.Recipe;
+import com.mattwiduch.bakeit.data.database.entries.Recipe;
 import com.mattwiduch.bakeit.data.network.RecipeService;
 import com.mattwiduch.bakeit.data.network.RetrofitClient;
 import java.util.ArrayList;

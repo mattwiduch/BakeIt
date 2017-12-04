@@ -1,6 +1,6 @@
 package com.mattwiduch.bakeit.data.network;
 
-import com.mattwiduch.bakeit.data.database.Recipe;
+import com.mattwiduch.bakeit.data.database.entries.Recipe;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;

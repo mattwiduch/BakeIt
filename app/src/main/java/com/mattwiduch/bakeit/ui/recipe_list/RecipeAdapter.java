@@ -8,7 +8,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
-import com.mattwiduch.bakeit.data.database.Recipe;
+import com.mattwiduch.bakeit.data.database.entries.Recipe;
 import com.mattwiduch.bakeit.ui.recipe_list.RecipeAdapter.RecipeViewHolder;
 import java.util.List;
 

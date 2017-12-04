@@ -1,4 +1,4 @@
-package com.mattwiduch.bakeit.data.database;
+package com.mattwiduch.bakeit.data.database.entries;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
