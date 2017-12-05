@@ -2,6 +2,7 @@ package com.mattwiduch.bakeit.data.network;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import retrofit2.Retrofit;
 import retrofit2.Retrofit.Builder;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -22,7 +23,7 @@ public class RetrofitClient {
   private static Retrofit retrofit = builder.build();
 
   private static HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor()
-          .setLevel(HttpLoggingInterceptor.Level.BODY);
+          .setLevel(Level.BASIC);
 
   private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
