@@ -63,9 +63,13 @@ public class RecipeRepository {
     // Only perform initialization once per app lifetime. If initialization has already been
     // performed, we have nothing to do in this method.
     if (mInitialized) return;
-
     mInitialized = true;
-    startFetchWeatherService();
+
+    // This method call triggers Sunshine to create its task to synchronize weather data
+    // periodically.
+    mRecipeNetworkDataSource.scheduleRecurringFetchRecipesSync();
+
+    mExecutors.diskIO().execute(this::startFetchRecipesService);
   }
 
   /**
@@ -79,7 +83,7 @@ public class RecipeRepository {
   /**
    * Network related operation.
    */
-  private void startFetchWeatherService() {
+  private void startFetchRecipesService() {
     mRecipeNetworkDataSource.startFetchRecipesService();
   }
 }
