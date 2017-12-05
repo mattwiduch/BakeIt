@@ -1,8 +1,7 @@
 package com.mattwiduch.bakeit.ui.recipe_list;
 
-import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModel;
 import com.mattwiduch.bakeit.data.RecipeRepository;
 import com.mattwiduch.bakeit.data.database.entries.Recipe;
 import java.util.List;
@@ -11,14 +10,13 @@ import java.util.List;
  * {@link ViewModel} for {@link RecipeListActivity}
  */
 
-public class RecipeListViewModel extends AndroidViewModel {
-  private final RecipeRepository mRepository;
+public class RecipeListViewModel extends ViewModel {
+
+  // List of recipes shown to the user
   private final LiveData<List<Recipe>> mAllRecipes;
 
-  public RecipeListViewModel (Application application) {
-    super(application);
-    mRepository = new RecipeRepository(application);
-    mAllRecipes = mRepository.getAllRecipes();
+  public RecipeListViewModel (RecipeRepository repository) {
+    mAllRecipes = repository.getAllRecipes();
   }
 
   LiveData<List<Recipe>> getAllRecipes() {

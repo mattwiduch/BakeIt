@@ -14,9 +14,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.data.database.entries.Recipe;
+import com.mattwiduch.bakeit.utils.InjectorUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Displays a list of baking recipes.
+ */
 public class RecipeListActivity extends AppCompatActivity {
 
   @BindView(R.id.recipes_recycler_view)
@@ -32,11 +36,16 @@ public class RecipeListActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_recipe_list);
     ButterKnife.bind(this);
+
+    // Recipe list RecyclerView setup
+    recipesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    recipesRecyclerView.setHasFixedSize(true);
     mRecipeAdapter = new RecipeAdapter(new ArrayList<Recipe>(0));
     recipesRecyclerView.setAdapter(mRecipeAdapter);
-    recipesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-    mViewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
 
+    RecipeListModelFactory factory = InjectorUtils.provideRecipeListViewModelFactory(
+        this.getApplicationContext());
+    mViewModel = ViewModelProviders.of(this, factory).get(RecipeListViewModel.class);
     mViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
       @Override
       public void onChanged(@Nullable List<Recipe> recipes) {

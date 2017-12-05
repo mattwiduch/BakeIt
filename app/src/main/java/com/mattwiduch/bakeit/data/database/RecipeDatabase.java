@@ -27,7 +27,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
 
   // Create RecipeDatabase singleton to prevent having multiple instances of the database opened
   // at the same time
-  public static RecipeDatabase getDatabase(final Context context) {
+  public static RecipeDatabase getInstance(final Context context) {
     if (sInstance == null) {
       synchronized (LOCK) {
         sInstance = Room.databaseBuilder(context.getApplicationContext(), RecipeDatabase.class,
