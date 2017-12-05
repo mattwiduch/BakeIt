@@ -4,7 +4,9 @@ import android.arch.lifecycle.LiveData;
 import android.util.Log;
 import com.mattwiduch.bakeit.AppExecutors;
 import com.mattwiduch.bakeit.data.database.RecipeDao;
+import com.mattwiduch.bakeit.data.database.entries.Ingredient;
 import com.mattwiduch.bakeit.data.database.entries.Recipe;
+import com.mattwiduch.bakeit.data.database.entries.Step;
 import com.mattwiduch.bakeit.data.network.RecipeNetworkDataSource;
 import com.mattwiduch.bakeit.data.network.RecipeService;
 import java.util.List;
@@ -44,12 +46,26 @@ public class RecipeRepository {
     mExecutors = executors;
 
     // Observe the network Live Data
-    LiveData<Recipe[]> networkData = mRecipeNetworkDataSource.getAllRecipes();
-    networkData.observeForever(newRecipesFromNetwork -> {
+    LiveData<Recipe[]> recipeData = mRecipeNetworkDataSource.getAllRecipes();
+    recipeData.observeForever(newRecipesFromNetwork -> {
       mExecutors.diskIO().execute(() -> {
         // Insert downloaded data into the database
-        mRecipeDao.bulkInsert(newRecipesFromNetwork);
+        mRecipeDao.insertRecipes(newRecipesFromNetwork);
         Log.d(LOG_TAG, "New recipes inserted");
+      });
+    });
+    LiveData<List<Ingredient>> ingredientsData = mRecipeNetworkDataSource.getAllIngredients();
+    ingredientsData.observeForever(newIngredientsFromNetwork -> {
+      mExecutors.diskIO().execute(() -> {
+        mRecipeDao.insertIngredients(newIngredientsFromNetwork);
+        Log.d(LOG_TAG, "New ingredients inserted");
+      });
+    });
+    LiveData<List<Step>> stepsData = mRecipeNetworkDataSource.getAllSteps();
+    stepsData.observeForever(newStepsFromNetwork -> {
+      mExecutors.diskIO().execute(() -> {
+        mRecipeDao.insertSteps(newStepsFromNetwork);
+        Log.d(LOG_TAG, "New steps inserted");
       });
     });
   }
@@ -78,6 +94,14 @@ public class RecipeRepository {
   public LiveData<List<Recipe>> getAllRecipes() {
     initialiseData();
     return mRecipeDao.getAllRecipes();
+  }
+  public LiveData<List<Ingredient>> getIngredientsForRecipe(int recipeId) {
+    initialiseData();
+    return mRecipeDao.getIngredientsForRecipe(recipeId);
+  }
+  public LiveData<List<Step>> getStepsForRecipe(int recipeId) {
+    initialiseData();
+    return mRecipeDao.getStepsForRecipe(recipeId);
   }
 
   /**

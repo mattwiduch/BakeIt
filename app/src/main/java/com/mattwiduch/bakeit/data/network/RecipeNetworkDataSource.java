@@ -12,7 +12,10 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
 import com.mattwiduch.bakeit.AppExecutors;
+import com.mattwiduch.bakeit.data.database.entries.Ingredient;
 import com.mattwiduch.bakeit.data.database.entries.Recipe;
+import com.mattwiduch.bakeit.data.database.entries.Step;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import retrofit2.Call;
@@ -39,6 +42,8 @@ public class RecipeNetworkDataSource {
 
   // LiveData storing the latest downloaded recipes
   private final MutableLiveData<Recipe[]> mDownloadedRecipes;
+  private final MutableLiveData<List<Ingredient>> mDownloadedIngredients;
+  private final MutableLiveData<List<Step>> mDownloadedSteps;
 
   private final AppExecutors mExecutors;
 
@@ -59,7 +64,9 @@ public class RecipeNetworkDataSource {
   private RecipeNetworkDataSource(Context context, AppExecutors executors) {
     mContext = context;
     mExecutors = executors;
-    mDownloadedRecipes = new MutableLiveData<Recipe[]>();
+    mDownloadedRecipes = new MutableLiveData<>();
+    mDownloadedIngredients = new MutableLiveData<>();
+    mDownloadedSteps = new MutableLiveData<>();
   }
 
   /**
@@ -111,7 +118,28 @@ public class RecipeNetworkDataSource {
           if (response.isSuccessful()) {
             Recipe[] recipes = new Recipe[response.body().size()];
             recipes = response.body().toArray(recipes);
+
+            List<Ingredient> allIngredients = new ArrayList<>();
+            List<Step> allSteps = new ArrayList<>();
+            for (Recipe recipe : recipes) {
+              // Get all ingredients for recipe
+              List<Ingredient> ingredients = recipe.getIngredients();
+              for (Ingredient ingredient : ingredients) {
+                ingredient.setRecipeId(recipe.getId());
+              }
+              allIngredients.addAll(ingredients);
+
+              // Get all steps for recipe
+              List<Step> steps = recipe.getSteps();
+              for (Step step : steps) {
+                step.setRecipeId(recipe.getId());
+              }
+              allSteps.addAll(steps);
+            }
+
             mDownloadedRecipes.postValue(recipes);
+            mDownloadedIngredients.postValue(allIngredients);
+            mDownloadedSteps.postValue(allSteps);
             Log.d(LOG_TAG, "Recipes loaded from web");
           } else {
             int statusCode = response.code();
@@ -137,4 +165,21 @@ public class RecipeNetworkDataSource {
     return mDownloadedRecipes;
   }
 
+  /**
+   * Returns LiveData object containing the most recently downloaded data from the network.
+   *
+   * @return List of ingredients
+   */
+  public LiveData<List<Ingredient>> getAllIngredients() {
+    return mDownloadedIngredients;
+  }
+
+  /**
+   * Returns LiveData object containing the most recently downloaded data from the network.
+   *
+   * @return List of steps
+   */
+  public LiveData<List<Step>> getAllSteps() {
+    return mDownloadedSteps;
+  }
 }
