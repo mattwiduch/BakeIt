@@ -43,15 +43,43 @@ public class RecipeRepository {
     mRecipeNetworkDataSource = recipeNetworkDataSource;
     mExecutors = executors;
 
-    // TODO: observe the network Live Data
-
+    // Observe the network Live Data
+    LiveData<Recipe[]> networkData = mRecipeNetworkDataSource.getAllRecipes();
+    networkData.observeForever(newRecipesFromNetwork -> {
+      mExecutors.diskIO().execute(() -> {
+        // Insert downloaded data into the database
+        mRecipeDao.bulkInsert(newRecipesFromNetwork);
+        Log.d(LOG_TAG, "New recipes inserted");
+      });
+    });
   }
 
   /**
-   * Database related operations
+   * Creates periodic sync tasks and checks to see if an immediate sync is required. If an
+   * immediate sync is required, this method will take care of making sure that sync occurs.
+   */
+  private synchronized void initialiseData() {
+
+    // Only perform initialization once per app lifetime. If initialization has already been
+    // performed, we have nothing to do in this method.
+    if (mInitialized) return;
+
+    mInitialized = true;
+    startFetchWeatherService();
+  }
+
+  /**
+   * Database related operations.
    **/
   public LiveData<List<Recipe>> getAllRecipes() {
-    // TODO: initialise data
+    initialiseData();
     return mRecipeDao.getAllRecipes();
+  }
+
+  /**
+   * Network related operation.
+   */
+  private void startFetchWeatherService() {
+    mRecipeNetworkDataSource.startFetchRecipesService();
   }
 }

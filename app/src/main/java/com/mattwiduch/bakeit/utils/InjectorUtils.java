@@ -47,4 +47,8 @@ public class InjectorUtils {
     return RecipeRepository.getInstance(database.recipeDao(), networkDataSource, executors);
   }
 
+  public static RecipeNetworkDataSource provideNetworkDataSource(Context context) {
+    AppExecutors executors = AppExecutors.getInstance();
+    return RecipeNetworkDataSource.getInstance(context.getApplicationContext(), executors);
+  }
 }
