@@ -3,6 +3,7 @@ package com.mattwiduch.bakeit.ui.recipe_list;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -10,6 +11,7 @@ import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.data.database.entries.Recipe;
 import com.mattwiduch.bakeit.ui.recipe_list.RecipeAdapter.RecipeViewHolder;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,17 +20,20 @@ import java.util.List;
  * The adapter provides access to the items in the {@link RecipeViewHolder}.
  */
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
+  // Interface to handle clicks on items within this Adapter
+  private final RecipeAdapterOnItemClickHandler mClickHandler;
   // List of recipes to display in Recycler View
   private List<Recipe> mRecipeList;
 
   /**
    * Default constructor for {@link RecipeViewHolder} adapter.
    *
-   * @param myDataset List of recycler view items
+   * @param clickHandler The on-click handler for this adapter
    */
-  RecipeAdapter(List<Recipe> myDataset) {
+  RecipeAdapter(RecipeAdapterOnItemClickHandler clickHandler) {
     setHasStableIds(true);
-    mRecipeList = myDataset;
+    mClickHandler = clickHandler;
+    mRecipeList = new ArrayList<>();
   }
 
   /**
@@ -59,22 +64,41 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
     return mRecipeList.size();
   }
 
+
+  void updateRecipes(List<Recipe> recipes) {
+    mRecipeList = recipes;
+    notifyDataSetChanged();
+  }
+
   /**
-   * The {@link RecipeViewHolder} class.
-   * Provides a reference to each view in the recipe item view.
+   * The interface that receives onItemClick messages.
    */
-  class RecipeViewHolder extends RecyclerView.ViewHolder {
+  public interface RecipeAdapterOnItemClickHandler {
+    void onItemClick(int recipeId);
+  }
+
+  /**
+   * The {@link RecipeViewHolder} class. Provides a reference to each view in the recipe item view.
+   */
+  class RecipeViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
     @BindView(R.id.list_item_recipe_name)
     TextView recipeName;
 
     RecipeViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
+      itemView.setOnClickListener(this);
     }
-  }
 
-  void updateRecipes(List<Recipe> recipes) {
-    mRecipeList = recipes;
-    notifyDataSetChanged();
+    /**
+     * This gets called by the child views during a click. It passes recipe id to onItemClickHandler
+     * registered with this adapter.
+     * @param v the View that was clicked
+     */
+    @Override
+    public void onClick(View v) {
+      int recipeId = mRecipeList.get(getAdapterPosition()).getId();
+      mClickHandler.onItemClick(recipeId);
+    }
   }
 }

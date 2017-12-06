@@ -7,17 +7,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
-import com.mattwiduch.bakeit.data.database.entries.Recipe;
+import com.mattwiduch.bakeit.ui.recipe_list.RecipeAdapter.RecipeAdapterOnItemClickHandler;
 import com.mattwiduch.bakeit.utils.InjectorUtils;
-import java.util.ArrayList;
 
 /**
  * Displays a list of baking recipes.
  */
-public class RecipeListActivity extends AppCompatActivity {
+public class RecipeListActivity extends AppCompatActivity implements
+    RecipeAdapterOnItemClickHandler {
 
   @BindView(R.id.recipes_recycler_view)
   RecyclerView recipesRecyclerView;
@@ -39,7 +40,7 @@ public class RecipeListActivity extends AppCompatActivity {
     // Recipe list RecyclerView setup
     recipesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     recipesRecyclerView.setHasFixedSize(true);
-    mRecipeAdapter = new RecipeAdapter(new ArrayList<Recipe>(0));
+    mRecipeAdapter = new RecipeAdapter(this);
     recipesRecyclerView.setAdapter(mRecipeAdapter);
 
     RecipeListModelFactory factory = InjectorUtils.provideRecipeListViewModelFactory(
@@ -58,6 +59,17 @@ public class RecipeListActivity extends AppCompatActivity {
         showLoading();
       }
     });
+  }
+
+  /**
+   * Responds to item clicks on recipes in the list.
+   *
+   * @param recipeId Id of recipe that has been clicked
+   */
+  @Override
+  public void onItemClick(int recipeId) {
+    // TODO: Launch RecipeDetailActivity
+    Toast.makeText(this, "RecipeId = " + recipeId, Toast.LENGTH_LONG).show();
   }
 
   /**
