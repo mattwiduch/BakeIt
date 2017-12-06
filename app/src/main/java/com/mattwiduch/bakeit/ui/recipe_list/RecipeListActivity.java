@@ -1,16 +1,17 @@
 package com.mattwiduch.bakeit.ui.recipe_list;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
+import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
 import com.mattwiduch.bakeit.ui.recipe_list.RecipeAdapter.RecipeAdapterOnItemClickHandler;
 import com.mattwiduch.bakeit.utils.InjectorUtils;
 
@@ -68,8 +69,10 @@ public class RecipeListActivity extends AppCompatActivity implements
    */
   @Override
   public void onItemClick(int recipeId) {
-    // TODO: Launch RecipeDetailActivity
-    Toast.makeText(this, "RecipeId = " + recipeId, Toast.LENGTH_LONG).show();
+    Intent recipeDetailIntent = new Intent(RecipeListActivity.this,
+        RecipeDetailActivity.class);
+    recipeDetailIntent.putExtra(RecipeDetailActivity.RECIPE_ID_EXTRA, recipeId);
+    startActivity(recipeDetailIntent);
   }
 
   /**
