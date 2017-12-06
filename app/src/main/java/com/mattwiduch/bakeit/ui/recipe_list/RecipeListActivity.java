@@ -1,22 +1,18 @@
 package com.mattwiduch.bakeit.ui.recipe_list;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.data.database.entries.Recipe;
 import com.mattwiduch.bakeit.utils.InjectorUtils;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Displays a list of baking recipes.
@@ -25,11 +21,14 @@ public class RecipeListActivity extends AppCompatActivity {
 
   @BindView(R.id.recipes_recycler_view)
   RecyclerView recipesRecyclerView;
+  @BindView(R.id.recipes_loading_indicator)
+  ProgressBar recipesLoadingIndicator;
 
   private static final String LOG_TAG = RecipeListActivity.class.getSimpleName();
 
   private RecipeListViewModel mViewModel;
   private RecipeAdapter mRecipeAdapter;
+  private int mPosition = RecyclerView.NO_POSITION;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -46,30 +45,34 @@ public class RecipeListActivity extends AppCompatActivity {
     RecipeListModelFactory factory = InjectorUtils.provideRecipeListViewModelFactory(
         this.getApplicationContext());
     mViewModel = ViewModelProviders.of(this, factory).get(RecipeListViewModel.class);
-    mViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
-      @Override
-      public void onChanged(@Nullable List<Recipe> recipes) {
-        mRecipeAdapter.updateRecipes(recipes);
+
+    mViewModel.getAllRecipes().observe(this, recipes -> {
+      mRecipeAdapter.updateRecipes(recipes);
+
+      if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+      recipesRecyclerView.smoothScrollToPosition(mPosition);
+
+      if (recipes != null && !recipes.isEmpty()) {
+        showRecipes();
+      } else {
+        showLoading();
       }
     });
-
-    //    if (isConnected()) {
-    //    } else {
-    //      Snackbar.make(findViewById(R.id.layout_recipe_list), R.string.error_not_connected,
-    //          Snackbar.LENGTH_LONG).show();
-    //    }
   }
 
   /**
-   * Checks if device is connected to the internet.
-   *
-   * @return true if connected
+   * Hides loading indicator and makes recipe list visible.
    */
-  private boolean isConnected() {
-    ConnectivityManager cm =
-        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+  private void showRecipes() {
+    recipesLoadingIndicator.setVisibility(View.INVISIBLE);
+    recipesRecyclerView.setVisibility(View.VISIBLE);
+  }
 
-    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-    return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+  /**
+   * Hides recipes list and shows loading indicator.
+   */
+  private void showLoading() {
+    recipesRecyclerView.setVisibility(View.INVISIBLE);
+    recipesLoadingIndicator.setVisibility(View.VISIBLE);
   }
 }
