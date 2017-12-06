@@ -13,18 +13,19 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
 
-    <!--The manifest entry for our MainActivity. Each Activity requires a manifest entry-->
+    <!-- The manifest entry for our MainActivity. Each Activity requires a manifest entry -->
     <activity
       android:label="@string/app_name"
       android:launchMode="singleTop"
       android:name=".ui.recipe_list.RecipeListActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
+
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
 
-    <!--This is required for immediate syncs -->
+    <!-- This is required for immediate syncs -->
     <service
       android:exported="false"
       android:name=".data.network.RecipeSyncIntentService" />
@@ -38,5 +39,24 @@
       </intent-filter>
     </service>
 
+    <activity
+      android:label="@string/title_step_list"
+      android:name=".ui.recipe_detail.RecipeDetailActivity"
+      android:parentActivityName=".ui.recipe_list.RecipeListActivity"
+      android:theme="@style/AppTheme.NoActionBar">
+      <meta-data
+        android:name="android.support.PARENT_ACTIVITY"
+        android:value="com.mattwiduch.bakeit.ui.recipe_list.RecipeListActivity" />
+    </activity>
+    <activity
+      android:label="@string/title_step_detail"
+      android:name=".ui.step_detail.StepDetailActivity"
+      android:parentActivityName=".ui.recipe_detail.RecipeDetailActivity"
+      android:theme="@style/AppTheme.NoActionBar">
+      <meta-data
+        android:name="android.support.PARENT_ACTIVITY"
+        android:value="com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity" />
+    </activity>
   </application>
+
 </manifest>
