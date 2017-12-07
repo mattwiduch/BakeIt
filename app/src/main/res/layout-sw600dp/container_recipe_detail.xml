@@ -18,9 +18,9 @@
     -->
 
   <android.support.v4.widget.NestedScrollView
-    android:id="@+id/frameLayout"
-    android:layout_width="match_parent"
+    android:layout_width="0dp"
     android:layout_height="match_parent"
+    android:layout_weight="1"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <include layout="@layout/content_recipe_detail" />
@@ -31,6 +31,6 @@
     android:id="@+id/step_detail_container"
     android:layout_width="0dp"
     android:layout_height="match_parent"
-    android:layout_weight="3" />
+    android:layout_weight="2" />
 
 </LinearLayout>

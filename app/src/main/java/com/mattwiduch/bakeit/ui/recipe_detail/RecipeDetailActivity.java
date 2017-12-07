@@ -55,7 +55,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     ButterKnife.bind(this);
 
     // The detail container view will be present only in the large-screen layouts
-    // (res/values-w900dp). If this view is present, then the activity should be in two-pane mode.
+    // (res/values-w600dp). If this view is present, then the activity should be in two-pane mode.
     if (findViewById(R.id.step_detail_container) != null) {
       mTwoPane = true;
     }
