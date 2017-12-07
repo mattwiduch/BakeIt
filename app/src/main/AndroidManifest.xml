@@ -41,6 +41,7 @@
 
     <activity
       android:label="@string/title_step_list"
+      android:launchMode="singleTop"
       android:name=".ui.recipe_detail.RecipeDetailActivity"
       android:parentActivityName=".ui.recipe_list.RecipeListActivity"
       android:theme="@style/AppTheme.NoActionBar">
