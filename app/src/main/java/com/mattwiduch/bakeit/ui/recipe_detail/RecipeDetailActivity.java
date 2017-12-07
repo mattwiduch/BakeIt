@@ -3,6 +3,7 @@ package com.mattwiduch.bakeit.ui.recipe_detail;
 import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -12,7 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import com.mattwiduch.bakeit.R;
+import com.mattwiduch.bakeit.ui.recipe_detail.RecipeStepAdapter.RecipeStepAdapterOnItemClickHandler;
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailActivity;
+import com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment;
 import com.mattwiduch.bakeit.utils.InjectorUtils;
 
 /**
@@ -23,7 +26,8 @@ import com.mattwiduch.bakeit.utils.InjectorUtils;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class RecipeDetailActivity extends AppCompatActivity {
+public class RecipeDetailActivity extends AppCompatActivity implements
+    RecipeStepAdapterOnItemClickHandler {
 
   public static final String RECIPE_ID_EXTRA = "RECIPE_ID_EXTRA";
 
@@ -32,7 +36,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
    * device.
    */
   private boolean mTwoPane;
-
   private RecipeDetailViewModel mViewModel;
   private RecipeStepAdapter mStepsAdapter;
 
@@ -102,7 +105,24 @@ public class RecipeDetailActivity extends AppCompatActivity {
   }
 
   private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-    mStepsAdapter = new RecipeStepAdapter(this, mTwoPane);
+    mStepsAdapter = new RecipeStepAdapter(this);
     recyclerView.setAdapter(mStepsAdapter);
+  }
+
+  @Override
+  public void onItemClick(int stepId) {
+    if (mTwoPane) {
+      Bundle arguments = new Bundle();
+      arguments.putInt(StepDetailFragment.RECIPE_STEP_ID, stepId);
+      StepDetailFragment fragment = new StepDetailFragment();
+      fragment.setArguments(arguments);
+      getSupportFragmentManager().beginTransaction()
+          .replace(R.id.step_detail_container, fragment)
+          .commit();
+    } else {
+      Intent intent = new Intent(this, StepDetailActivity.class);
+      intent.putExtra(StepDetailFragment.RECIPE_STEP_ID, stepId);
+      startActivity(intent);
+    }
   }
 }

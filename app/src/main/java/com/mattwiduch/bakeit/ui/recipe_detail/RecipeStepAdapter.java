@@ -1,20 +1,19 @@
 package com.mattwiduch.bakeit.ui.recipe_detail;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.data.database.entries.Step;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeStepAdapter.RecipeStepViewHolder;
-import com.mattwiduch.bakeit.ui.step_detail.StepDetailActivity;
-import com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * The {@link RecipeStepAdapter} class.
@@ -23,37 +22,25 @@ import java.util.List;
  */
 public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder> {
 
-  private final RecipeDetailActivity mParentActivity;
+  // Interface to handle clicks on items within this Adapter
+  private final RecipeStepAdapterOnItemClickHandler mClickHandler;
+  // List of recipe steps to display in Recycler View
   private List<Step> mStepList;
-  private final boolean mTwoPane;
-  private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
 
-      if (mTwoPane) {
-        Bundle arguments = new Bundle();
-        arguments.putString(StepDetailFragment.ARG_ITEM_ID, (String) view.getTag());
-        StepDetailFragment fragment = new StepDetailFragment();
-        fragment.setArguments(arguments);
-        mParentActivity.getSupportFragmentManager().beginTransaction()
-            .replace(R.id.step_detail_container, fragment)
-            .commit();
-      } else {
-        Context context = view.getContext();
-        Intent intent = new Intent(context, StepDetailActivity.class);
-        intent.putExtra(StepDetailFragment.ARG_ITEM_ID, (String) view.getTag());
-
-        context.startActivity(intent);
-      }
-    }
-  };
-
-  RecipeStepAdapter(RecipeDetailActivity parent, boolean twoPane) {
+  /**
+   * Default constructor for {@link RecipeStepViewHolder} adapter.
+   *
+   * @param clickHandler The on-click handler for this adapter
+   */
+  RecipeStepAdapter(RecipeStepAdapterOnItemClickHandler clickHandler) {
+    setHasStableIds(true);
+    mClickHandler = clickHandler;
     mStepList = new ArrayList<>();
-    mParentActivity = parent;
-    mTwoPane = twoPane;
   }
 
+  /**
+   * Creates a new view for a recipe step item view. This method is invoked by the layout manager.
+   */
   @Override
   public RecipeStepViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View view = LayoutInflater.from(parent.getContext())
@@ -61,35 +48,68 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
     return new RecipeStepViewHolder(view);
   }
 
+  /**
+   *  Replaces the content in the views that make up the recipe item view. This method is invoked
+   *  by the layout manager.
+   */
   @Override
   public void onBindViewHolder(final RecipeStepViewHolder holder, int position) {
     Step step = mStepList.get(position);
-
-    holder.mIdView.setText(step.getShortDescription());
-
-    holder.itemView.setTag(step.getDbId());
-    holder.itemView.setOnClickListener(mOnClickListener);
+    holder.stepNumberTv.setText(String.format(Locale.getDefault(),"%d",
+        step.getStepNumber() + 1));
+    holder.stepDescriptionTv.setText(step.getShortDescription());
   }
 
+  /**
+   *  Returns the size of the dataset.
+   */
   @Override
   public int getItemCount() {
     return mStepList.size();
   }
 
-  class RecipeStepViewHolder extends RecyclerView.ViewHolder {
-
-    final TextView mIdView;
-    final TextView mContentView;
-
-    RecipeStepViewHolder(View view) {
-      super(view);
-      mIdView = (TextView) view.findViewById(R.id.id_text);
-      mContentView = (TextView) view.findViewById(R.id.content);
-    }
-  }
-
+  /**
+   * Update list of recipe steps to display.
+   * @param steps List of steps
+   */
   void updateSteps(List<Step> steps) {
     mStepList = steps;
     notifyDataSetChanged();
+  }
+
+  /**
+   * The interface that receives onItemClick messages.
+   */
+  public interface RecipeStepAdapterOnItemClickHandler {
+    void onItemClick(int stepId);
+  }
+
+  /**
+   * The {@link RecipeStepViewHolder} class. Provides a reference to each view in the recipe item
+   * view.
+   */
+  class RecipeStepViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
+
+    @BindView(R.id.id_text)
+    TextView stepNumberTv;
+    @BindView(R.id.content)
+    TextView stepDescriptionTv;
+
+    RecipeStepViewHolder(View view) {
+      super(view);
+      ButterKnife.bind(this, itemView);
+      itemView.setOnClickListener(this);
+    }
+
+    /**
+     * This gets called by the child views during a click. It passes recipe id to onItemClickHandler
+     * registered with this adapter.
+     * @param v the View that was clicked
+     */
+    @Override
+    public void onClick(View v) {
+      int stepId = mStepList.get(getAdapterPosition()).getDbId();
+      mClickHandler.onItemClick(stepId);
+    }
   }
 }
