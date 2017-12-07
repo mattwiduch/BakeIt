@@ -1,13 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/steps_recycler_view"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:layout_marginLeft="16dp"
-  android:layout_marginRight="16dp"
-  android:name="com.mattwiduch.bakeit.ui.recipe_details.StepListFragment"
-  app:layoutManager="LinearLayoutManager"
-  tools:context="com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity"
-  tools:listitem="@layout/list_item_step" />
+  android:layout_height="match_parent">
+
+  <android.support.v7.widget.AppCompatButton
+    android:id="@+id/ingredients_btn"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/content_spacing"
+    android:layout_marginEnd="@dimen/content_spacing"
+    android:layout_gravity="bottom|end"
+    android:paddingStart="@dimen/content_spacing"
+    android:paddingEnd="@dimen/content_spacing"
+    android:paddingLeft="@dimen/content_spacing"
+    android:paddingRight="@dimen/content_spacing"
+    android:drawableEnd="@drawable/ic_arrow_drop_down_black_36dp"
+    android:gravity="start|center_vertical"
+    android:onClick="toggleIngredients"
+    android:text="@string/ingredients_label"
+    android:textAllCaps="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <net.cachapa.expandablelayout.ExpandableLayout
+    android:id="@+id/ingredients_container"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    app:el_duration="1000"
+    app:el_expanded="false"
+    app:el_parallax="0.5"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/ingredients_btn">
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/ingredients_recycler_view"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:name="com.mattwiduch.bakeit.ui.recipe_details.StepListFragment"
+      tools:context="com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity"
+      tools:listitem="@layout/list_item_ingredient" />
+
+  </net.cachapa.expandablelayout.ExpandableLayout>
+
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/steps_recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:name="com.mattwiduch.bakeit.ui.recipe_details.StepListFragment"
+    android:nestedScrollingEnabled="false"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/ingredients_container"
+    tools:context="com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity"
+    tools:listitem="@layout/list_item_step" />
+
+</android.support.constraint.ConstraintLayout>

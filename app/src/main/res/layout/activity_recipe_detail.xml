@@ -7,13 +7,13 @@
   android:fitsSystemWindows="true"
   tools:context="com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity">
 
-  <FrameLayout
-    android:id="@+id/frameLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+  <!--<FrameLayout-->
+    <!--android:id="@+id/frameLayout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
 
-    <include layout="@layout/content_recipe_detail" />
-  </FrameLayout>
+    <include layout="@layout/container_recipe_detail" />
+  <!--</FrameLayout>-->
 
 </android.support.design.widget.CoordinatorLayout>

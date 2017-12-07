@@ -17,17 +17,15 @@
     
     -->
 
-  <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/steps_recycler_view"
-    android:layout_width="@dimen/item_width"
+  <android.support.v4.widget.NestedScrollView
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:name="com.mattwiduch.bakeit.ui.recipe_details.StepListFragment"
-    app:layoutManager="LinearLayoutManager"
-    tools:context="com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity"
-    tools:listitem="@layout/list_item_step" />
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <include layout="@layout/content_recipe_detail" />
+
+  </android.support.v4.widget.NestedScrollView>
 
   <FrameLayout
     android:id="@+id/step_detail_container"
