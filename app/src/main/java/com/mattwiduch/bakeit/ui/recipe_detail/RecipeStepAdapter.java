@@ -10,19 +10,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.data.database.entries.Step;
+import com.mattwiduch.bakeit.ui.recipe_detail.RecipeStepAdapter.RecipeStepViewHolder;
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailActivity;
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by mateusz on 06/12/17.
+ * The {@link RecipeStepAdapter} class.
+ *
+ * The adapter provides access to the items in the {@link RecipeStepViewHolder}.
  */
-
-public class RecipeDetailAdapter extends RecyclerView.Adapter<RecipeDetailAdapter.ViewHolder> {
+public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder> {
 
   private final RecipeDetailActivity mParentActivity;
-  private final List<Step> mValues;
+  private List<Step> mStepList;
   private final boolean mTwoPane;
   private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
     @Override
@@ -46,42 +48,48 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecipeDetailAdapte
     }
   };
 
-  RecipeDetailAdapter(RecipeDetailActivity parent, boolean twoPane) {
-    mValues = new ArrayList<>();
+  RecipeStepAdapter(RecipeDetailActivity parent, boolean twoPane) {
+    mStepList = new ArrayList<>();
     mParentActivity = parent;
     mTwoPane = twoPane;
   }
 
   @Override
-  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  public RecipeStepViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View view = LayoutInflater.from(parent.getContext())
         .inflate(R.layout.list_item_step, parent, false);
-    return new ViewHolder(view);
+    return new RecipeStepViewHolder(view);
   }
 
   @Override
-  public void onBindViewHolder(final ViewHolder holder, int position) {
-    holder.mIdView.setText(mValues.get(position).getStepNumber());
-    holder.mContentView.setText(mValues.get(position).getShortDescription());
+  public void onBindViewHolder(final RecipeStepViewHolder holder, int position) {
+    Step step = mStepList.get(position);
 
-    holder.itemView.setTag(mValues.get(position).getDbId());
+    holder.mIdView.setText(step.getShortDescription());
+
+    holder.itemView.setTag(step.getDbId());
     holder.itemView.setOnClickListener(mOnClickListener);
   }
 
   @Override
   public int getItemCount() {
-    return mValues.size();
+    return mStepList.size();
   }
 
-  class ViewHolder extends RecyclerView.ViewHolder {
+  class RecipeStepViewHolder extends RecyclerView.ViewHolder {
 
     final TextView mIdView;
     final TextView mContentView;
 
-    ViewHolder(View view) {
+    RecipeStepViewHolder(View view) {
       super(view);
       mIdView = (TextView) view.findViewById(R.id.id_text);
       mContentView = (TextView) view.findViewById(R.id.content);
     }
+  }
+
+  void updateSteps(List<Step> steps) {
+    mStepList = steps;
+    notifyDataSetChanged();
   }
 }

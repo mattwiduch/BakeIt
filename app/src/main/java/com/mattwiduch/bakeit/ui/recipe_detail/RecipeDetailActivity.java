@@ -2,6 +2,7 @@ package com.mattwiduch.bakeit.ui.recipe_detail;
 
 import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailActivity;
+import com.mattwiduch.bakeit.utils.InjectorUtils;
 
 /**
  * An activity representing a list of Steps. This activity
@@ -30,6 +32,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
    * device.
    */
   private boolean mTwoPane;
+
+  private RecipeDetailViewModel mViewModel;
+  private RecipeStepAdapter mStepsAdapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,26 @@ public class RecipeDetailActivity extends AppCompatActivity {
       mTwoPane = true;
     }
 
+    // Retrieve recipe id from intent extras
+    int recipeId = getIntent().getIntExtra(RECIPE_ID_EXTRA, -1);
+
+    // Get the ViewModel from the factory
+    RecipeDetailModelFactory factory = InjectorUtils.provideRecipeDetailViewModelFactory(
+        this.getApplicationContext(), recipeId);
+    mViewModel = ViewModelProviders.of(this, factory).get(RecipeDetailViewModel.class);
+
+    // Observe changes in recipe data
+    mViewModel.getRecipeIngredients().observe(this, ingredients -> {
+      if (ingredients != null) {
+        // TODO: Update UI
+      }
+    });
+    mViewModel.getRecipeSteps().observe(this, steps -> {
+      if (steps != null) {
+        mStepsAdapter.updateSteps(steps);
+      }
+    });
+
     View recyclerView = findViewById(R.id.step_list);
     assert recyclerView != null;
     setupRecyclerView((RecyclerView) recyclerView);
@@ -77,6 +102,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
   }
 
   private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-    recyclerView.setAdapter(new RecipeDetailAdapter(this, mTwoPane));
+    mStepsAdapter = new RecipeStepAdapter(this, mTwoPane);
+    recyclerView.setAdapter(mStepsAdapter);
   }
 }

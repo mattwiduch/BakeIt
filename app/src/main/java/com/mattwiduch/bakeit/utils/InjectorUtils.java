@@ -22,6 +22,7 @@ import com.mattwiduch.bakeit.data.RecipeRepository;
 import com.mattwiduch.bakeit.data.database.RecipeDatabase;
 
 import com.mattwiduch.bakeit.data.network.RecipeNetworkDataSource;
+import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailModelFactory;
 import com.mattwiduch.bakeit.ui.recipe_list.RecipeListModelFactory;
 
 /**
@@ -50,5 +51,11 @@ public class InjectorUtils {
   public static RecipeNetworkDataSource provideNetworkDataSource(Context context) {
     AppExecutors executors = AppExecutors.getInstance();
     return RecipeNetworkDataSource.getInstance(context.getApplicationContext(), executors);
+  }
+
+  public static RecipeDetailModelFactory provideRecipeDetailViewModelFactory(Context context,
+      int recipeId) {
+    RecipeRepository repository = provideRepository(context.getApplicationContext());
+    return new RecipeDetailModelFactory(repository, recipeId);
   }
 }
