@@ -81,7 +81,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
    * The {@link RecipeViewHolder} class. Provides a reference to each view in the recipe item view.
    */
   class RecipeViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
-    @BindView(R.id.list_item_recipe_name)
+    @BindView(R.id.recipe_name)
     TextView recipeName;
 
     RecipeViewHolder(View itemView) {

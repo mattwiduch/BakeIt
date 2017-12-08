@@ -4,4 +4,10 @@
   <string name="title_step_list">Steps</string>
   <string name="title_step_detail">Step Detail</string>
   <string name="ingredients_label">Ingredients</string>
+
+  <!-- Accessibility -->
+  <string name="a11y_recipe_image">Recipe Image</string>
+
+  <!-- Recipe List Item-->
+  <string name="recipe_servings">%d Servings</string>
 </resources>
