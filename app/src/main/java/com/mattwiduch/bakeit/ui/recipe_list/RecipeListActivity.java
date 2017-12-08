@@ -41,7 +41,7 @@ public class RecipeListActivity extends AppCompatActivity implements
     // Recipe list RecyclerView setup
     recipesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     recipesRecyclerView.setHasFixedSize(true);
-    mRecipeAdapter = new RecipeAdapter(this);
+    mRecipeAdapter = new RecipeAdapter(this, this);
     recipesRecyclerView.setAdapter(mRecipeAdapter);
 
     RecipeListModelFactory factory = InjectorUtils.provideRecipeListViewModelFactory(

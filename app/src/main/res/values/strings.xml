@@ -9,5 +9,5 @@
   <string name="a11y_recipe_image">Recipe Image</string>
 
   <!-- Recipe List Item-->
-  <string name="recipe_servings">%d Servings</string>
+  <string name="recipe_servings">%1$d Servings</string>
 </resources>

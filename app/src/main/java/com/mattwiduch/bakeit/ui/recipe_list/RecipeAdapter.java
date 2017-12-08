@@ -1,5 +1,6 @@
 package com.mattwiduch.bakeit.ui.recipe_list;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,14 +25,17 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
   private final RecipeAdapterOnItemClickHandler mClickHandler;
   // List of recipes to display in Recycler View
   private List<Recipe> mRecipeList;
+  // Context used to get app resources
+  private Context mContext;
 
   /**
    * Default constructor for {@link RecipeViewHolder} adapter.
    *
    * @param clickHandler The on-click handler for this adapter
    */
-  RecipeAdapter(RecipeAdapterOnItemClickHandler clickHandler) {
+  RecipeAdapter(Context context, RecipeAdapterOnItemClickHandler clickHandler) {
     setHasStableIds(true);
+    mContext = context;
     mClickHandler = clickHandler;
     mRecipeList = new ArrayList<>();
   }
@@ -54,6 +58,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
   public void onBindViewHolder(RecipeViewHolder holder, int position) {
     Recipe recipe = mRecipeList.get(position);
     holder.recipeName.setText(recipe.getName());
+    holder.recipeServings.setText(
+        mContext.getString(R.string.recipe_servings, recipe.getServings()));
   }
 
   /**
@@ -83,6 +89,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
   class RecipeViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
     @BindView(R.id.recipe_name)
     TextView recipeName;
+    @BindView(R.id.recipe_servings)
+    TextView recipeServings;
 
     RecipeViewHolder(View itemView) {
       super(itemView);
