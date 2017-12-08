@@ -7,6 +7,9 @@
   <dimen name="item_width">200dp</dimen>
   <dimen name="text_margin">16dp</dimen>
 
+  <!-- Recipe List -->
+  <integer name="recipe_list_columns">1</integer>
+
   <!-- Recipe List Item -->
   <dimen name="recipe_card_height">64dp</dimen>
   <dimen name="recipe_image_size">32dp</dimen>

@@ -4,7 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -39,7 +39,8 @@ public class RecipeListActivity extends AppCompatActivity implements
     ButterKnife.bind(this);
 
     // Recipe list RecyclerView setup
-    recipesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    recipesRecyclerView.setLayoutManager(new GridLayoutManager(this,
+        getResources().getInteger(R.integer.recipe_list_columns)));
     recipesRecyclerView.setHasFixedSize(true);
     mRecipeAdapter = new RecipeAdapter(this, this);
     recipesRecyclerView.setAdapter(mRecipeAdapter);
