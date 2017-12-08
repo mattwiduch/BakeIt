@@ -5,6 +5,7 @@
   <color name="colorSecondary">#B2B9C4</color>
   <color name="colorAccent">#F94E36</color>
   <color name="colorBackground">#F7F8F9</color>
+  <color name="colorCardBackground">#FFFFFF</color>
   <color name="colorText">#BABAC4</color>
   <color name="colorDivider">#0f000000</color>
 </resources>

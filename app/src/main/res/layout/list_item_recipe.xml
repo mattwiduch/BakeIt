@@ -8,7 +8,7 @@
   android:layout_marginBottom="@dimen/content_spacing"
   android:layout_marginStart="@dimen/content_spacing"
   android:layout_marginEnd="@dimen/content_spacing"
-  app:cardBackgroundColor="@color/colorBackground">
+  app:cardBackgroundColor="@color/colorCardBackground">
 
   <android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
