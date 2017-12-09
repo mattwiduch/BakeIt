@@ -1,25 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/layout_recipe_list"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context="com.mattwiduch.bakeit.ui.recipe_list.RecipeListActivity">
+  android:fitsSystemWindows="true">
 
-  <android.support.v7.widget.RecyclerView
-    android:id="@+id/recipes_recycler_view"
-    android:scrollbars="vertical"
+  <android.support.design.widget.AppBarLayout
+    android:id="@+id/recipes_actionbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/card_margin"
-    android:paddingBottom="@dimen/card_margin"/>
+    android:fitsSystemWindows="true"
+    android:theme="@style/AppTheme.AppBarOverlay">
 
-  <ProgressBar
-    android:id="@+id/recipes_loading_indicator"
-    android:layout_width="48dp"
-    android:layout_height="48dp"
-    android:layout_gravity="center"
-    android:visibility="invisible" />
+    <android.support.v7.widget.Toolbar
+      android:id="@+id/recipes_toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:fitsSystemWindows="true"
+      app:popupTheme="@style/AppTheme.PopupOverlay">
 
-</android.support.constraint.ConstraintLayout>
+      <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/content_padding"
+        android:layout_marginBottom="@dimen/content_padding"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/bakeit_logo" />
+
+    </android.support.v7.widget.Toolbar>
+  </android.support.design.widget.AppBarLayout>
+
+  <android.support.constraint.ConstraintLayout
+    android:id="@+id/layout_recipe_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.mattwiduch.bakeit.ui.recipe_list.RecipeListActivity">
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/recipes_recycler_view"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:scrollbars="vertical" />
+
+    <ProgressBar
+      android:id="@+id/recipes_loading_indicator"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:layout_gravity="center"
+      android:visibility="invisible" />
+
+  </android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>
