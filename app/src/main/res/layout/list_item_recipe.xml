@@ -9,7 +9,7 @@
   android:layout_marginBottom="@dimen/card_margin"
   android:layout_marginStart="@dimen/content_spacing"
   android:layout_marginEnd="@dimen/content_spacing"
-android:clipToPadding="false"
+  android:foreground="?android:attr/selectableItemBackground"
   app:cardBackgroundColor="@color/colorCardBackground">
 
   <android.support.constraint.ConstraintLayout

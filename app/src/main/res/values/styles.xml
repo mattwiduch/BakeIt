@@ -1,7 +1,7 @@
 <resources>
 
   <!-- Base application theme. -->
-  <style name="BaseTheme" parent="Theme.AppCompat">
+  <style name="BaseTheme" parent="Theme.AppCompat.Light">
     <!-- Customize your theme here. -->
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimary</item>
@@ -25,7 +25,8 @@
 
   <style name="AppTheme.ActionBar" parent="Widget.AppCompat.Light.ActionBar.Solid" >
     <item name="background">@color/colorBackground</item>
-    <item name="elevation">0dp</item>
+    <item name="elevation">4dp</item>
+    <item name="logo">@drawable/bakeit_logo</item>
   </style>
 
   <style name="AppTheme.RecipeListItem.Name" parent="TextAppearance.AppCompat.Title">
