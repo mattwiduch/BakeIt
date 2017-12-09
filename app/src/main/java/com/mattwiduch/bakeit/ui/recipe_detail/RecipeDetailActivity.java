@@ -8,6 +8,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
@@ -36,6 +37,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements
   ExpandableLayout ingredientsContainer;
   @BindView(R.id.ingredients_recycler_view)
   RecyclerView ingredientsRecyclerView;
+  @BindView(R.id.recipe_name)
+  TextView recipeNameTv;
 
   public static final String RECIPE_ID_EXTRA = "RECIPE_ID_EXTRA";
 
@@ -76,6 +79,12 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     mViewModel = ViewModelProviders.of(this, factory).get(RecipeDetailViewModel.class);
 
     // Observe changes in recipe data
+    mViewModel.getRecipe().observe(this, recipe -> {
+      if (recipe != null) {
+        recipeNameTv.setText(recipe.getName());
+      }
+    });
+
     mViewModel.getRecipeIngredients().observe(this, ingredients -> {
       if (ingredients != null) {
         mIngredientsAdapter.updateIngredients(ingredients);

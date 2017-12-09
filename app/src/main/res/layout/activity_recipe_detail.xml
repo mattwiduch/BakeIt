@@ -4,16 +4,45 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:fitsSystemWindows="true"
+
   tools:context="com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity">
 
-  <!--<FrameLayout-->
-    <!--android:id="@+id/frameLayout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+  <android.support.design.widget.AppBarLayout
+    android:id="@+id/recipes_actionbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/AppTheme.AppBarOverlay">
+
+    <android.support.v7.widget.Toolbar
+      android:id="@+id/recipes_toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:popupTheme="@style/AppTheme.PopupOverlay">
+
+      <TextView
+        android:id="@+id/recipe_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:layout_marginBottom="5dp"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/amatica_sc_bold"
+        android:textAllCaps="true"
+        android:textColor="@color/colorBackground"
+        android:textSize="42sp"
+        tools:text="brownies" />
+
+    </android.support.v7.widget.Toolbar>
+  </android.support.design.widget.AppBarLayout>
+
+  <FrameLayout
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <include layout="@layout/container_recipe_detail" />
-  <!--</FrameLayout>-->
+  </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

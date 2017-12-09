@@ -95,6 +95,10 @@ public class RecipeRepository {
     initialiseData();
     return mRecipeDao.getAllRecipes();
   }
+  public LiveData<Recipe> getRecipe(int recipeId) {
+    initialiseData();
+    return mRecipeDao.getRecipe(recipeId);
+  }
   public LiveData<List<Ingredient>> getIngredientsForRecipe(int recipeId) {
     initialiseData();
     return mRecipeDao.getIngredientsForRecipe(recipeId);
