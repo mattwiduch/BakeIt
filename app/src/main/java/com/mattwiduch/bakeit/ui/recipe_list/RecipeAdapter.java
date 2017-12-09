@@ -6,9 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.data.database.entries.Recipe;
 import com.mattwiduch.bakeit.ui.recipe_list.RecipeAdapter.RecipeViewHolder;
@@ -27,6 +30,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
   private List<Recipe> mRecipeList;
   // Context used to get app resources
   private Context mContext;
+  // Glide options manager
+  private RequestOptions mGlideOptions;
 
   /**
    * Default constructor for {@link RecipeViewHolder} adapter.
@@ -38,6 +43,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
     mContext = context;
     mClickHandler = clickHandler;
     mRecipeList = new ArrayList<>();
+    mGlideOptions = new RequestOptions()
+        .centerCrop()
+        .error(R.drawable.ic_recipe)
+        .placeholder(R.drawable.ic_recipe);
   }
 
   /**
@@ -60,6 +69,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
     holder.recipeName.setText(recipe.getName());
     holder.recipeServings.setText(
         mContext.getString(R.string.recipe_servings, recipe.getServings()));
+    String recipeImageUrl = recipe.getImage();
+    if (!recipeImageUrl.isEmpty() && recipeImageUrl.length() > 0) {
+      Glide.with(mContext)
+          .load(recipeImageUrl)
+          .apply(mGlideOptions)
+          .into(holder.recipeImage);
+    }
   }
 
   /**
@@ -91,6 +107,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
     TextView recipeName;
     @BindView(R.id.recipe_servings)
     TextView recipeServings;
+    @BindView(R.id.recipe_image)
+    ImageView recipeImage;
 
     RecipeViewHolder(View itemView) {
       super(itemView);
