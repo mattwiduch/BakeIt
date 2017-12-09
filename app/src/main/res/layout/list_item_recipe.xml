@@ -9,7 +9,7 @@
   android:layout_marginBottom="@dimen/card_margin"
   android:layout_marginStart="@dimen/card_margin"
   android:layout_marginEnd="@dimen/card_margin"
-
+  android:foreground="?android:attr/selectableItemBackground"
   app:cardBackgroundColor="@color/colorCardBackground">
 
   <android.support.constraint.ConstraintLayout
@@ -43,11 +43,13 @@
 
     <TextView
       android:id="@+id/recipe_name"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/recipe_name_offset"
       android:layout_marginStart="@dimen/content_padding"
+      android:layout_marginEnd="@dimen/content_padding"
       android:textAppearance="@style/AppTheme.RecipeListItem.Name"
+      app:layout_constraintEnd_toStartOf="@+id/recipe_arrow"
       app:layout_constraintStart_toEndOf="@+id/recipe_image_divider"
       app:layout_constraintTop_toTopOf="parent"
       tools:text="Brownies" />
@@ -61,16 +63,19 @@
 
     <TextView
       android:id="@+id/recipe_servings"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginBottom="@dimen/recipe_name_offset"
       android:layout_marginStart="@dimen/content_padding"
+      android:layout_marginEnd="@dimen/content_padding"
       android:text="@string/recipe_servings"
       android:textAppearance="@style/AppTheme.RecipeListItem.Servings"
       app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/recipe_arrow"
       app:layout_constraintStart_toEndOf="@+id/recipe_image_divider" />
 
     <ImageView
+      android:id="@+id/recipe_arrow"
       android:layout_width="@dimen/recipe_arrow_size"
       android:layout_height="@dimen/recipe_arrow_size"
       android:layout_marginTop="@dimen/content_spacing"
