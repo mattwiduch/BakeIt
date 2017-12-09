@@ -54,13 +54,6 @@
       app:layout_constraintTop_toTopOf="parent"
       tools:text="Brownies" />
 
-    <android.support.constraint.Guideline
-      android:id="@+id/recipe_guideline"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      app:layout_constraintGuide_begin="32dp" />
-
     <TextView
       android:id="@+id/recipe_servings"
       android:layout_width="0dp"
