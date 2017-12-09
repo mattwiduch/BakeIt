@@ -5,9 +5,11 @@
   android:id="@+id/list_item_recipe"
   android:layout_width="match_parent"
   android:layout_height="@dimen/recipe_card_height"
-  android:layout_marginBottom="@dimen/content_spacing"
+  android:layout_marginTop="@dimen/card_margin"
+  android:layout_marginBottom="@dimen/card_margin"
   android:layout_marginStart="@dimen/content_spacing"
   android:layout_marginEnd="@dimen/content_spacing"
+android:clipToPadding="false"
   app:cardBackgroundColor="@color/colorCardBackground">
 
   <android.support.constraint.ConstraintLayout

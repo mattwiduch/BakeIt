@@ -12,7 +12,8 @@
     android:scrollbars="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/content_spacing"/>
+    android:paddingTop="@dimen/card_margin"
+    android:paddingBottom="@dimen/card_margin"/>
 
   <ProgressBar
     android:id="@+id/recipes_loading_indicator"
