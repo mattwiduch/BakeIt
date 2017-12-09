@@ -44,6 +44,8 @@
       android:id="@+id/recipes_recycler_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:padding="@dimen/card_margin"
+      android:clipToPadding="false"
       android:scrollbars="vertical" />
 
     <ProgressBar
