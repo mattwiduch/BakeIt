@@ -48,7 +48,7 @@
       android:layout_marginTop="@dimen/recipe_name_offset"
       android:layout_marginStart="@dimen/content_padding"
       android:layout_marginEnd="@dimen/content_padding"
-      android:textAppearance="@style/AppTheme.RecipeListItem.Name"
+      android:textAppearance="@style/AppText.RecipeListItem.Name"
       app:layout_constraintEnd_toStartOf="@+id/recipe_arrow"
       app:layout_constraintStart_toEndOf="@+id/recipe_image_divider"
       app:layout_constraintTop_toTopOf="parent"
@@ -62,7 +62,7 @@
       android:layout_marginStart="@dimen/content_padding"
       android:layout_marginEnd="@dimen/content_padding"
       android:text="@string/recipe_servings"
-      android:textAppearance="@style/AppTheme.RecipeListItem.Servings"
+      android:textAppearance="@style/AppText.RecipeListItem.Servings"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toStartOf="@+id/recipe_arrow"
       app:layout_constraintStart_toEndOf="@+id/recipe_image_divider" />
