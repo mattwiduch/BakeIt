@@ -21,5 +21,6 @@
   <dimen name="ingredients_btn_elevation">2dp</dimen>
   <dimen name="ingredients_btn_height">48dp</dimen>
   <dimen name="ingredients_label_offset">4dp</dimen>
-  <dimen name="ingredients_servings_offset">6dp</dimen>
+  <dimen name="ingredients_servings_offset">5dp</dimen>
+  <dimen name="ingredients_list_margin">12dp</dimen>
 </resources>

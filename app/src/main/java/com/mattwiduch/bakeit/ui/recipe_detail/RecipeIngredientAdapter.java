@@ -10,8 +10,10 @@ import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.data.database.entries.Ingredient;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeIngredientAdapter.RecipeIngredientViewHolder;
+import com.mattwiduch.bakeit.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * The {@link RecipeIngredientAdapter} class.
@@ -47,6 +49,10 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
   @Override
   public void onBindViewHolder(RecipeIngredientViewHolder holder, int position) {
     Ingredient ingredient = mIngredientList.get(position);
+
+    holder.ingredientQuantityTv.setText(String.format(Locale.getDefault(), "%s%s ",
+        StringUtils.formatQuantity(ingredient.getQuantity().toString()),
+        StringUtils.formatMeasure(ingredient.getMeasure())));
     holder.ingredientNameTv.setText(ingredient.getName());
   }
 
@@ -75,6 +81,8 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
 
     @BindView(R.id.ingredient_name)
     TextView ingredientNameTv;
+    @BindView(R.id.ingredient_quantity)
+    TextView ingredientQuantityTv;
 
     RecipeIngredientViewHolder(View view) {
       super(view);

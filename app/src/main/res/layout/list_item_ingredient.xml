@@ -5,9 +5,29 @@
   android:orientation="horizontal">
 
   <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/list_bullet"
+    android:textAppearance="@style/AppText.Body"
+    android:textColor="@color/colorPrimary"
+    android:layout_marginStart="@dimen/content_padding"
+    android:layout_marginEnd="@dimen/content_spacing"
+    android:layout_marginTop="@dimen/card_margin"
+    android:layout_marginBottom="@dimen/card_margin"/>
+
+  <TextView
+    android:id="@+id/ingredient_quantity"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/card_margin"
+    android:layout_marginBottom="@dimen/card_margin"
+    android:textAppearance="@style/AppText.Body" />
+
+  <TextView
     android:id="@+id/ingredient_name"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/text_margin"
-    android:textAppearance="?attr/textAppearanceListItem" />
+    android:layout_marginTop="@dimen/card_margin"
+    android:layout_marginBottom="@dimen/card_margin"
+    android:textAppearance="@style/AppText.Body" />
 </LinearLayout>
