@@ -4,10 +4,12 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,14 +33,16 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 
   @BindView(R.id.steps_recycler_view)
   RecyclerView stepsRecyclerView;
-  @BindView(R.id.ingredients_btn)
-  AppCompatButton expandIngredientsBtn;
+  @BindView(R.id.recipe_ingredients_arrow)
+  ImageView expandIngredientsBtn;
   @BindView(R.id.ingredients_container)
   ExpandableLayout ingredientsContainer;
   @BindView(R.id.ingredients_recycler_view)
   RecyclerView ingredientsRecyclerView;
   @BindView(R.id.recipe_name)
   TextView recipeNameTv;
+  @BindView(R.id.recipe_servings)
+  TextView recipeServingsTv;
 
   public static final String RECIPE_ID_EXTRA = "RECIPE_ID_EXTRA";
 
@@ -82,6 +86,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     mViewModel.getRecipe().observe(this, recipe -> {
       if (recipe != null) {
         recipeNameTv.setText(recipe.getName());
+        recipeServingsTv.setText(getString(R.string.recipe_servings, recipe.getServings()));
       }
     });
 
@@ -141,12 +146,13 @@ public class RecipeDetailActivity extends AppCompatActivity implements
    */
   public void toggleIngredients(View view) {
     ingredientsContainer.toggle();
+    Animation rotate = AnimationUtils.loadAnimation(this, R.anim.ingredients_button);
     if (ingredientsContainer.isExpanded()) {
-      expandIngredientsBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0,
-          R.drawable.ic_arrow_drop_up_black_36dp, 0);
+      expandIngredientsBtn.startAnimation(rotate);
+      expandIngredientsBtn.setImageResource(R.drawable.ic_arrow_drop_down_black_36dp);
     } else {
-      expandIngredientsBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0,
-          R.drawable.ic_arrow_drop_down_black_36dp, 0);
+      expandIngredientsBtn.startAnimation(rotate);
+      expandIngredientsBtn.setImageResource(R.drawable.ic_arrow_drop_up_black_36dp);
     }
   }
 }

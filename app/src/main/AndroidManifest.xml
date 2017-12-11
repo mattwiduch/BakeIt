@@ -43,8 +43,7 @@
       android:label="@string/title_step_list"
       android:launchMode="singleTop"
       android:name=".ui.recipe_detail.RecipeDetailActivity"
-      android:parentActivityName=".ui.recipe_list.RecipeListActivity"
-      android:theme="@style/AppTheme.NoActionBar">
+      android:parentActivityName=".ui.recipe_list.RecipeListActivity">
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
         android:value="com.mattwiduch.bakeit.ui.recipe_list.RecipeListActivity" />
@@ -52,8 +51,7 @@
     <activity
       android:label="@string/title_step_detail"
       android:name=".ui.step_detail.StepDetailActivity"
-      android:parentActivityName=".ui.recipe_detail.RecipeDetailActivity"
-      android:theme="@style/AppTheme.NoActionBar">
+      android:parentActivityName=".ui.recipe_detail.RecipeDetailActivity">
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
         android:value="com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity" />
