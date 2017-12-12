@@ -107,6 +107,10 @@ public class RecipeRepository {
     initialiseData();
     return mRecipeDao.getStepsForRecipe(recipeId);
   }
+  public LiveData<Step> getStep(int stepId) {
+    initialiseData();
+    return mRecipeDao.getStep(stepId);
+  }
 
   /**
    * Network related operation.

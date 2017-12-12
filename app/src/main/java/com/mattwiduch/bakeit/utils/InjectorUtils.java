@@ -20,10 +20,10 @@ import android.content.Context;
 import com.mattwiduch.bakeit.AppExecutors;
 import com.mattwiduch.bakeit.data.RecipeRepository;
 import com.mattwiduch.bakeit.data.database.RecipeDatabase;
-
 import com.mattwiduch.bakeit.data.network.RecipeNetworkDataSource;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailModelFactory;
 import com.mattwiduch.bakeit.ui.recipe_list.RecipeListModelFactory;
+import com.mattwiduch.bakeit.ui.step_detail.StepDetailModelFactory;
 
 /**
  * Provides static methods to inject the various classes needed for Bake it
@@ -57,5 +57,11 @@ public class InjectorUtils {
       int recipeId) {
     RecipeRepository repository = provideRepository(context.getApplicationContext());
     return new RecipeDetailModelFactory(repository, recipeId);
+  }
+
+  public static StepDetailModelFactory provideStepDetailViewModelFactory(Context context,
+      int recipeId, int stepId) {
+    RecipeRepository repository = provideRepository(context.getApplicationContext());
+    return new StepDetailModelFactory(repository, recipeId, stepId);
   }
 }

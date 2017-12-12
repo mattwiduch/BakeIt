@@ -63,6 +63,14 @@ public interface RecipeDao {
   LiveData<Recipe> getRecipe(int recipeId);
 
   /**
+   * Gets step with given id from the database.
+   *
+   * @return {@link LiveData} step
+   */
+  @Query("SELECT * FROM steps WHERE dbId = :stepId")
+  LiveData<Step> getStep(int stepId);
+
+  /**
    * Gets all the ingredients for a given recipe from the database.
    *
    * @return {@link LiveData} with list of ingredients

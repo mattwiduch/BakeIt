@@ -54,6 +54,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
   private RecipeDetailViewModel mViewModel;
   private RecipeStepAdapter mStepsAdapter;
   private RecipeIngredientAdapter mIngredientsAdapter;
+  private int mRecipeId;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -75,11 +76,11 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     setupRecyclerViews();
 
     // Retrieve recipe id from intent extras
-    int recipeId = getIntent().getIntExtra(RECIPE_ID_EXTRA, -1);
+    mRecipeId = getIntent().getIntExtra(RECIPE_ID_EXTRA, -1);
 
     // Get the ViewModel from the factory
     RecipeDetailModelFactory factory = InjectorUtils.provideRecipeDetailViewModelFactory(
-        this.getApplicationContext(), recipeId);
+        this.getApplicationContext(), mRecipeId);
     mViewModel = ViewModelProviders.of(this, factory).get(RecipeDetailViewModel.class);
 
     // Observe changes in recipe data
@@ -128,6 +129,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
   public void onItemClick(int stepId) {
     if (mTwoPane) {
       Bundle arguments = new Bundle();
+      arguments.putInt(RECIPE_ID_EXTRA, mRecipeId);
       arguments.putInt(StepDetailFragment.RECIPE_STEP_ID, stepId);
       StepDetailFragment fragment = new StepDetailFragment();
       fragment.setArguments(arguments);
@@ -136,6 +138,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
           .commit();
     } else {
       Intent intent = new Intent(this, StepDetailActivity.class);
+      intent.putExtra(RECIPE_ID_EXTRA, mRecipeId);
       intent.putExtra(StepDetailFragment.RECIPE_STEP_ID, stepId);
       startActivity(intent);
     }

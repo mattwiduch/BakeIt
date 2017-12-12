@@ -1,14 +1,17 @@
 package com.mattwiduch.bakeit.ui.step_detail;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
-import com.mattwiduch.bakeit.data.database.entries.Step;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
+import com.mattwiduch.bakeit.utils.InjectorUtils;
 
 /**
  * A fragment representing a single Step detail screen.
@@ -18,16 +21,18 @@ import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
  */
 public class StepDetailFragment extends Fragment {
 
+  @BindView(R.id.step_detail)
+  TextView stepDescriptionTv;
+
   /**
    * The fragment argument representing the step ID that this fragment
    * represents.
    */
   public static final String RECIPE_STEP_ID = "recipe_step_id";
 
-  /**
-   * The dummy content this fragment is presenting.
-   */
-  private Step mItem;
+  private StepDetailViewModel mViewModel;
+  private int mRecipeId;
+  private int mStepId;
 
   /**
    * Mandatory empty constructor for the fragment manager to instantiate the
@@ -40,23 +45,32 @@ public class StepDetailFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    if (getArguments().containsKey(RECIPE_STEP_ID)) {
-      // Load the dummy content specified by the fragment
-      // arguments. In a real-world scenario, use a Loader
-      // to load content from a content provider.
-      // mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+    if (getArguments().containsKey(RecipeDetailActivity.RECIPE_ID_EXTRA)) {
+      mRecipeId = getArguments().getInt(RecipeDetailActivity.RECIPE_ID_EXTRA);
     }
+    if (getArguments().containsKey(RECIPE_STEP_ID)) {
+      mStepId = getArguments().getInt(RECIPE_STEP_ID);
+    }
+
+    // Get the ViewModel from the factory
+    StepDetailModelFactory factory = InjectorUtils.provideStepDetailViewModelFactory(
+        getContext(), mRecipeId, mStepId);
+    mViewModel = ViewModelProviders.of(this, factory).get(StepDetailViewModel.class);
+
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
+    ButterKnife.bind(this, rootView);
 
-    // Show the dummy content as text in a TextView.
-    if (mItem != null) {
-      ((TextView) rootView.findViewById(R.id.step_detail)).setText(mItem.getDescription());
-    }
+    // Observe changes in step data
+    mViewModel.getCurrentStep().observe(this, step -> {
+      if (step != null) {
+        stepDescriptionTv.setText(step.getDescription());
+      }
+    });
 
     return rootView;
   }
