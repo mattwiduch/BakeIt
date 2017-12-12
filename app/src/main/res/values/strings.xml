@@ -16,5 +16,6 @@
   <string name="recipe_ingredients_label">Ingredients</string>
   <string name="recipe_ingredients_for">for</string>
   <string name="list_bullet">\u2022</string>
+  <string name="recipe_steps_label">How to bake?</string>
 
 </resources>

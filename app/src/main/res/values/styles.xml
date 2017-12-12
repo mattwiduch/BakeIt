@@ -50,4 +50,9 @@
     <item name="android:textSize">14sp</item>
   </style>
 
+  <style name="AppText.RecipeDetails.StepNumber" parent="TextAppearance.AppCompat.Caption">
+    <item name="android:fontFamily">monospace</item>
+    <item name="android:textColor">@color/colorAccent</item>
+  </style>
+
 </resources>

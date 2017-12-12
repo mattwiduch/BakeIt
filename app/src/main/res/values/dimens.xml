@@ -23,4 +23,6 @@
   <dimen name="ingredients_label_offset">4dp</dimen>
   <dimen name="ingredients_servings_offset">5dp</dimen>
   <dimen name="ingredients_list_margin">12dp</dimen>
+  <dimen name="recipe_steps_label_offset">12dp</dimen>
+  <dimen name="recipe_step_item_margin">32dp</dimen>
 </resources>

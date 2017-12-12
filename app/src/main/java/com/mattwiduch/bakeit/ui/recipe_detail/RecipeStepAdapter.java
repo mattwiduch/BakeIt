@@ -58,6 +58,10 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
     holder.stepNumberTv.setText(String.format(Locale.getDefault(),"%d",
         step.getStepNumber() + 1));
     holder.stepDescriptionTv.setText(step.getShortDescription());
+
+    if (position == mStepList.size() - 1) {
+      holder.stepDecor.setVisibility(View.INVISIBLE);
+    }
   }
 
   /**
@@ -90,10 +94,12 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
    */
   class RecipeStepViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
-    @BindView(R.id.id_text)
+    @BindView(R.id.recipe_step_number)
     TextView stepNumberTv;
-    @BindView(R.id.content)
+    @BindView(R.id.recipe_step_description)
     TextView stepDescriptionTv;
+    @BindView(R.id.recipe_step_decor)
+    View stepDecor;
 
     RecipeStepViewHolder(View view) {
       super(view);
