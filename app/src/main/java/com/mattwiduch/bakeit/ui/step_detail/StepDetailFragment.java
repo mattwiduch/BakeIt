@@ -12,6 +12,7 @@ import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
 import com.mattwiduch.bakeit.utils.InjectorUtils;
+import com.mattwiduch.bakeit.utils.StringUtils;
 
 /**
  * A fragment representing a single Step detail screen.
@@ -21,7 +22,9 @@ import com.mattwiduch.bakeit.utils.InjectorUtils;
  */
 public class StepDetailFragment extends Fragment {
 
-  @BindView(R.id.step_detail)
+  @BindView(R.id.step_number)
+  TextView stepNumberTv;
+  @BindView(R.id.step_description)
   TextView stepDescriptionTv;
 
   /**
@@ -68,7 +71,8 @@ public class StepDetailFragment extends Fragment {
     // Observe changes in step data
     mViewModel.getCurrentStep().observe(this, step -> {
       if (step != null) {
-        stepDescriptionTv.setText(step.getDescription());
+        stepNumberTv.setText(getString(R.string.step_number, step.getStepNumber() + 1));
+        stepDescriptionTv.setText(StringUtils.removeStepNumber(step.getDescription()));
       }
     });
 

@@ -33,4 +33,13 @@ public class StringUtils {
     return formattedMeasure;
   }
 
+  /**
+   * Removes step number from step description.
+   * @param description recipe step description
+   * @return description without step number
+   */
+  public static String removeStepNumber(String description) {
+    return description.replaceAll("[0-9]+\\. *", "");
+  }
+
 }

@@ -18,4 +18,9 @@
   <string name="list_bullet">\u2022</string>
   <string name="recipe_steps_label">How to bake?</string>
 
+  <!-- Step Detail Activity -->
+  <string name="step_number">Step %1$d</string>
+  <string name="step_previous_btn">prev</string>
+  <string name="step_next_btn">next</string>
+
 </resources>

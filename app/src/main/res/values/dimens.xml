@@ -17,7 +17,7 @@
   <dimen name="recipe_arrow_size">24dp</dimen>
   <dimen name="recipe_name_offset">12dp</dimen>
 
-  <!-- Recipe Details Activity -->
+  <!-- Recipe Detail Activity -->
   <dimen name="ingredients_btn_elevation">2dp</dimen>
   <dimen name="ingredients_btn_height">48dp</dimen>
   <dimen name="ingredients_label_offset">4dp</dimen>
@@ -25,4 +25,7 @@
   <dimen name="ingredients_list_margin">12dp</dimen>
   <dimen name="recipe_steps_label_offset">12dp</dimen>
   <dimen name="recipe_step_item_margin">32dp</dimen>
+
+  <!-- Step Detail Activity-->
+  <dimen name="step_buttons_elevation">4dp</dimen>
 </resources>
