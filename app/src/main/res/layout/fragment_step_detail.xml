@@ -30,14 +30,30 @@
         app:layout_constraintTop_toTopOf="parent" />
 
       <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/step_video_plaer"
+        android:id="@+id/step_video_player"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="gone"
         app:layout_constraintDimensionRatio="H,16:9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:controller_layout_id="@layout/playback_control"
+        app:show_timeout="5000" />
+
+      <ImageView
+        android:id="@+id/play_video_btn"
+        android:layout_width="@dimen/play_button_size"
+        android:layout_height="@dimen/play_button_size"
+        android:background="@drawable/play_button_bg"
+        android:src="@drawable/exo_controls_play"
+        android:tint="@color/colorBackground"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/step_video_player"
+        app:layout_constraintStart_toStartOf="@id/step_video_player"
+        app:layout_constraintTop_toTopOf="@id/step_video_player"
+        app:layout_constraintBottom_toBottomOf="@id/step_video_player"
+        android:contentDescription="@string/exo_controls_play_description" />
 
       <TextView
         android:id="@+id/step_number"

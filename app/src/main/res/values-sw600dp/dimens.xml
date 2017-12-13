@@ -2,4 +2,5 @@
 <resources>
   <!-- Recipe List -->
   <integer name="recipe_list_columns">3</integer>
+  <dimen name="play_button_size">64dp</dimen>
 </resources>

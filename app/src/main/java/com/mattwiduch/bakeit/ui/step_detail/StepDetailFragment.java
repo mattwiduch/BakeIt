@@ -11,6 +11,7 @@ import android.support.transition.Explode;
 import android.support.transition.Fade;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,7 @@ public class StepDetailFragment extends Fragment {
 
   @BindView(R.id.step_image)
   ImageView stepImageIv;
-  @BindView(R.id.step_video_plaer)
+  @BindView(R.id.step_video_player)
   SimpleExoPlayerView videoPlayerView;
   @BindView(R.id.step_number)
   TextView stepNumberTv;
@@ -61,6 +62,10 @@ public class StepDetailFragment extends Fragment {
   Button previousStepBtn;
   @BindView(R.id.step_next_btn)
   Button nextStepBtn;
+  @BindView(R.id.playback_controller)
+  CardView playbackController;
+  @BindView(R.id.play_video_btn)
+  ImageView playButton;
 
   /**
    * The fragment argument representing the step ID that this fragment
@@ -128,6 +133,7 @@ public class StepDetailFragment extends Fragment {
 
         if (StringUtils.checkUrl(videoUrl)) {
           videoPlayerView.setVisibility(View.VISIBLE);
+          playButton.setVisibility(View.VISIBLE);
           prepareVideo(videoUrl);
         } else if (StringUtils.checkUrl(imageUrl)) {
           // If image is available, load it using Glide
@@ -203,6 +209,7 @@ public class StepDetailFragment extends Fragment {
         new DefaultLoadControl());
 
     videoPlayerView.setPlayer(mVideoPlayer);
+    videoPlayerView.hideController();
 
     mVideoPlayer.setPlayWhenReady(mPlayWhenReady);
     mVideoPlayer.seekTo(mCurrentWindow, mPlaybackPosition);
@@ -276,5 +283,17 @@ public class StepDetailFragment extends Fragment {
   @OnClick(R.id.step_next_btn)
   public void loadNextStep() {
     loadStepFragment(mStepNumber + 1);
+  }
+
+  /**
+   * Starts video playback.
+   */
+  @OnClick(R.id.play_video_btn)
+  public void playVideo() {
+    playButton.setVisibility(View.GONE);
+    playbackController.setVisibility(View.VISIBLE);
+    videoPlayerView.hideController();
+    mVideoPlayer.setPlayWhenReady(true);
+    mVideoPlayer.getPlaybackState();
   }
 }
