@@ -4,6 +4,7 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 import static com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity.RECIPE_ID_EXTRA;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.transition.Explode;
@@ -21,6 +22,20 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
 import com.mattwiduch.bakeit.utils.InjectorUtils;
@@ -36,6 +51,8 @@ public class StepDetailFragment extends Fragment {
 
   @BindView(R.id.step_image)
   ImageView stepImageIv;
+  @BindView(R.id.step_video_plaer)
+  SimpleExoPlayerView videoPlayerView;
   @BindView(R.id.step_number)
   TextView stepNumberTv;
   @BindView(R.id.step_description)
@@ -54,6 +71,14 @@ public class StepDetailFragment extends Fragment {
   private StepDetailViewModel mViewModel;
   private int mRecipeId;
   private int mStepNumber;
+
+  // ExoPlayer
+  private SimpleExoPlayer mVideoPlayer;
+  private long mPlaybackPosition;
+  private int mCurrentWindow;
+  private boolean mPlayWhenReady = false;
+  // bandwidth meter to measure and estimate bandwidth
+  private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
   /**
    * Mandatory empty constructor for the fragment manager to instantiate the
@@ -102,7 +127,8 @@ public class StepDetailFragment extends Fragment {
         String videoUrl = step.getVideoURL();
 
         if (StringUtils.checkUrl(videoUrl)) {
-          // TODO: Initialise exo player
+          videoPlayerView.setVisibility(View.VISIBLE);
+          prepareVideo(videoUrl);
         } else if (StringUtils.checkUrl(imageUrl)) {
           // If image is available, load it using Glide
           stepImageIv.setVisibility(View.VISIBLE);
@@ -129,6 +155,91 @@ public class StepDetailFragment extends Fragment {
     });
 
     return rootView;
+  }
+
+  @Override
+  public void onStart() {
+    super.onStart();
+    if (Util.SDK_INT > 23) {
+      initializePlayer();
+    }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    if ((Util.SDK_INT <= 23 || mVideoPlayer == null)) {
+      initializePlayer();
+    }
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    if (Util.SDK_INT <= 23) {
+      releasePlayer();
+    }
+  }
+
+  @Override
+  public void onStop() {
+    super.onStop();
+    if (Util.SDK_INT > 23) {
+      releasePlayer();
+    }
+  }
+
+  /**
+   * Creates a player instance and a media source needed for streaming recipe step media.
+   */
+  private void initializePlayer() {
+    // a factory to create an AdaptiveVideoTrackSelection
+    TrackSelection.Factory adaptiveTrackSelectionFactory =
+        new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
+
+    mVideoPlayer = ExoPlayerFactory.newSimpleInstance(
+        new DefaultRenderersFactory(getContext()),
+        new DefaultTrackSelector(adaptiveTrackSelectionFactory),
+        new DefaultLoadControl());
+
+    videoPlayerView.setPlayer(mVideoPlayer);
+
+    mVideoPlayer.setPlayWhenReady(mPlayWhenReady);
+    mVideoPlayer.seekTo(mCurrentWindow, mPlaybackPosition);
+  }
+
+  /**
+   * Prepares recipe step video.
+   * @param url of video to play
+   */
+  private void prepareVideo(String url) {
+    Uri uri = Uri.parse(url);
+    MediaSource mediaSource = buildMediaSource(uri);
+    mVideoPlayer.prepare(mediaSource, true, false);
+  }
+
+  /**
+   * Releases exoPlayer resources and saves its state.
+   */
+  private void releasePlayer() {
+    if (mVideoPlayer != null) {
+      mPlaybackPosition = mVideoPlayer.getCurrentPosition();
+      mCurrentWindow = mVideoPlayer.getCurrentWindowIndex();
+      mPlayWhenReady = mVideoPlayer.getPlayWhenReady();
+      mVideoPlayer.release();
+      mVideoPlayer = null;
+    }
+  }
+
+  /**
+   * Constructs and returns a ExtractorMediaSource for the given uri.
+   * @param uri pointing to a media to play
+   * @return media source
+   */
+  private MediaSource buildMediaSource(Uri uri) {
+    return new ExtractorMediaSource(uri,
+        new DefaultHttpDataSourceFactory("ua", BANDWIDTH_METER),
+        new DefaultExtractorsFactory(), null, null);
   }
 
   /**
