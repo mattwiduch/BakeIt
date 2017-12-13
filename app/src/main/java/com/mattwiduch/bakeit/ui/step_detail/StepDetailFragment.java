@@ -4,6 +4,7 @@ import static com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity.RECIPE
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.transition.Explode;
 import android.support.transition.Fade;
 import android.support.v4.app.Fragment;
@@ -53,17 +54,20 @@ public class StepDetailFragment extends Fragment {
    * fragment (e.g. upon screen orientation changes).
    */
   public StepDetailFragment() {
+    // Mandatory
   }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    if (getArguments().containsKey(RECIPE_ID_EXTRA)) {
-      mRecipeId = getArguments().getInt(RECIPE_ID_EXTRA);
-    }
-    if (getArguments().containsKey(RECIPE_STEP_NUMBER)) {
-      mStepNumber = getArguments().getInt(RECIPE_STEP_NUMBER);
+    if (getArguments() != null) {
+      if (getArguments().containsKey(RECIPE_ID_EXTRA)) {
+        mRecipeId = getArguments().getInt(RECIPE_ID_EXTRA);
+      }
+      if (getArguments().containsKey(RECIPE_STEP_NUMBER)) {
+        mStepNumber = getArguments().getInt(RECIPE_STEP_NUMBER);
+      }
     }
 
     // Get the ViewModel from the factory
@@ -74,7 +78,7 @@ public class StepDetailFragment extends Fragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
     ButterKnife.bind(this, rootView);
@@ -111,8 +115,8 @@ public class StepDetailFragment extends Fragment {
     arguments.putInt(StepDetailFragment.RECIPE_STEP_NUMBER, stepNumber);
     StepDetailFragment fragment = new StepDetailFragment();
     fragment.setArguments(arguments);
-    fragment.setExitTransition(new Explode());
-    fragment.setEnterTransition(new Fade());
+    fragment.setExitTransition(new Fade());
+    fragment.setEnterTransition(new Explode());
     FragmentManager fragmentManager = getFragmentManager();
     if (fragmentManager != null) {
           fragmentManager.beginTransaction()
