@@ -1,5 +1,6 @@
 package com.mattwiduch.bakeit.ui.step_detail;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 import static com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity.RECIPE_ID_EXTRA;
 
 import android.arch.lifecycle.ViewModelProviders;
@@ -13,10 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
 import com.mattwiduch.bakeit.utils.InjectorUtils;
@@ -30,6 +34,8 @@ import com.mattwiduch.bakeit.utils.StringUtils;
  */
 public class StepDetailFragment extends Fragment {
 
+  @BindView(R.id.step_image)
+  ImageView stepImageIv;
   @BindView(R.id.step_number)
   TextView stepNumberTv;
   @BindView(R.id.step_description)
@@ -37,7 +43,7 @@ public class StepDetailFragment extends Fragment {
   @BindView(R.id.step_previous_btn)
   Button previousStepBtn;
   @BindView(R.id.step_next_btn)
-  Button nextStepButton;
+  Button nextStepBtn;
 
   /**
    * The fragment argument representing the step ID that this fragment
@@ -91,13 +97,33 @@ public class StepDetailFragment extends Fragment {
         }
         stepNumberTv.setText(getString(R.string.step_number, step.getStepNumber() + 1));
         stepDescriptionTv.setText(StringUtils.removeStepNumber(step.getDescription()));
+
+        String imageUrl = step.getThumbnailURL();
+        String videoUrl = step.getVideoURL();
+
+        if (StringUtils.checkUrl(videoUrl)) {
+          // TODO: Initialise exo player
+        } else if (StringUtils.checkUrl(imageUrl)) {
+          // If image is available, load it using Glide
+          stepImageIv.setVisibility(View.VISIBLE);
+          RequestOptions glideOptions = new RequestOptions().centerCrop()
+              .error(R.drawable.error);
+          Glide.with(this)
+              .load(imageUrl+"SSS")
+              .apply(glideOptions)
+              .transition(withCrossFade())
+              .into(stepImageIv);
+        } else {
+          // If both video and image are not available, remove image view
+          stepImageIv.setVisibility(View.GONE);
+        }
       }
     });
 
     mViewModel.getRecipeSteps().observe(this, steps -> {
       if (steps != null) {
         if (mStepNumber == steps.size() - 1) {
-          nextStepButton.setVisibility(View.INVISIBLE);
+          nextStepBtn.setVisibility(View.INVISIBLE);
         }
       }
     });

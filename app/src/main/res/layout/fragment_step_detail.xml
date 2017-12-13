@@ -5,13 +5,18 @@
   android:layout_height="match_parent"
   android:background="@color/colorBackground">
 
-  <View
-    android:id="@+id/step_media"
+  <ImageView
+    android:id="@+id/step_image"
     android:layout_width="match_parent"
     android:layout_height="0dp"
+    android:visibility="visible"
     app:layout_constraintHeight_default="percent"
     app:layout_constraintHeight_percent=".5"
-    android:background="@color/colorAccent" />
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintDimensionRatio="H,16:9"
+    android:contentDescription="@string/a11y_recipe_picture" />
 
   <TextView
     android:id="@+id/step_number"
@@ -26,7 +31,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.0"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/step_media" />
+    app:layout_constraintTop_toBottomOf="@+id/step_image" />
 
   <ScrollView
     android:id="@+id/step_description_frame"

@@ -1,5 +1,7 @@
 package com.mattwiduch.bakeit.utils;
 
+import android.util.Patterns;
+
 /**
  * Provides static methods to format various strings across the app.
  */
@@ -42,4 +44,12 @@ public class StringUtils {
     return description.replaceAll("[0-9]+\\. *", "");
   }
 
+  /**
+   * Checks if supplied url is valid.
+   * @param url String containing url
+   * @return true if valid
+   */
+  public static boolean checkUrl(String url) {
+    return Patterns.WEB_URL.matcher(url).matches();
+  }
 }
