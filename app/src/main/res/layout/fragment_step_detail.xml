@@ -5,69 +5,77 @@
   android:layout_height="match_parent"
   android:background="@color/colorBackground">
 
-  <ImageView
-    android:id="@+id/step_image"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:visibility="visible"
-    app:layout_constraintHeight_default="percent"
-    app:layout_constraintHeight_percent=".5"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintDimensionRatio="H,16:9"
-    android:contentDescription="@string/a11y_recipe_picture" />
-
-  <TextView
-    android:id="@+id/step_number"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/content_padding"
-    android:layout_marginTop="@dimen/content_padding"
-    android:layout_marginStart="@dimen/content_spacing"
-    android:layout_marginEnd="@dimen/content_padding"
-    android:text="@string/step_number"
-    android:textAppearance="@style/AppText.RecipeDetails.Label"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.0"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/step_image" />
-
   <ScrollView
     android:id="@+id/step_description_frame"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    android:layout_marginStart="@dimen/content_padding"
-    android:layout_marginEnd="@dimen/content_padding"
-    app:layout_constraintBottom_toTopOf="@id/step_buttons_frame"
+    android:layout_height="0dp"
+    app:layout_constraintBottom_toTopOf="@+id/step_buttons_frame"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/step_number"
-    app:layout_constraintVertical_bias="0.0">
+    app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-      android:id="@+id/step_description"
+    <android.support.constraint.ConstraintLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:textAppearance="@style/AppText.Body"
-      tools:context="com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment"
-      tools:text="Step description" />
+      android:layout_height="wrap_content">
 
+      <ImageView
+        android:id="@+id/step_image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:contentDescription="@string/a11y_recipe_picture"
+        android:visibility="invisible"
+        app:layout_constraintDimensionRatio="H,16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <TextView
+        android:id="@+id/step_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/content_padding"
+        android:layout_marginTop="@dimen/content_padding"
+        android:layout_marginStart="@dimen/content_spacing"
+        android:layout_marginEnd="@dimen/content_padding"
+        android:text="@string/step_number"
+        android:textAppearance="@style/AppText.RecipeDetails.Label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/step_image" />
+
+      <TextView
+        android:id="@+id/step_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/content_padding"
+        android:layout_marginStart="@dimen/content_padding"
+        android:layout_marginEnd="@dimen/content_padding"
+        android:textAppearance="@style/AppText.Body"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/step_number"
+        app:layout_constraintVertical_bias="0.0"
+        tools:context="com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment"
+        tools:text="Step description" />
+
+    </android.support.constraint.ConstraintLayout>
   </ScrollView>
 
   <View
     android:id="@+id/step_buttons_frame"
     android:layout_width="match_parent"
     android:layout_height="@dimen/ingredients_btn_height"
-    android:elevation="@dimen/step_buttons_elevation"
     android:background="@color/colorCardBackground"
-    app:layout_constraintStart_toStartOf="parent"
+    android:elevation="@dimen/step_buttons_elevation"
+    app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent" />
+    app:layout_constraintStart_toStartOf="parent" />
 
   <Button
     android:id="@+id/step_previous_btn"
+    style="?android:attr/borderlessButtonStyle"
     android:layout_width="wrap_content"
     android:layout_height="@dimen/ingredients_btn_height"
     android:layout_marginStart="@dimen/content_spacing"
@@ -75,11 +83,11 @@
     android:textColor="@color/colorTextSecondary"
     android:translationZ="@dimen/step_buttons_elevation"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    style="?android:attr/borderlessButtonStyle"/>
+    app:layout_constraintStart_toStartOf="parent" />
 
   <Button
     android:id="@+id/step_next_btn"
+    style="?android:attr/borderlessButtonStyle"
     android:layout_width="wrap_content"
     android:layout_height="@dimen/ingredients_btn_height"
     android:layout_marginEnd="@dimen/content_spacing"
@@ -87,7 +95,6 @@
     android:textColor="@color/colorAccent"
     android:translationZ="@dimen/step_buttons_elevation"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    style="?android:attr/borderlessButtonStyle"/>
+    app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
