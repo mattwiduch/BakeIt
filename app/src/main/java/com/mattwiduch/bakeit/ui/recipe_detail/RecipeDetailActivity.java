@@ -123,14 +123,14 @@ public class RecipeDetailActivity extends AppCompatActivity implements
   /**
    * Responds to item clicks on recipes in the list.
    *
-   * @param stepId Id of recipe step that has been clicked
+   * @param stepNumber Id of recipe step that has been clicked
    */
   @Override
-  public void onItemClick(int stepId) {
+  public void onItemClick(int stepNumber) {
     if (mTwoPane) {
       Bundle arguments = new Bundle();
       arguments.putInt(RECIPE_ID_EXTRA, mRecipeId);
-      arguments.putInt(StepDetailFragment.RECIPE_STEP_ID, stepId);
+      arguments.putInt(StepDetailFragment.RECIPE_STEP_NUMBER, stepNumber);
       StepDetailFragment fragment = new StepDetailFragment();
       fragment.setArguments(arguments);
       getSupportFragmentManager().beginTransaction()
@@ -139,7 +139,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     } else {
       Intent intent = new Intent(this, StepDetailActivity.class);
       intent.putExtra(RECIPE_ID_EXTRA, mRecipeId);
-      intent.putExtra(StepDetailFragment.RECIPE_STEP_ID, stepId);
+      intent.putExtra(StepDetailFragment.RECIPE_STEP_NUMBER, stepNumber);
       startActivity(intent);
     }
   }

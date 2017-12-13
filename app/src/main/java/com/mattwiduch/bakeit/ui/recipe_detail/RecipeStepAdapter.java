@@ -114,8 +114,8 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
      */
     @Override
     public void onClick(View v) {
-      int stepId = mStepList.get(getAdapterPosition()).getDbId();
-      mClickHandler.onItemClick(stepId);
+      int stepNumber = mStepList.get(getAdapterPosition()).getStepNumber();
+      mClickHandler.onItemClick(stepNumber);
     }
   }
 }

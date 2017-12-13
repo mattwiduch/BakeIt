@@ -24,7 +24,7 @@ public class StepDetailActivity extends AppCompatActivity {
 
   private StepDetailViewModel mViewModel;
   private int mRecipeId;
-  private int mStepId;
+  private int mStepNumber;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +38,11 @@ public class StepDetailActivity extends AppCompatActivity {
 
     // Get extras passed on to this activity
     mRecipeId = getIntent().getIntExtra(RecipeDetailActivity.RECIPE_ID_EXTRA, -1);
-    mStepId = getIntent().getIntExtra(StepDetailFragment.RECIPE_STEP_ID, -1);
+    mStepNumber = getIntent().getIntExtra(StepDetailFragment.RECIPE_STEP_NUMBER, -1);
 
     // Get the ViewModel from the factory
     StepDetailModelFactory factory = InjectorUtils.provideStepDetailViewModelFactory(
-        this, mRecipeId, mStepId);
+        this, mRecipeId, mStepNumber);
     mViewModel = ViewModelProviders.of(this, factory).get(StepDetailViewModel.class);
 
     // Observe changes in recipe data
@@ -65,7 +65,7 @@ public class StepDetailActivity extends AppCompatActivity {
       // Create the detail fragment and add it to the activity
       // using a fragment transaction.
       Bundle arguments = new Bundle();
-      arguments.putInt(StepDetailFragment.RECIPE_STEP_ID, mStepId);
+      arguments.putInt(StepDetailFragment.RECIPE_STEP_NUMBER, mStepNumber);
       arguments.putInt(RecipeDetailActivity.RECIPE_ID_EXTRA, mRecipeId);
       StepDetailFragment fragment = new StepDetailFragment();
       fragment.setArguments(arguments);

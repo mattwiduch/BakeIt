@@ -18,9 +18,9 @@ public class StepDetailViewModel extends ViewModel {
   // List of all steps
   private final LiveData<List<Step>> mRecipeSteps;
 
-  public StepDetailViewModel (RecipeRepository repository, int recipeId, int stepId) {
+  public StepDetailViewModel (RecipeRepository repository, int recipeId, int stepNumber) {
     mRecipe = repository.getRecipe(recipeId);
-    mCurrentStep = repository.getStep(stepId);
+    mCurrentStep = repository.getStep(recipeId, stepNumber);
     mRecipeSteps = repository.getStepsForRecipe(recipeId);
   }
 
