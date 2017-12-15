@@ -14,17 +14,24 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
-  <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-    android:id="@+id/step_video_player"
+  <FrameLayout
+    android:id="@+id/step_video_container"
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:visibility="gone"
-    app:controller_layout_id="@layout/playback_control"
     app:layout_constraintDimensionRatio="H,16:9"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:show_timeout="5000" />
+    app:layout_constraintTop_toTopOf="parent">
+
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+      android:id="@+id/step_video_player"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:controller_layout_id="@layout/playback_control"
+      app:show_timeout="5000" />
+
+  </FrameLayout>
 
   <ImageView
     android:id="@+id/play_video_btn"
@@ -35,10 +42,10 @@
     android:src="@drawable/exo_controls_play"
     android:tint="@color/colorBackground"
     android:visibility="gone"
-    app:layout_constraintBottom_toBottomOf="@id/step_video_player"
-    app:layout_constraintEnd_toEndOf="@id/step_video_player"
-    app:layout_constraintStart_toStartOf="@id/step_video_player"
-    app:layout_constraintTop_toTopOf="@id/step_video_player" />
+    app:layout_constraintBottom_toBottomOf="@id/step_video_container"
+    app:layout_constraintEnd_toEndOf="@id/step_video_container"
+    app:layout_constraintStart_toStartOf="@id/step_video_container"
+    app:layout_constraintTop_toTopOf="@id/step_video_container" />
 
   <TextView
     android:id="@+id/step_number"

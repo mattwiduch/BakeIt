@@ -3,7 +3,9 @@ package com.mattwiduch.bakeit.ui.step_detail;
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 import static com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity.RECIPE_ID_EXTRA;
 
+import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +18,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -66,6 +70,10 @@ public class StepDetailFragment extends Fragment {
   CardView playbackController;
   @BindView(R.id.play_video_btn)
   ImageView playButton;
+  @BindView(R.id.exo_fullscreen)
+  ImageButton fullscreenButton;
+  @BindView(R.id.step_video_container)
+  FrameLayout videoPlayerContainer;
 
   /**
    * The fragment argument representing the step ID that this fragment
@@ -84,6 +92,10 @@ public class StepDetailFragment extends Fragment {
   private boolean mPlayWhenReady = false;
   // bandwidth meter to measure and estimate bandwidth
   private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
+
+  // Used to play video in full screen
+  private Dialog mVideoDialog;
+  private boolean mVideoFullscreen;
 
   /**
    * Mandatory empty constructor for the fragment manager to instantiate the
@@ -132,7 +144,8 @@ public class StepDetailFragment extends Fragment {
         String videoUrl = step.getVideoURL();
 
         if (StringUtils.checkUrl(videoUrl)) {
-          videoPlayerView.setVisibility(View.VISIBLE);
+          mVideoDialog = initialiseVideoDialog(getActivity());
+          videoPlayerContainer.setVisibility(View.VISIBLE);
           playButton.setVisibility(View.VISIBLE);
           prepareVideo(videoUrl);
         } else if (StringUtils.checkUrl(imageUrl)) {
@@ -295,5 +308,54 @@ public class StepDetailFragment extends Fragment {
     videoPlayerView.hideController();
     mVideoPlayer.setPlayWhenReady(true);
     mVideoPlayer.getPlaybackState();
+  }
+
+  /**
+   * Initialises Dialog that shows ExoPlayer in fullscreen mode.
+   * @return Dialog
+   */
+  private Dialog initialiseVideoDialog(Context context) {
+    return new Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen) {
+      public void onBackPressed() {
+        if (mVideoFullscreen)
+          closeFullscreenVideo();
+        super.onBackPressed();
+      }
+    };
+  }
+
+  /**
+   * Moves ExoPlayer view to full screen dialog.
+   */
+  private void showFullscreenVideo() {
+    ((ViewGroup) videoPlayerView.getParent()).removeView(videoPlayerView);
+    mVideoDialog.addContentView(videoPlayerView, new ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    fullscreenButton.setImageDrawable(getActivity().getDrawable(R.drawable.ic_fullscreen_exit));
+    mVideoFullscreen = true;
+    mVideoDialog.show();
+  }
+
+  /**
+   * Brings back ExoPlayer view to fragment layout.
+   */
+  private void closeFullscreenVideo() {
+    ((ViewGroup) videoPlayerView.getParent()).removeView(videoPlayerView);
+    videoPlayerContainer.addView(videoPlayerView);
+    mVideoFullscreen = false;
+    mVideoDialog.dismiss();
+    fullscreenButton.setImageDrawable(getActivity().getDrawable(R.drawable.ic_fullscreen));
+  }
+
+  /**
+   * Responds to clicks on fullscreen button.
+   */
+  @OnClick(R.id.exo_fullscreen)
+  public void playVideoFullscreen() {
+    if(!mVideoFullscreen) {
+      showFullscreenVideo();
+    } else {
+      closeFullscreenVideo();
+    }
   }
 }

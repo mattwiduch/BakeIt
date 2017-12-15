@@ -9,6 +9,7 @@
   <string name="a11y_recipe_image">Recipe Image</string>
   <string name="a11y_toggle_ingredients_list">Toggle ingredients list</string>
   <string name="a11y_recipe_picture">Recipe picture</string>
+  <string name="a11y_video_fullscreen_btn">Fullscreen</string>
 
   <!-- Recipe List Item-->
   <string name="recipe_servings">%1$d Servings</string>
