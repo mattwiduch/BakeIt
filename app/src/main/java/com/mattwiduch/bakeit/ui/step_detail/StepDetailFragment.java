@@ -68,7 +68,8 @@ public class StepDetailFragment extends Fragment {
    * represents.
    */
   public static final String RECIPE_STEP_NUMBER = "recipe_step_id";
-  private static final String VIDEO_PLAYING = "VIDEO_PLAYING";
+  private static final String KEY_VIDEO_PLAYING = "KEY_VIDEO_PLAYING";
+  private static final String KEY_VIDEO_FULLSCREEN = "KEY_VIDEO_FULLSCREEN";
 
   private StepDetailViewModel mViewModel;
   private int mRecipeId;
@@ -92,7 +93,8 @@ public class StepDetailFragment extends Fragment {
     super.onCreate(savedInstanceState);
 
     if (savedInstanceState != null) {
-      mPlaying = savedInstanceState.getBoolean(VIDEO_PLAYING);
+      mPlaying = savedInstanceState.getBoolean(KEY_VIDEO_PLAYING);
+      mVideoFullscreen = savedInstanceState.getBoolean(KEY_VIDEO_FULLSCREEN);
     }
 
     if (getArguments() != null) {
@@ -130,12 +132,15 @@ public class StepDetailFragment extends Fragment {
 
         if (StringUtils.checkUrl(videoUrl)) {
           mVideoDialog = initialiseVideoDialog(getActivity());
+          if (mVideoFullscreen) {showFullscreenVideo();}
+
           videoPlayerContainer.setVisibility(View.VISIBLE);
           if (!mPlaying) {
             playButton.setVisibility(View.VISIBLE);
           } else {
             playbackController.setVisibility(View.VISIBLE);
           }
+
           VideoPlayer.getInstance().initialiseExoPlayer(getActivity(), Uri.parse(videoUrl),
               videoPlayerView);
         } else if (StringUtils.checkUrl(imageUrl)) {
@@ -187,7 +192,8 @@ public class StepDetailFragment extends Fragment {
   @Override
   public void onSaveInstanceState(@NonNull Bundle outState) {
     super.onSaveInstanceState(outState);
-    outState.putBoolean(VIDEO_PLAYING, mPlaying);
+    outState.putBoolean(KEY_VIDEO_PLAYING, mPlaying);
+    outState.putBoolean(KEY_VIDEO_FULLSCREEN, mVideoFullscreen);
   }
 
   /**
