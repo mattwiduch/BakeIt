@@ -27,21 +27,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 import com.mattwiduch.bakeit.R;
+import com.mattwiduch.bakeit.ui.VideoPlayer;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
 import com.mattwiduch.bakeit.utils.InjectorUtils;
 import com.mattwiduch.bakeit.utils.StringUtils;
@@ -80,18 +68,12 @@ public class StepDetailFragment extends Fragment {
    * represents.
    */
   public static final String RECIPE_STEP_NUMBER = "recipe_step_id";
+  private static final String VIDEO_PLAYING = "VIDEO_PLAYING";
 
   private StepDetailViewModel mViewModel;
   private int mRecipeId;
   private int mStepNumber;
-
-  // ExoPlayer
-  private SimpleExoPlayer mVideoPlayer;
-  private long mPlaybackPosition;
-  private int mCurrentWindow;
-  private boolean mPlayWhenReady = false;
-  // bandwidth meter to measure and estimate bandwidth
-  private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
+  private boolean mPlaying;
 
   // Used to play video in full screen
   private Dialog mVideoDialog;
@@ -109,6 +91,10 @@ public class StepDetailFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    if (savedInstanceState != null) {
+      mPlaying = savedInstanceState.getBoolean(VIDEO_PLAYING);
+    }
+
     if (getArguments() != null) {
       if (getArguments().containsKey(RECIPE_ID_EXTRA)) {
         mRecipeId = getArguments().getInt(RECIPE_ID_EXTRA);
@@ -122,7 +108,6 @@ public class StepDetailFragment extends Fragment {
     StepDetailModelFactory factory = InjectorUtils.provideStepDetailViewModelFactory(
         getContext(), mRecipeId, mStepNumber);
     mViewModel = ViewModelProviders.of(this, factory).get(StepDetailViewModel.class);
-
   }
 
   @Override
@@ -146,8 +131,13 @@ public class StepDetailFragment extends Fragment {
         if (StringUtils.checkUrl(videoUrl)) {
           mVideoDialog = initialiseVideoDialog(getActivity());
           videoPlayerContainer.setVisibility(View.VISIBLE);
-          playButton.setVisibility(View.VISIBLE);
-          prepareVideo(videoUrl);
+          if (!mPlaying) {
+            playButton.setVisibility(View.VISIBLE);
+          } else {
+            playbackController.setVisibility(View.VISIBLE);
+          }
+          VideoPlayer.getInstance().initialiseExoPlayer(getActivity(), Uri.parse(videoUrl),
+              videoPlayerView);
         } else if (StringUtils.checkUrl(imageUrl)) {
           // If image is available, load it using Glide
           stepImageIv.setVisibility(View.VISIBLE);
@@ -177,89 +167,27 @@ public class StepDetailFragment extends Fragment {
   }
 
   @Override
-  public void onStart() {
-    super.onStart();
-    if (Util.SDK_INT > 23) {
-      initializePlayer();
-    }
-  }
-
-  @Override
   public void onResume() {
     super.onResume();
-    if ((Util.SDK_INT <= 23 || mVideoPlayer == null)) {
-      initializePlayer();
-    }
+    VideoPlayer.getInstance().resume();
   }
 
   @Override
   public void onPause() {
     super.onPause();
-    if (Util.SDK_INT <= 23) {
-      releasePlayer();
-    }
+    VideoPlayer.getInstance().suspend();
   }
 
   @Override
-  public void onStop() {
-    super.onStop();
-    if (Util.SDK_INT > 23) {
-      releasePlayer();
-    }
+  public void onDestroyView() {
+    super.onDestroyView();
+    VideoPlayer.getInstance().release();
   }
 
-  /**
-   * Creates a player instance and a media source needed for streaming recipe step media.
-   */
-  private void initializePlayer() {
-    // a factory to create an AdaptiveVideoTrackSelection
-    TrackSelection.Factory adaptiveTrackSelectionFactory =
-        new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
-
-    mVideoPlayer = ExoPlayerFactory.newSimpleInstance(
-        new DefaultRenderersFactory(getContext()),
-        new DefaultTrackSelector(adaptiveTrackSelectionFactory),
-        new DefaultLoadControl());
-
-    videoPlayerView.setPlayer(mVideoPlayer);
-    videoPlayerView.hideController();
-
-    mVideoPlayer.setPlayWhenReady(mPlayWhenReady);
-    mVideoPlayer.seekTo(mCurrentWindow, mPlaybackPosition);
-  }
-
-  /**
-   * Prepares recipe step video.
-   * @param url of video to play
-   */
-  private void prepareVideo(String url) {
-    Uri uri = Uri.parse(url);
-    MediaSource mediaSource = buildMediaSource(uri);
-    mVideoPlayer.prepare(mediaSource, true, false);
-  }
-
-  /**
-   * Releases exoPlayer resources and saves its state.
-   */
-  private void releasePlayer() {
-    if (mVideoPlayer != null) {
-      mPlaybackPosition = mVideoPlayer.getCurrentPosition();
-      mCurrentWindow = mVideoPlayer.getCurrentWindowIndex();
-      mPlayWhenReady = mVideoPlayer.getPlayWhenReady();
-      mVideoPlayer.release();
-      mVideoPlayer = null;
-    }
-  }
-
-  /**
-   * Constructs and returns a ExtractorMediaSource for the given uri.
-   * @param uri pointing to a media to play
-   * @return media source
-   */
-  private MediaSource buildMediaSource(Uri uri) {
-    return new ExtractorMediaSource(uri,
-        new DefaultHttpDataSourceFactory("ua", BANDWIDTH_METER),
-        new DefaultExtractorsFactory(), null, null);
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putBoolean(VIDEO_PLAYING, mPlaying);
   }
 
   /**
@@ -305,9 +233,8 @@ public class StepDetailFragment extends Fragment {
   public void playVideo() {
     playButton.setVisibility(View.GONE);
     playbackController.setVisibility(View.VISIBLE);
-    videoPlayerView.hideController();
-    mVideoPlayer.setPlayWhenReady(true);
-    mVideoPlayer.getPlaybackState();
+    VideoPlayer.getInstance().play();
+    mPlaying = true;
   }
 
   /**
