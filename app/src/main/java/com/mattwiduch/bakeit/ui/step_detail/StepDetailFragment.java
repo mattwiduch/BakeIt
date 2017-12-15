@@ -141,7 +141,7 @@ public class StepDetailFragment extends Fragment {
           RequestOptions glideOptions = new RequestOptions().centerCrop()
               .error(R.drawable.error);
           Glide.with(this)
-              .load(imageUrl+"SSS")
+              .load(imageUrl)
               .apply(glideOptions)
               .transition(withCrossFade())
               .into(stepImageIv);
