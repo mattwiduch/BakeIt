@@ -1,0 +1,120 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/colorBackground">
+
+  <ImageView
+    android:id="@+id/step_image"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_margin="@dimen/content_padding"
+    android:contentDescription="@string/a11y_recipe_picture"
+    android:visibility="invisible"
+    app:layout_constraintBottom_toTopOf="@id/step_buttons_frame"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.0"
+    app:layout_constraintWidth_percent="0.6" />
+
+  <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+    android:id="@+id/step_video_player"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_margin="@dimen/content_padding"
+    android:visibility="gone"
+    app:controller_layout_id="@layout/playback_control"
+    app:layout_constraintBottom_toTopOf="@id/step_buttons_frame"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.0"
+    app:layout_constraintWidth_percent="0.6"
+    app:show_timeout="5000" />
+
+  <ImageView
+    android:id="@+id/play_video_btn"
+    android:layout_width="@dimen/play_button_size"
+    android:layout_height="@dimen/play_button_size"
+    android:background="@drawable/play_button_bg"
+    android:contentDescription="@string/exo_controls_play_description"
+    android:src="@drawable/exo_controls_play"
+    android:tint="@color/colorBackground"
+    android:visibility="gone"
+    app:layout_constraintBottom_toBottomOf="@id/step_video_player"
+    app:layout_constraintEnd_toEndOf="@id/step_video_player"
+    app:layout_constraintStart_toStartOf="@id/step_video_player"
+    app:layout_constraintTop_toTopOf="@id/step_video_player" />
+
+  <TextView
+    android:id="@+id/step_number"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/content_padding"
+    android:layout_marginTop="@dimen/content_padding"
+    android:layout_marginStart="@dimen/content_padding"
+    android:text="@string/step_number"
+    android:textAppearance="@style/AppText.RecipeDetails.Label"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toEndOf="@id/step_image"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <ScrollView
+    android:id="@+id/step_description_frame"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/content_padding"
+    android:layout_marginEnd="@dimen/content_padding"
+    android:layout_marginStart="@dimen/content_padding"
+    app:layout_constraintBottom_toTopOf="@id/step_buttons_frame"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@id/step_image"
+    app:layout_constraintTop_toBottomOf="@+id/step_number"
+    app:layout_constraintVertical_bias="0.0">
+
+    <TextView
+      android:id="@+id/step_description"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textAppearance="@style/AppText.Body"
+      tools:context="com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment"
+      tools:text="Step description" />
+
+  </ScrollView>
+
+  <View
+    android:id="@+id/step_buttons_frame"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/ingredients_btn_height"
+    android:background="@color/colorCardBackground"
+    android:elevation="@dimen/step_buttons_elevation"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
+
+  <Button
+    android:id="@+id/step_previous_btn"
+    style="?android:attr/borderlessButtonStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/ingredients_btn_height"
+    android:layout_marginStart="@dimen/content_spacing"
+    android:text="@string/step_previous_btn"
+    android:textColor="@color/colorTextSecondary"
+    android:translationZ="@dimen/step_buttons_elevation"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
+
+  <Button
+    android:id="@+id/step_next_btn"
+    style="?android:attr/borderlessButtonStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/ingredients_btn_height"
+    android:layout_marginEnd="@dimen/content_spacing"
+    android:text="@string/step_next_btn"
+    android:textColor="@color/colorAccent"
+    android:translationZ="@dimen/step_buttons_elevation"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
