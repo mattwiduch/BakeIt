@@ -42,7 +42,6 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
    * @param clickHandler The on-click handler for this adapter
    */
   RecipeStepAdapter(RecipeStepAdapterOnItemClickHandler clickHandler, Context context) {
-    //setHasStableIds(true);
     mClickHandler = clickHandler;
     mStepList = new ArrayList<>();
     mContext = context;
@@ -72,6 +71,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
     // Highlight currently selected item
     if (position == mSelectedPosition) {
       holder.stepNumberFrame.setImageResource(R.color.colorAccent);
+      holder.stepNumberFrame.setBorderColor(mContext.getResources().getColor(R.color.colorAccent));
       holder.stepNumberTv.setTextColor(
           mContext.getResources().getColor(R.color.colorCardBackground));
       holder.stepNumberTv.setTypeface(holder.stepNumberTv.getTypeface(), Typeface.BOLD);
@@ -79,15 +79,12 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
       holder.stepArrowIv.setColorFilter(mContext.getResources().getColor(R.color.colorAccent));
     } else {
       holder.stepNumberFrame.setImageResource(R.color.colorCardBackground);
+      holder.stepNumberFrame.setBorderColor(mContext.getResources().getColor(R.color.colorSecondary));
       holder.stepNumberTv.setTextColor(
           mContext.getResources().getColor(R.color.colorAccent));
       holder.stepNumberTv.setTypeface(holder.stepNumberTv.getTypeface(), Typeface.NORMAL);
       holder.stepDescriptionTv.setTypeface(ResourcesCompat.getFont(mContext, R.font.poppins_light));
       holder.stepArrowIv.setColorFilter(mContext.getResources().getColor(R.color.colorSecondary));
-    }
-
-    if (position == mStepList.size() - 1) {
-      holder.stepDecor.setVisibility(View.INVISIBLE);
     }
   }
 
@@ -137,8 +134,6 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
     TextView stepDescriptionTv;
     @BindView(R.id.recipe_step_arrow)
     ImageView stepArrowIv;
-    @BindView(R.id.recipe_step_decor)
-    View stepDecor;
 
     RecipeStepViewHolder(View view) {
       super(view);

@@ -114,7 +114,7 @@
     android:name="com.mattwiduch.bakeit.ui.recipe_details.StepListFragment"
     android:nestedScrollingEnabled="false"
     android:elevation="@dimen/ingredients_btn_elevation"
-    android:paddingTop="@dimen/ingredients_btn_height"
+    android:paddingTop="@dimen/step_list_offset"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"

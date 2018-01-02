@@ -28,5 +28,7 @@
 
   <!-- Step Detail Activity-->
   <dimen name="step_buttons_elevation">4dp</dimen>
+  <dimen name="step_list_offset">40dp</dimen>
+  <dimen name="step_item_margin">12dp</dimen>
   <dimen name="play_button_size">48dp</dimen>
 </resources>
