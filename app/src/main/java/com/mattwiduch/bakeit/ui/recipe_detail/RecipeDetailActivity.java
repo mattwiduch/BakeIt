@@ -45,6 +45,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
   TextView recipeServingsTv;
 
   public static final String RECIPE_ID_EXTRA = "RECIPE_ID_EXTRA";
+  private static final String KEY_CURRENT_STEP = "KEY_CURRENT_STEP";
 
   /**
    * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -55,6 +56,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
   private RecipeStepAdapter mStepsAdapter;
   private RecipeIngredientAdapter mIngredientsAdapter;
   private int mRecipeId;
+  private int mCurrentStep = 0;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -104,8 +106,20 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 
     // Show first step upon launch in two pane mode
     if (mTwoPane && savedInstanceState == null) {
-      loadStepFragment(0);
+      loadStepFragment(mCurrentStep);
+      mStepsAdapter.setSelectedItem(mCurrentStep);
+    } else {
+      mCurrentStep = savedInstanceState.getInt(KEY_CURRENT_STEP);
+      mStepsAdapter.setSelectedItem(mCurrentStep);
     }
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    if (mTwoPane) {
+      outState.putInt(KEY_CURRENT_STEP, mCurrentStep);
+    }
+    super.onSaveInstanceState(outState);
   }
 
   /**
@@ -116,23 +130,22 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     mIngredientsAdapter = new RecipeIngredientAdapter();
     ingredientsRecyclerView.setAdapter(mIngredientsAdapter);
     ingredientsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-    ingredientsRecyclerView.setHasFixedSize(true)
-    ;
+    ingredientsRecyclerView.setHasFixedSize(true);
     // Steps recycler view
-    mStepsAdapter = new RecipeStepAdapter(this);
+    mStepsAdapter = new RecipeStepAdapter(this, this);
     stepsRecyclerView.setAdapter(mStepsAdapter);
     stepsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     stepsRecyclerView.setHasFixedSize(true);
   }
 
-  /**
+  /**.
    * Responds to item clicks on recipes in the list.
-   *.
    * @param stepNumber Id of recipe step that has been clicked
    */
   @Override
   public void onItemClick(int stepNumber) {
     if (mTwoPane) {
+      mCurrentStep = stepNumber;
       loadStepFragment(stepNumber);
     } else {
       Intent intent = new Intent(this, StepDetailActivity.class);
