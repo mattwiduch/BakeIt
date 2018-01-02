@@ -101,6 +101,11 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         mStepsAdapter.updateSteps(steps);
       }
     });
+
+    // Show first step upon launch in two pane mode
+    if (mTwoPane && savedInstanceState == null) {
+      loadStepFragment(0);
+    }
   }
 
   /**
@@ -122,26 +127,34 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 
   /**
    * Responds to item clicks on recipes in the list.
-   *
+   *.
    * @param stepNumber Id of recipe step that has been clicked
    */
   @Override
   public void onItemClick(int stepNumber) {
     if (mTwoPane) {
-      Bundle arguments = new Bundle();
-      arguments.putInt(RECIPE_ID_EXTRA, mRecipeId);
-      arguments.putInt(StepDetailFragment.RECIPE_STEP_NUMBER, stepNumber);
-      StepDetailFragment fragment = new StepDetailFragment();
-      fragment.setArguments(arguments);
-      getSupportFragmentManager().beginTransaction()
-          .replace(R.id.step_detail_container, fragment)
-          .commit();
+      loadStepFragment(stepNumber);
     } else {
       Intent intent = new Intent(this, StepDetailActivity.class);
       intent.putExtra(RECIPE_ID_EXTRA, mRecipeId);
       intent.putExtra(StepDetailFragment.RECIPE_STEP_NUMBER, stepNumber);
       startActivity(intent);
     }
+  }
+
+  /**
+   * Loads fragment that displays step data in two pane mode.
+   * @param stepNumber of step to display
+   */
+  private void loadStepFragment(int stepNumber) {
+    Bundle arguments = new Bundle();
+    arguments.putInt(RECIPE_ID_EXTRA, mRecipeId);
+    arguments.putInt(StepDetailFragment.RECIPE_STEP_NUMBER, stepNumber);
+    StepDetailFragment fragment = new StepDetailFragment();
+    fragment.setArguments(arguments);
+    getSupportFragmentManager().beginTransaction()
+        .replace(R.id.step_detail_container, fragment)
+        .commit();
   }
 
   /**
