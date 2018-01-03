@@ -105,12 +105,15 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     });
 
     // Show first step upon launch in two pane mode
-    if (mTwoPane && savedInstanceState == null) {
-      loadStepFragment(mCurrentStep);
-      mStepsAdapter.setSelectedItem(mCurrentStep);
-    } else {
-      mCurrentStep = savedInstanceState.getInt(KEY_CURRENT_STEP);
-      mStepsAdapter.setSelectedItem(mCurrentStep);
+    if (mTwoPane) {
+      if (savedInstanceState == null) {
+        loadStepFragment(mCurrentStep);
+        mStepsAdapter.setSelectedItem(mCurrentStep);
+      } else {
+        // Or restore previously opened recipe step
+        mCurrentStep = savedInstanceState.getInt(KEY_CURRENT_STEP);
+        mStepsAdapter.setSelectedItem(mCurrentStep);
+      }
     }
   }
 
