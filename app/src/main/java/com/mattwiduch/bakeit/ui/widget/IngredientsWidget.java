@@ -17,17 +17,21 @@ public class IngredientsWidget extends AppWidgetProvider {
   static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
       int appWidgetId) {
 
-    CharSequence widgetText = context.getString(R.string.appwidget_text);
+    // TODO: Pass actual recipe name
+    CharSequence recipeName = "BROWNIES";
+    CharSequence recipeServings = context.getString(R.string.recipe_servings, 8);
     // Construct the RemoteViews object
     RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget);
-    views.setTextViewText(R.id.appwidget_text, widgetText);
+    views.setTextViewText(R.id.widget_recipe_name, recipeName);
+    views.setTextViewText(R.id.widget_recipe_servings, recipeServings);
 
     // Create an Intent to launch RecipeDetailActivity for given recipe when clicked
     Intent intent = new Intent(context, RecipeDetailActivity.class);
     // TODO: Change to actual id
     intent.putExtra(RecipeDetailActivity.RECIPE_ID_EXTRA, 1);
-    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-    views.setOnClickPendingIntent(R.id.ingredients_widget_container, pendingIntent);
+    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+        intent, PendingIntent.FLAG_CANCEL_CURRENT);
+    views.setOnClickPendingIntent(R.id.widget_bar, pendingIntent);
 
     // Instruct the widget manager to update the widget
     appWidgetManager.updateAppWidget(appWidgetId, views);
