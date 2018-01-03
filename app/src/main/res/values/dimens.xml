@@ -31,4 +31,8 @@
   <dimen name="step_list_offset">40dp</dimen>
   <dimen name="step_item_margin">12dp</dimen>
   <dimen name="play_button_size">48dp</dimen>
+
+  <!-- Widget -->
+  <dimen name="widget_margin">8dp</dimen>
+
 </resources>
