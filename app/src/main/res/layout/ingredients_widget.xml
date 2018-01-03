@@ -71,8 +71,9 @@
   </LinearLayout>
 
   <ListView
+    android:id="@+id/widget_ingredients_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/content_spacing"/>
+    android:paddingBottom="@dimen/content_spacing"/>
 
 </LinearLayout>

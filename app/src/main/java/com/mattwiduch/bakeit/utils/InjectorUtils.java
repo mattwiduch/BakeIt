@@ -40,7 +40,7 @@ public class InjectorUtils {
     return new RecipeListModelFactory(repository);
   }
 
-  private static RecipeRepository provideRepository(Context context) {
+  public static RecipeRepository provideRepository(Context context) {
     RecipeDatabase database = RecipeDatabase.getInstance(context.getApplicationContext());
     AppExecutors executors = AppExecutors.getInstance();
     RecipeNetworkDataSource networkDataSource = RecipeNetworkDataSource.getInstance(

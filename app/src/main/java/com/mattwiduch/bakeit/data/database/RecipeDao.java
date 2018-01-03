@@ -85,4 +85,20 @@ public interface RecipeDao {
    */
   @Query("SELECT * FROM steps WHERE recipe_id = :recipeId ORDER BY stepNumber ASC")
   LiveData<List<Step>> getStepsForRecipe(int recipeId);
+
+  /**
+   * Gets recipe with given id from the database.
+   *
+   * @return recipe
+   */
+  @Query("SELECT * FROM recipes WHERE id = :recipeId")
+  Recipe getRecipeData(int recipeId);
+
+  /**
+   * Gets all the ingredients for a given recipe from the database.
+   *
+   * @return list of ingredients
+   */
+  @Query("SELECT * FROM ingredients WHERE recipe_id = :recipeId")
+  List<Ingredient> getIngredientsData(int recipeId);
 }

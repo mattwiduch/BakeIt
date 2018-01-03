@@ -111,6 +111,14 @@ public class RecipeRepository {
     initialiseData();
     return mRecipeDao.getStep(recipeId, stepNumber);
   }
+  public Recipe getRecipeData(int recipeId) {
+    initialiseData();
+    return mRecipeDao.getRecipeData(recipeId);
+  }
+  public List<Ingredient> getIngredientsData(int recipeId) {
+    initialiseData();
+    return mRecipeDao.getIngredientsData(recipeId);
+  }
 
   /**
    * Network related operation.

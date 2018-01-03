@@ -25,6 +25,11 @@ public class IngredientsWidget extends AppWidgetProvider {
     views.setTextViewText(R.id.widget_recipe_name, recipeName);
     views.setTextViewText(R.id.widget_recipe_servings, recipeServings);
 
+    // Populate ListView
+    Intent listIntent = new Intent(context, IngredientsWidgetService.class);
+    listIntent.putExtra(RecipeDetailActivity.RECIPE_ID_EXTRA, 1);
+    views.setRemoteAdapter(R.id.widget_ingredients_list, listIntent);
+
     // Create an Intent to launch RecipeDetailActivity for given recipe when clicked
     Intent intent = new Intent(context, RecipeDetailActivity.class);
     // TODO: Change to actual id
