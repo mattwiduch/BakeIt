@@ -67,7 +67,7 @@ class IngredientsListRemoteViewsFactory implements RemoteViewsFactory {
     String measure = StringUtils.formatMeasure(ingredient.getMeasure());
     String name = ingredient.getName();
 
-    RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.list_item_ingredient);
+    RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.list_item_widget);
 
     views.setTextViewText(R.id.ingredient_quantity, String.format(Locale.getDefault(),
         "%s%s ", quantity, measure));

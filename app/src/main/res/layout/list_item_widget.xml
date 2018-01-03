@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="horizontal"
+  android:layout_marginTop="@dimen/ingredients_label_offset"
+  android:layout_marginBottom="@dimen/ingredients_label_offset">
+
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/list_bullet"
+    android:fontFamily="sans-serif-light"
+    android:textSize="14sp"
+    android:textColor="@color/colorPrimary"
+    android:layout_marginStart="@dimen/content_padding"
+    android:layout_marginEnd="@dimen/content_spacing"
+    android:layout_marginTop="@dimen/card_margin"
+    android:layout_marginBottom="@dimen/card_margin"/>
+
+  <TextView
+    android:id="@+id/ingredient_quantity"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/card_margin"
+    android:layout_marginBottom="@dimen/card_margin"
+    android:fontFamily="sans-serif-light"
+    android:textSize="14sp" />
+
+  <TextView
+    android:id="@+id/ingredient_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/card_margin"
+    android:layout_marginBottom="@dimen/card_margin"
+    android:fontFamily="sans-serif-light"
+    android:textSize="14sp" />
+</LinearLayout>
