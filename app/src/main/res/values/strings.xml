@@ -30,5 +30,6 @@
   <string name="widget_config_label">Choose Recipe:</string>
   <string name="widget_config_cancel">Cancel</string>
   <string name="widget_config_apply">Apply</string>
+  <string name="empty_recipe_database">There are no recipes saved in Bake It. Please connect to the Internet first.</string>
 
 </resources>
