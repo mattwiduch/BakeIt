@@ -36,7 +36,6 @@ public class IngredientsWidgetConfigActivity extends AppCompatActivity {
       mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
           AppWidgetManager.INVALID_APPWIDGET_ID);
 
-      // TODO: Observe data
       RecipeListModelFactory factory = InjectorUtils.provideRecipeListViewModelFactory(
           this.getApplicationContext());
       mViewModel = ViewModelProviders.of(this, factory).get(RecipeListViewModel.class);
