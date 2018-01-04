@@ -27,5 +27,8 @@
 
   <!-- Widget -->
   <string name="add_widget">Add widget</string>
+  <string name="widget_config_label">Choose Recipe:</string>
+  <string name="widget_config_cancel">Cancel</string>
+  <string name="widget_config_apply">Apply</string>
 
 </resources>

@@ -57,6 +57,7 @@
         android:value="com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity" />
     </activity>
 
+    <!-- Ingredients Widget -->
     <receiver android:name=".ui.widget.IngredientsWidget">
       <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -70,5 +71,12 @@
     <service
       android:name=".ui.widget.IngredientsWidgetService"
       android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+    <activity android:name=".ui.widget.IngredientsWidgetConfigActivity"
+      android:theme="@style/AppTheme.Widget.Config">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+      </intent-filter>
+    </activity>
   </application>
 </manifest>

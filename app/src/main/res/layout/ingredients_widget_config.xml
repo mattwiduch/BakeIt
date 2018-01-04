@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical">
+
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/content_padding"
+    android:layout_marginStart="@dimen/content_padding"
+    android:layout_marginEnd="@dimen/content_padding"
+    android:textAppearance="@style/AppText.RecipeListItem.Name"
+    android:text="@string/widget_config_label"/>
+
+  <Spinner
+    android:id="@+id/widget_config_spinner"
+    style="@style/Widget.AppCompat.Spinner"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/content_padding"
+    android:layout_marginBottom="@dimen/content_padding"
+    android:popupBackground="@color/colorBackground"/>
+
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="end|center_horizontal"
+    android:orientation="horizontal">
+
+    <Button
+      android:id="@+id/widget_config_cancel"
+      style="?android:attr/borderlessButtonStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="@dimen/ingredients_btn_height"
+      android:text="@string/widget_config_cancel"
+      android:textColor="@color/colorTextSecondary" />
+
+    <Button
+      android:id="@+id/widget_config_apply"
+      style="?android:attr/borderlessButtonStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="@dimen/ingredients_btn_height"
+      android:text="@string/widget_config_apply"
+      android:textColor="@color/colorAccent" />
+
+  </LinearLayout>
+
+</LinearLayout>
