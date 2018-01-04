@@ -16,14 +16,15 @@
   <Spinner
     android:id="@+id/widget_config_spinner"
     style="@style/Widget.AppCompat.Spinner"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/content_padding"
     android:layout_marginBottom="@dimen/content_padding"
+    android:layout_marginStart="@dimen/content_spacing"
     android:popupBackground="@color/colorBackground"/>
 
   <LinearLayout
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="end|center_horizontal"
     android:orientation="horizontal">
