@@ -31,5 +31,10 @@
   <dimen name="step_list_offset">40dp</dimen>
   <dimen name="step_item_margin">12dp</dimen>
   <dimen name="play_button_size">48dp</dimen>
+  <dimen name="widget_config_min_width">240dp</dimen>
+  <dimen name="widget_margin">24dp</dimen>
+  <dimen name="widget_config_btn_min_width">64dp</dimen>
+  <dimen name="widget_config_btn_height">36dp</dimen>
+  <dimen name="widget_config_title_margin_bottom">20dp</dimen>
 
 </resources>

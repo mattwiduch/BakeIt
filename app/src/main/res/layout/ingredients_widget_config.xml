@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
+  android:layout_width="wrap_content"
   android:layout_height="wrap_content"
+  android:minWidth="@dimen/widget_config_min_width"
   android:orientation="vertical">
 
   <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/content_padding"
-    android:layout_marginStart="@dimen/content_padding"
-    android:layout_marginEnd="@dimen/content_padding"
+    android:layout_marginTop="@dimen/widget_margin"
+    android:layout_marginStart="@dimen/widget_margin"
+    android:layout_marginEnd="@dimen/widget_margin"
+    android:layout_marginBottom="@dimen/widget_config_title_margin_bottom"
     android:textAppearance="@style/AppText.RecipeListItem.Name"
     android:text="@string/widget_config_label"/>
 
   <Spinner
     android:id="@+id/widget_config_spinner"
     style="@style/Widget.AppCompat.Spinner"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/content_padding"
-    android:layout_marginBottom="@dimen/content_padding"
-    android:layout_marginStart="@dimen/content_spacing"
+    android:layout_marginStart="@dimen/widget_margin"
+    android:layout_marginEnd="@dimen/widget_margin"
     android:popupBackground="@color/colorBackground"/>
 
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/widget_margin"
     android:gravity="end|center_horizontal"
     android:orientation="horizontal">
 
@@ -33,7 +35,11 @@
       android:id="@+id/widget_config_cancel"
       style="?android:attr/borderlessButtonStyle"
       android:layout_width="wrap_content"
-      android:layout_height="@dimen/ingredients_btn_height"
+      android:layout_height="@dimen/widget_config_btn_height"
+      android:minWidth="@dimen/widget_config_btn_min_width"
+      android:layout_marginStart="@dimen/content_spacing"
+      android:layout_marginTop="@dimen/content_spacing"
+      android:layout_marginBottom="@dimen/content_spacing"
       android:text="@string/widget_config_cancel"
       android:textColor="@color/colorTextSecondary" />
 
@@ -41,7 +47,9 @@
       android:id="@+id/widget_config_apply"
       style="?android:attr/borderlessButtonStyle"
       android:layout_width="wrap_content"
-      android:layout_height="@dimen/ingredients_btn_height"
+      android:layout_height="@dimen/widget_config_btn_height"
+      android:minWidth="@dimen/widget_config_btn_min_width"
+      android:layout_margin="@dimen/content_spacing"
       android:text="@string/widget_config_apply"
       android:textColor="@color/colorAccent" />
 
