@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,6 +38,11 @@ public class IngredientsWidgetConfigActivity extends AppCompatActivity implement
 
   @BindView(R.id.widget_config_spinner)
   Spinner recipesSpinner;
+
+  private static final String PREFS_NAME = "com.mattwiduch.bakeit.ui.widget.IngredientsWidget";
+  private static final String PREF_ID_KEY = "recipeId_";
+  private static final String PREF_NAME_KEY = "recipeName_";
+  private static final String PREF_SERVINGS_KEY = "recipeServings_";
 
   int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
   int mSpinnerPosition;
@@ -75,7 +81,15 @@ public class IngredientsWidgetConfigActivity extends AppCompatActivity implement
 
   @OnClick(R.id.widget_config_apply)
   public void addWidget() {
-    // TODO: Save id, name and servings to shared preferences
+    // Save id, name and servings quantity of recipe to shared preferences
+    SharedPreferences.Editor prefs = getSharedPreferences(PREFS_NAME, 0).edit();
+    prefs.putInt(PREF_ID_KEY + mAppWidgetId,
+        ((Recipe) recipesSpinner.getAdapter().getItem(mSpinnerPosition)).getId());
+    prefs.putString(PREF_NAME_KEY + mAppWidgetId,
+        ((Recipe) recipesSpinner.getAdapter().getItem(mSpinnerPosition)).getName());
+    prefs.putInt(PREF_SERVINGS_KEY + mAppWidgetId,
+        ((Recipe) recipesSpinner.getAdapter().getItem(mSpinnerPosition)).getServings());
+    prefs.commit();
     // Push widget update
     AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
     IngredientsWidget.updateAppWidget(this, appWidgetManager, mAppWidgetId);
