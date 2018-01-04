@@ -1,10 +1,16 @@
 package com.mattwiduch.bakeit.ui.widget;
 
+import static com.mattwiduch.bakeit.ui.widget.IngredientsWidgetConfigActivity.PREFS_NAME;
+import static com.mattwiduch.bakeit.ui.widget.IngredientsWidgetConfigActivity.PREF_ID_KEY;
+import static com.mattwiduch.bakeit.ui.widget.IngredientsWidgetConfigActivity.PREF_NAME_KEY;
+import static com.mattwiduch.bakeit.ui.widget.IngredientsWidgetConfigActivity.PREF_SERVINGS_KEY;
+
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
@@ -16,10 +22,14 @@ public class IngredientsWidget extends AppWidgetProvider {
 
   static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
       int appWidgetId) {
+    // Load recipe details from shared preferences
+    SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+    int recipeId = prefs.getInt(PREF_ID_KEY + appWidgetId, 1);
+    CharSequence recipeName = prefs.getString(PREF_NAME_KEY + appWidgetId,
+        context.getString(R.string.app_name));
+    CharSequence recipeServings = context.getString(R.string.recipe_servings,
+        prefs.getInt(PREF_SERVINGS_KEY + appWidgetId, 0));
 
-    // TODO: Pass actual recipe name
-    CharSequence recipeName = "BROWNIES";
-    CharSequence recipeServings = context.getString(R.string.recipe_servings, 8);
     // Construct the RemoteViews object
     RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget);
     views.setTextViewText(R.id.widget_recipe_name, recipeName);
@@ -27,13 +37,12 @@ public class IngredientsWidget extends AppWidgetProvider {
 
     // Populate ListView
     Intent listIntent = new Intent(context, IngredientsWidgetService.class);
-    listIntent.putExtra(RecipeDetailActivity.RECIPE_ID_EXTRA, 1);
+    listIntent.putExtra(RecipeDetailActivity.RECIPE_ID_EXTRA, recipeId);
     views.setRemoteAdapter(R.id.widget_ingredients_list, listIntent);
 
     // Create an Intent to launch RecipeDetailActivity for given recipe when clicked
     Intent intent = new Intent(context, RecipeDetailActivity.class);
-    // TODO: Change to actual id
-    intent.putExtra(RecipeDetailActivity.RECIPE_ID_EXTRA, 1);
+    intent.putExtra(RecipeDetailActivity.RECIPE_ID_EXTRA, recipeId);
     PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
         intent, PendingIntent.FLAG_CANCEL_CURRENT);
     views.setOnClickPendingIntent(R.id.widget_bar, pendingIntent);
