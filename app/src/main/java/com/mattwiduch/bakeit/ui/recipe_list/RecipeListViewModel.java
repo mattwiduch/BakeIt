@@ -19,7 +19,7 @@ public class RecipeListViewModel extends ViewModel {
     mAllRecipes = repository.getAllRecipes();
   }
 
-  LiveData<List<Recipe>> getAllRecipes() {
+  public LiveData<List<Recipe>> getAllRecipes() {
     return mAllRecipes;
   }
 }

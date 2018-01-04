@@ -1,25 +1,28 @@
 package com.mattwiduch.bakeit.ui.widget;
 
-import android.app.Activity;
 import android.appwidget.AppWidgetManager;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.mattwiduch.bakeit.R;
-import java.util.ArrayList;
-import java.util.List;
+import com.mattwiduch.bakeit.ui.recipe_list.RecipeListModelFactory;
+import com.mattwiduch.bakeit.ui.recipe_list.RecipeListViewModel;
+import com.mattwiduch.bakeit.utils.InjectorUtils;
 
 /**
  * Configuration activity for IngredientsWidget. Provides user with a list of recipes to choose
  * from.
  */
 
-public class IngredientsWidgetConfigActivity extends Activity {
+public class IngredientsWidgetConfigActivity extends AppCompatActivity {
 
   int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+  private RecipeListViewModel mViewModel;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,14 +37,18 @@ public class IngredientsWidgetConfigActivity extends Activity {
           AppWidgetManager.INVALID_APPWIDGET_ID);
 
       // TODO: Observe data
+      RecipeListModelFactory factory = InjectorUtils.provideRecipeListViewModelFactory(
+          this.getApplicationContext());
+      mViewModel = ViewModelProviders.of(this, factory).get(RecipeListViewModel.class);
 
-      final List<String> recipes = new ArrayList<>();
-      if (true) {
-      // TODO: Show this toast when live data object is empty
-      } else {
-        Toast.makeText(this, R.string.empty_recipe_database, Toast.LENGTH_LONG).show();
-        finish();
-      }
+      mViewModel.getAllRecipes().observe(this, recipes -> {
+        if (recipes != null && !recipes.isEmpty()) {
+          // TODO: Populate spinner with recipes
+        } else {
+          Toast.makeText(this, R.string.empty_recipe_database, Toast.LENGTH_LONG).show();
+          finish();
+        }
+      });
     }
   }
 
