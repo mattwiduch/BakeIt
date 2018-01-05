@@ -3,6 +3,7 @@ package com.mattwiduch.bakeit.ui.recipe_list;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
 import com.mattwiduch.bakeit.ui.recipe_list.RecipeAdapter.RecipeAdapterOnItemClickHandler;
+import com.mattwiduch.bakeit.utils.ConnectionDetector;
 import com.mattwiduch.bakeit.utils.InjectorUtils;
 
 /**
@@ -49,14 +51,38 @@ public class RecipeListActivity extends AppCompatActivity implements
         this.getApplicationContext());
     mViewModel = ViewModelProviders.of(this, factory).get(RecipeListViewModel.class);
 
+    // Create snack bar that shows connection error messages
+    final Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+        R.string.connection_error, Snackbar.LENGTH_INDEFINITE);
+    View snackbarView = snackbar.getView();
+    snackbarView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+    // Observe device connectivity
+    ConnectionDetector connectionDetector = new ConnectionDetector(getApplicationContext());
+    connectionDetector.observe(this, status -> {
+      if (status != null && status.getIsConnected()) {
+        // Request new data only if recipe list is empty
+        if (mRecipeAdapter.getItemCount() < 1) {
+          InjectorUtils.provideNetworkDataSource(this).startFetchRecipesService();
+        }
+        snackbar.dismiss();
+      } else {
+        snackbar.show();
+      }
+    });
+
     mViewModel.getAllRecipes().observe(this, recipes -> {
       mRecipeAdapter.updateRecipes(recipes);
 
       if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
       recipesRecyclerView.smoothScrollToPosition(mPosition);
 
-      if (recipes != null && !recipes.isEmpty()) {
-        showRecipes();
+      if (recipes != null) {
+        if (!recipes.isEmpty()) {
+          showRecipes();
+        } else {
+         // TODO: Show empty list view
+        }
       } else {
         showLoading();
       }
