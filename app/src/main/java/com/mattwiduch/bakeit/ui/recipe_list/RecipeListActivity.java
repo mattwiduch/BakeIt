@@ -3,11 +3,13 @@ package com.mattwiduch.bakeit.ui.recipe_list;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,10 +25,14 @@ import com.mattwiduch.bakeit.utils.InjectorUtils;
 public class RecipeListActivity extends AppCompatActivity implements
     RecipeAdapterOnItemClickHandler {
 
+  @BindView(R.id.recipes_coordinator)
+  CoordinatorLayout recipesCoordinator;
   @BindView(R.id.recipes_recycler_view)
   RecyclerView recipesRecyclerView;
   @BindView(R.id.recipes_loading_indicator)
   ProgressBar recipesLoadingIndicator;
+  @BindView(R.id.recipes_empty_list)
+  LinearLayout recipesEmptyList;
 
   private static final String LOG_TAG = RecipeListActivity.class.getSimpleName();
 
@@ -52,8 +58,8 @@ public class RecipeListActivity extends AppCompatActivity implements
     mViewModel = ViewModelProviders.of(this, factory).get(RecipeListViewModel.class);
 
     // Create snack bar that shows connection error messages
-    final Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
-        R.string.connection_error, Snackbar.LENGTH_INDEFINITE);
+    final Snackbar snackbar = Snackbar.make(recipesCoordinator, R.string.connection_error,
+        Snackbar.LENGTH_INDEFINITE);
     View snackbarView = snackbar.getView();
     snackbarView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
 
@@ -81,7 +87,7 @@ public class RecipeListActivity extends AppCompatActivity implements
         if (!recipes.isEmpty()) {
           showRecipes();
         } else {
-         // TODO: Show empty list view
+         showEmpty();
         }
       } else {
         showLoading();
@@ -106,7 +112,8 @@ public class RecipeListActivity extends AppCompatActivity implements
    * Hides loading indicator and makes recipe list visible.
    */
   private void showRecipes() {
-    recipesLoadingIndicator.setVisibility(View.INVISIBLE);
+    recipesEmptyList.setVisibility(View.GONE);
+    recipesLoadingIndicator.setVisibility(View.GONE);
     recipesRecyclerView.setVisibility(View.VISIBLE);
   }
 
@@ -114,7 +121,17 @@ public class RecipeListActivity extends AppCompatActivity implements
    * Hides recipes list and shows loading indicator.
    */
   private void showLoading() {
-    recipesRecyclerView.setVisibility(View.INVISIBLE);
+    recipesEmptyList.setVisibility(View.GONE);
+    recipesRecyclerView.setVisibility(View.GONE);
     recipesLoadingIndicator.setVisibility(View.VISIBLE);
+  }
+
+  /**
+   * Hides empty list view and shows recipe list.
+   */
+  private void showEmpty() {
+    recipesLoadingIndicator.setVisibility(View.GONE);
+    recipesRecyclerView.setVisibility(View.GONE);
+    recipesEmptyList.setVisibility(View.VISIBLE);
   }
 }
