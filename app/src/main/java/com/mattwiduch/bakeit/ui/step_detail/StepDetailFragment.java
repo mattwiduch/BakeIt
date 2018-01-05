@@ -147,7 +147,7 @@ public class StepDetailFragment extends Fragment {
           // If image is available, load it using Glide
           stepImageIv.setVisibility(View.VISIBLE);
           RequestOptions glideOptions = new RequestOptions().centerCrop()
-              .error(R.drawable.error);
+              .error(R.drawable.error_image);
           Glide.with(this)
               .load(imageUrl)
               .apply(glideOptions)
