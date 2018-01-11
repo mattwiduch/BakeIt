@@ -5,9 +5,10 @@ import android.arch.lifecycle.ViewModel;
 import com.mattwiduch.bakeit.data.RecipeRepository;
 import com.mattwiduch.bakeit.data.database.entries.Recipe;
 import java.util.List;
+import javax.inject.Inject;
 
 /**
- * {@link ViewModel} for {@link RecipeListActivity}
+ * {@link ViewModel} for {@link RecipeListFragment}
  */
 
 public class RecipeListViewModel extends ViewModel {
@@ -15,7 +16,8 @@ public class RecipeListViewModel extends ViewModel {
   // List of recipes shown to the user
   private final LiveData<List<Recipe>> mAllRecipes;
 
-  public RecipeListViewModel (RecipeRepository repository) {
+  @Inject
+  RecipeListViewModel (RecipeRepository repository) {
     mAllRecipes = repository.getAllRecipes();
   }
 

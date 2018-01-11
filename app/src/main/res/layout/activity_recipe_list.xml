@@ -35,53 +35,10 @@
   </android.support.design.widget.AppBarLayout>
 
   <FrameLayout
-    android:id="@+id/layout_recipe_list"
+    android:id="@+id/recipe_list_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.mattwiduch.bakeit.ui.recipe_list.RecipeListActivity">
+    tools:context="com.mattwiduch.bakeit.MainActivity" />
 
-    <android.support.v7.widget.RecyclerView
-      android:id="@+id/recipes_recycler_view"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:padding="@dimen/card_margin"
-      android:clipToPadding="false"
-      android:scrollbars="vertical" />
-
-    <ProgressBar
-      android:id="@+id/recipes_loading_indicator"
-      android:layout_width="48dp"
-      android:layout_height="48dp"
-      android:layout_gravity="center"
-      android:visibility="gone" />
-
-    <LinearLayout
-      android:id="@+id/recipes_empty_list"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:orientation="vertical"
-      android:visibility="gone">
-
-      <ImageView
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:importantForAccessibility="no"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/content_spacing"
-        android:src="@drawable/ic_recipe"/>
-
-      <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/amatica_sc_bold"
-        android:textAllCaps="true"
-        android:textColor="@color/colorSecondary"
-        android:textSize="36sp"
-        android:textAlignment="center"
-        android:text="@string/error_empty_list" />
-    </LinearLayout>
-
-  </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>

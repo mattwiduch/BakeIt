@@ -10,11 +10,14 @@ import com.mattwiduch.bakeit.data.database.entries.Step;
 import com.mattwiduch.bakeit.data.network.RecipeNetworkDataSource;
 import com.mattwiduch.bakeit.data.network.RecipeService;
 import java.util.List;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Handles data operations in Bake It. Acts as a mediator between {@link RecipeService}
  * and {@link RecipeDao}
  */
+@Singleton
 public class RecipeRepository {
 
   private static final String LOG_TAG = RecipeRepository.class.getSimpleName();
@@ -39,7 +42,8 @@ public class RecipeRepository {
     return sInstance;
   }
 
-  private RecipeRepository(RecipeDao recipeDao, RecipeNetworkDataSource recipeNetworkDataSource,
+  @Inject
+  public RecipeRepository(RecipeDao recipeDao, RecipeNetworkDataSource recipeNetworkDataSource,
       AppExecutors executors) {
     mRecipeDao = recipeDao;
     mRecipeNetworkDataSource = recipeNetworkDataSource;
