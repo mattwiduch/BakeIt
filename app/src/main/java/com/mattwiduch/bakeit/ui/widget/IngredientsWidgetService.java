@@ -9,18 +9,29 @@ import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.data.RecipeRepository;
 import com.mattwiduch.bakeit.data.database.entries.Ingredient;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
-import com.mattwiduch.bakeit.utils.InjectorUtils;
 import com.mattwiduch.bakeit.utils.StringUtils;
+import dagger.android.AndroidInjection;
 import java.util.List;
 import java.util.Locale;
+import javax.inject.Inject;
 
 /**
  * An interface for an adapter between ListView and the ingredients data for that view.
  */
 public class IngredientsWidgetService extends RemoteViewsService {
+
+  @Inject
+  RecipeRepository repository;
+
+  @Override
+  public void onCreate() {
+    AndroidInjection.inject(this);
+    super.onCreate();
+  }
+
   @Override
   public RemoteViewsFactory onGetViewFactory(Intent intent) {
-    return new IngredientsListRemoteViewsFactory(this.getApplicationContext(),
+    return new IngredientsListRemoteViewsFactory(this.getApplicationContext(), repository,
         intent.getIntExtra(RecipeDetailActivity.RECIPE_ID_EXTRA, 0));
   }
 }
@@ -32,9 +43,9 @@ class IngredientsListRemoteViewsFactory implements RemoteViewsFactory {
   private List<Ingredient> mIngredients;
   private int mRecipeId;
 
-  IngredientsListRemoteViewsFactory(Context context, int id) {
+  IngredientsListRemoteViewsFactory(Context context, RecipeRepository repository, int id) {
     mContext = context;
-    mRepository = InjectorUtils.provideRepository(mContext);
+    mRepository = repository;
     mRecipeId = id;
   }
 

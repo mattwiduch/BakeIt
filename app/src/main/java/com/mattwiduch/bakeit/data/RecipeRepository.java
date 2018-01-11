@@ -22,28 +22,13 @@ public class RecipeRepository {
 
   private static final String LOG_TAG = RecipeRepository.class.getSimpleName();
 
-  // Singleton instantiation
-  private static final Object LOCK = new Object();
-  private static RecipeRepository sInstance;
   private final RecipeDao mRecipeDao;
   private final RecipeNetworkDataSource mRecipeNetworkDataSource;
   private final AppExecutors mExecutors;
   private boolean mInitialized = false;
 
-  public static synchronized RecipeRepository getInstance(RecipeDao recipeDao,
-      RecipeNetworkDataSource recipeNetworkDataSource, AppExecutors executors) {
-    Log.d(LOG_TAG, "Getting the repository");
-    if (sInstance == null) {
-      synchronized (LOCK) {
-        sInstance = new RecipeRepository(recipeDao, recipeNetworkDataSource, executors);
-        Log.d(LOG_TAG, "Created new repository");
-      }
-    }
-    return sInstance;
-  }
-
   @Inject
-  public RecipeRepository(RecipeDao recipeDao, RecipeNetworkDataSource recipeNetworkDataSource,
+  RecipeRepository(RecipeDao recipeDao, RecipeNetworkDataSource recipeNetworkDataSource,
       AppExecutors executors) {
     mRecipeDao = recipeDao;
     mRecipeNetworkDataSource = recipeNetworkDataSource;

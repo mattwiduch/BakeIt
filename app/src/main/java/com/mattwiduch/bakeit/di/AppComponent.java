@@ -30,7 +30,8 @@ import javax.inject.Singleton;
 @Component(modules = {
     AndroidSupportInjectionModule.class,
     AppModule.class,
-    ActivityBuilderModule.class
+    ActivityBuilderModule.class,
+    ServiceBuilderModule.class
 })
 public interface AppComponent {
   // Adds method to the builder that binds application instance to Dagger graph

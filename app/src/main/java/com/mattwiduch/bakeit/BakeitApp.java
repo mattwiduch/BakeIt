@@ -2,18 +2,22 @@ package com.mattwiduch.bakeit;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.Service;
 import com.mattwiduch.bakeit.di.DaggerAppComponent;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
+import dagger.android.HasServiceInjector;
 import javax.inject.Inject;
 
 /**
  * Entry point to the App. It's main purpose is to setup Dagger 2 dependency injection.
  */
-public class BakeitApp extends Application implements HasActivityInjector {
+public class BakeitApp extends Application implements HasActivityInjector, HasServiceInjector {
 
   @Inject
-  DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
+  DispatchingAndroidInjector<Service> serviceInjector;
+  @Inject
+  DispatchingAndroidInjector<Activity> activityInjector;
 
   @Override
   public void onCreate() {
@@ -23,6 +27,11 @@ public class BakeitApp extends Application implements HasActivityInjector {
 
   @Override
   public DispatchingAndroidInjector<Activity> activityInjector() {
-    return dispatchingAndroidInjector;
+    return activityInjector;
+  }
+
+  @Override
+  public DispatchingAndroidInjector<Service> serviceInjector() {
+    return serviceInjector;
   }
 }
