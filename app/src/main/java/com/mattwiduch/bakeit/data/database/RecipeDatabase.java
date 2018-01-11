@@ -19,7 +19,7 @@ import com.mattwiduch.bakeit.data.database.entries.Step;
 public abstract class RecipeDatabase extends RoomDatabase {
 
   private static final String LOG_TAG = RecipeDatabase.class.getSimpleName();
-  private static final String DATABASE_NAME = "recipe_database";
+  public static final String DATABASE_NAME = "recipe_database";
 
   // For singleton instantiation
   private static final Object LOCK = new Object();
