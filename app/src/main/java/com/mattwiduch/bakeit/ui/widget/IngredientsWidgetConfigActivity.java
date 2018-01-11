@@ -1,6 +1,7 @@
 package com.mattwiduch.bakeit.ui.widget;
 
 import android.appwidget.AppWidgetManager;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -23,21 +24,23 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.data.database.entries.Recipe;
-import com.mattwiduch.bakeit.ui.recipe_list.RecipeListModelFactory;
 import com.mattwiduch.bakeit.ui.recipe_list.RecipeListViewModel;
-import com.mattwiduch.bakeit.utils.InjectorUtils;
+import dagger.android.AndroidInjection;
 import java.util.List;
+import javax.inject.Inject;
 
 /**
  * Configuration activity for IngredientsWidget. Provides user with a list of recipes to choose
  * from.
  */
-
 public class IngredientsWidgetConfigActivity extends AppCompatActivity implements
     OnItemSelectedListener {
 
   @BindView(R.id.widget_config_spinner)
   Spinner recipesSpinner;
+
+  @Inject
+  ViewModelProvider.Factory mViewModelFactory;
 
   static final String PREFS_NAME = "com.mattwiduch.bakeit.ui.widget.IngredientsWidget";
   static final String PREF_ID_KEY = "recipeId_";
@@ -49,6 +52,7 @@ public class IngredientsWidgetConfigActivity extends AppCompatActivity implement
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
+    AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ingredients_widget_config);
     ButterKnife.bind(this);
@@ -59,9 +63,7 @@ public class IngredientsWidgetConfigActivity extends AppCompatActivity implement
       mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
           AppWidgetManager.INVALID_APPWIDGET_ID);
 
-      RecipeListModelFactory factory = InjectorUtils.provideRecipeListViewModelFactory(
-          this.getApplicationContext());
-      RecipeListViewModel mViewModel = ViewModelProviders.of(this, factory)
+      RecipeListViewModel mViewModel = ViewModelProviders.of(this, mViewModelFactory)
           .get(RecipeListViewModel.class);
 
       mViewModel.getAllRecipes().observe(this, recipes -> {

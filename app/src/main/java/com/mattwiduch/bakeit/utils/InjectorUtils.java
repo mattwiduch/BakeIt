@@ -22,7 +22,6 @@ import com.mattwiduch.bakeit.data.RecipeRepository;
 import com.mattwiduch.bakeit.data.database.RecipeDatabase;
 import com.mattwiduch.bakeit.data.network.RecipeNetworkDataSource;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailModelFactory;
-import com.mattwiduch.bakeit.ui.recipe_list.RecipeListModelFactory;
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailModelFactory;
 
 /**
@@ -33,11 +32,6 @@ public class InjectorUtils {
 
   private InjectorUtils() {
     // Utility class. Not meant to be instantiated.
-  }
-
-  public static RecipeListModelFactory provideRecipeListViewModelFactory(Context context) {
-    RecipeRepository repository = provideRepository(context.getApplicationContext());
-    return new RecipeListModelFactory(repository);
   }
 
   public static RecipeRepository provideRepository(Context context) {
