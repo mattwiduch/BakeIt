@@ -5,7 +5,8 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 import com.firebase.jobdispatcher.RetryStrategy;
-import com.mattwiduch.bakeit.utils.InjectorUtils;
+import dagger.android.AndroidInjection;
+import javax.inject.Inject;
 
 /**
  * Schedules recipe database update job.
@@ -13,7 +14,16 @@ import com.mattwiduch.bakeit.utils.InjectorUtils;
 
 public class RecipeFirebaseJobService extends JobService {
 
+  @Inject
+  RecipeNetworkDataSource mRecipeNetworkDataSource;
+
   private static final String LOG_TAG = RecipeFirebaseJobService.class.getSimpleName();
+
+  @Override
+  public void onCreate() {
+    AndroidInjection.inject(this);
+    super.onCreate();
+  }
 
   /**
    * The entry point to your Job. Implementations should offload work to another thread of
@@ -29,9 +39,7 @@ public class RecipeFirebaseJobService extends JobService {
   public boolean onStartJob(JobParameters job) {
     Log.d(LOG_TAG, "Started recipe job service");
 
-    RecipeNetworkDataSource networkDataSource = InjectorUtils.provideNetworkDataSource(
-        this.getApplicationContext());
-    networkDataSource.fetchRecipes();
+    mRecipeNetworkDataSource.fetchRecipes();
 
     jobFinished(job, false);
 

@@ -4,7 +4,8 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import com.mattwiduch.bakeit.utils.InjectorUtils;
+import dagger.android.AndroidInjection;
+import javax.inject.Inject;
 
 /**
  * An {@link IntentService} subclass for immediately scheduling a sync with the server off of the
@@ -14,6 +15,9 @@ import com.mattwiduch.bakeit.utils.InjectorUtils;
  */
 public class RecipeSyncIntentService extends IntentService {
 
+  @Inject
+  RecipeNetworkDataSource mRecipeNetworkDataSource;
+
   private static final String LOG_TAG = RecipeSyncIntentService.class.getSimpleName();
 
   public RecipeSyncIntentService() {
@@ -21,10 +25,14 @@ public class RecipeSyncIntentService extends IntentService {
   }
 
   @Override
+  public void onCreate() {
+    AndroidInjection.inject(this);
+    super.onCreate();
+  }
+
+  @Override
   protected void onHandleIntent(@Nullable Intent intent) {
     Log.d(LOG_TAG, "Recipe IntentService started");
-    RecipeNetworkDataSource networkDataSource = InjectorUtils.provideNetworkDataSource(
-        this.getApplicationContext());
-    networkDataSource.fetchRecipes();
+    mRecipeNetworkDataSource.fetchRecipes();
   }
 }

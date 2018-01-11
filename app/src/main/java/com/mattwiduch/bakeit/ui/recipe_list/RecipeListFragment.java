@@ -20,10 +20,10 @@ import android.widget.ProgressBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
+import com.mattwiduch.bakeit.data.network.RecipeNetworkDataSource;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
 import com.mattwiduch.bakeit.ui.recipe_list.RecipeAdapter.RecipeAdapterOnItemClickHandler;
 import com.mattwiduch.bakeit.utils.ConnectionDetector;
-import com.mattwiduch.bakeit.utils.InjectorUtils;
 import dagger.android.support.AndroidSupportInjection;
 import javax.inject.Inject;
 
@@ -41,6 +41,8 @@ public class RecipeListFragment extends Fragment implements RecipeAdapterOnItemC
 
   @Inject
   ViewModelProvider.Factory mViewModelFactory;
+  @Inject
+  RecipeNetworkDataSource mRecipeNetworkDataSource;
 
   private RecipeListViewModel mViewModel;
   private RecipeAdapter mRecipeAdapter;
@@ -91,7 +93,7 @@ public class RecipeListFragment extends Fragment implements RecipeAdapterOnItemC
       if (status != null && status.getIsConnected()) {
         // Request new data only if recipe list is empty
         if (mRecipeAdapter.getItemCount() < 1) {
-          InjectorUtils.provideNetworkDataSource(getContext()).startFetchRecipesService();
+          mRecipeNetworkDataSource.startFetchRecipesService();
         }
         snackbar.dismiss();
       } else {

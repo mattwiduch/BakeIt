@@ -35,8 +35,7 @@ import javax.inject.Singleton;
 class AppModule {
   @Singleton @Provides
   RecipeNetworkDataSource provideRecipeNetworkDataSource(Application app) {
-    return RecipeNetworkDataSource.getInstance(
-        app.getApplicationContext(), AppExecutors.getInstance());
+    return new RecipeNetworkDataSource(app.getApplicationContext(), AppExecutors.getInstance());
   }
 
   @Singleton @Provides
