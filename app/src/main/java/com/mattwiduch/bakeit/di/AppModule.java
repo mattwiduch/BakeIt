@@ -19,10 +19,9 @@ import static com.mattwiduch.bakeit.data.database.RecipeDatabase.DATABASE_NAME;
 
 import android.app.Application;
 import android.arch.persistence.room.Room;
-import com.mattwiduch.bakeit.AppExecutors;
+import android.content.Context;
 import com.mattwiduch.bakeit.data.database.RecipeDao;
 import com.mattwiduch.bakeit.data.database.RecipeDatabase;
-import com.mattwiduch.bakeit.data.network.RecipeNetworkDataSource;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -33,18 +32,21 @@ import javax.inject.Singleton;
  */
 @Module(includes = ViewModelModule.class)
 class AppModule {
-  @Singleton @Provides
-  RecipeNetworkDataSource provideRecipeNetworkDataSource(Application app) {
-    return new RecipeNetworkDataSource(app.getApplicationContext(), AppExecutors.getInstance());
+
+  @Provides
+  @Singleton
+  Context provideContext(Application application) {
+    return application;
   }
 
-  @Singleton @Provides
+  @Provides
+  @Singleton
   RecipeDatabase provideDatabase(Application app) {
     return Room.databaseBuilder(app, RecipeDatabase.class, DATABASE_NAME).build();
   }
 
-  @Singleton
   @Provides
+  @Singleton
   RecipeDao provideRecipeDao(RecipeDatabase db) {
     return db.recipeDao();
   }
