@@ -1,7 +1,9 @@
 package com.mattwiduch.bakeit.ui.step_detail;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -9,7 +11,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
-import com.mattwiduch.bakeit.utils.InjectorUtils;
+import dagger.android.AndroidInjection;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
+import javax.inject.Inject;
 
 /**
  * An activity representing a single Step detail screen. This
@@ -17,10 +22,15 @@ import com.mattwiduch.bakeit.utils.InjectorUtils;
  * item details are presented side-by-side with a list of items
  * in a {@link RecipeDetailActivity}.
  */
-public class StepDetailActivity extends AppCompatActivity {
+public class StepDetailActivity extends AppCompatActivity implements HasSupportFragmentInjector {
 
   @BindView(R.id.recipe_name)
   TextView recipeNameTv;
+
+  @Inject
+  DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
+  @Inject
+  ViewModelProvider.Factory factory;
 
   private StepDetailViewModel mViewModel;
   private int mRecipeId;
@@ -28,6 +38,7 @@ public class StepDetailActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_step_detail);
     ButterKnife.bind(this);
@@ -40,10 +51,9 @@ public class StepDetailActivity extends AppCompatActivity {
     mRecipeId = getIntent().getIntExtra(RecipeDetailActivity.RECIPE_ID_EXTRA, -1);
     mStepNumber = getIntent().getIntExtra(StepDetailFragment.RECIPE_STEP_NUMBER, -1);
 
-    // Get the ViewModel from the factory
-    StepDetailModelFactory factory = InjectorUtils.provideStepDetailViewModelFactory(
-        this, mRecipeId, mStepNumber);
+    // Set up ViewModel
     mViewModel = ViewModelProviders.of(this, factory).get(StepDetailViewModel.class);
+    mViewModel.setStepData(mRecipeId, mStepNumber);
 
     // Observe changes in recipe data
     mViewModel.getRecipe().observe(this, recipe -> {
@@ -73,5 +83,10 @@ public class StepDetailActivity extends AppCompatActivity {
           .add(R.id.step_detail_container, fragment)
           .commit();
     }
+  }
+
+  @Override
+  public DispatchingAndroidInjector<Fragment> supportFragmentInjector() {
+    return dispatchingAndroidInjector;
   }
 }

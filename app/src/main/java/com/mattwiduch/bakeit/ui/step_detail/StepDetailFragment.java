@@ -4,11 +4,13 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 import static com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity.RECIPE_ID_EXTRA;
 
 import android.app.Dialog;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.transition.Explode;
 import android.support.transition.Fade;
 import android.support.v4.app.Fragment;
@@ -31,8 +33,9 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.ui.VideoPlayer;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
-import com.mattwiduch.bakeit.utils.InjectorUtils;
 import com.mattwiduch.bakeit.utils.StringUtils;
+import dagger.android.support.AndroidSupportInjection;
+import javax.inject.Inject;
 
 /**
  * A fragment representing a single Step detail screen.
@@ -63,6 +66,9 @@ public class StepDetailFragment extends Fragment {
   @BindView(R.id.step_video_container)
   FrameLayout videoPlayerContainer;
 
+  @Inject
+  ViewModelProvider.Factory factory;
+
   /**
    * The fragment argument representing the step ID that this fragment
    * represents.
@@ -89,6 +95,12 @@ public class StepDetailFragment extends Fragment {
   }
 
   @Override
+  public void onAttach(Context context) {
+    AndroidSupportInjection.inject(this);
+    super.onAttach(context);
+  }
+
+  @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
@@ -105,11 +117,6 @@ public class StepDetailFragment extends Fragment {
         mStepNumber = getArguments().getInt(RECIPE_STEP_NUMBER);
       }
     }
-
-    // Get the ViewModel from the factory
-    StepDetailModelFactory factory = InjectorUtils.provideStepDetailViewModelFactory(
-        getContext(), mRecipeId, mStepNumber);
-    mViewModel = ViewModelProviders.of(this, factory).get(StepDetailViewModel.class);
   }
 
   @Override
@@ -117,6 +124,15 @@ public class StepDetailFragment extends Fragment {
       Bundle savedInstanceState) {
     View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
     ButterKnife.bind(this, rootView);
+    return rootView;
+  }
+
+  @Override
+  public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    // Setup ViewModel
+    mViewModel = ViewModelProviders.of(this, factory).get(StepDetailViewModel.class);
+    mViewModel.setStepData(mRecipeId, mStepNumber);
 
     // Observe changes in step data
     mViewModel.getCurrentStep().observe(this, step -> {
@@ -167,8 +183,6 @@ public class StepDetailFragment extends Fragment {
         }
       }
     });
-
-    return rootView;
   }
 
   @Override

@@ -20,6 +20,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import com.mattwiduch.bakeit.ui.BakeitViewModelFactory;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailViewModel;
 import com.mattwiduch.bakeit.ui.recipe_list.RecipeListViewModel;
+import com.mattwiduch.bakeit.ui.step_detail.StepDetailViewModel;
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
@@ -35,6 +36,11 @@ abstract class ViewModelModule {
   @IntoMap
   @ViewModelKey(RecipeDetailViewModel.class)
   abstract ViewModel bindRecipeDetailViewModel(RecipeDetailViewModel recipeDetailViewModel);
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(StepDetailViewModel.class)
+  abstract ViewModel bindStepDetailViewModel(StepDetailViewModel stepDetailViewModel);
 
   @Binds
   abstract ViewModelProvider.Factory bindViewModelFactory(BakeitViewModelFactory factory);

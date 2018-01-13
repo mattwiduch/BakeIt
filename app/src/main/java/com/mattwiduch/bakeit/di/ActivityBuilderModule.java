@@ -17,6 +17,7 @@ package com.mattwiduch.bakeit.di;
 
 import com.mattwiduch.bakeit.MainActivity;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
+import com.mattwiduch.bakeit.ui.step_detail.StepDetailActivity;
 import com.mattwiduch.bakeit.ui.widget.IngredientsWidgetConfigActivity;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -28,6 +29,9 @@ public abstract class ActivityBuilderModule {
 
   @ContributesAndroidInjector(modules = FragmentBuilderModule.class)
   abstract RecipeDetailActivity contributeRecipeDetailActivity();
+
+  @ContributesAndroidInjector(modules = FragmentBuilderModule.class)
+  abstract StepDetailActivity contributeStepDetailActivity();
 
   @ContributesAndroidInjector
   abstract IngredientsWidgetConfigActivity contributeIngredientsWidgetConfigAbility();
