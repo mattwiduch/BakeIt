@@ -22,6 +22,7 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 import com.mattwiduch.bakeit.data.database.RecipeDao;
 import com.mattwiduch.bakeit.data.database.RecipeDatabase;
+import com.mattwiduch.bakeit.di.modules.ViewModelModule;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;

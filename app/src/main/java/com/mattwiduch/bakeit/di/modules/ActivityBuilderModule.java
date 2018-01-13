@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mattwiduch.bakeit.di;
+package com.mattwiduch.bakeit.di.modules;
 
 import com.mattwiduch.bakeit.MainActivity;
+import com.mattwiduch.bakeit.di.scopes.ActivityScope;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailActivity;
 import com.mattwiduch.bakeit.ui.widget.IngredientsWidgetConfigActivity;

@@ -67,7 +67,7 @@ public class StepDetailFragment extends Fragment {
   FrameLayout videoPlayerContainer;
 
   @Inject
-  ViewModelProvider.Factory factory;
+  ViewModelProvider.Factory viewModelFactory;
 
   /**
    * The fragment argument representing the step ID that this fragment
@@ -131,7 +131,7 @@ public class StepDetailFragment extends Fragment {
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     // Setup ViewModel
-    mViewModel = ViewModelProviders.of(this, factory).get(StepDetailViewModel.class);
+    mViewModel = ViewModelProviders.of(this, viewModelFactory).get(StepDetailViewModel.class);
     mViewModel.setStepData(mRecipeId, mStepNumber);
 
     // Observe changes in step data

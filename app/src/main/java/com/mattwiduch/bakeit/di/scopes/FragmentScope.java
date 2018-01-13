@@ -1,4 +1,4 @@
-package com.mattwiduch.bakeit.di;
+package com.mattwiduch.bakeit.di.scopes;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

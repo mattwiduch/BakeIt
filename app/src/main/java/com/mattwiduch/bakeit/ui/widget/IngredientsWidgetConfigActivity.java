@@ -40,7 +40,7 @@ public class IngredientsWidgetConfigActivity extends AppCompatActivity implement
   Spinner recipesSpinner;
 
   @Inject
-  ViewModelProvider.Factory mViewModelFactory;
+  ViewModelProvider.Factory viewModelFactory;
 
   static final String PREFS_NAME = "com.mattwiduch.bakeit.ui.widget.IngredientsWidget";
   static final String PREF_ID_KEY = "recipeId_";
@@ -63,7 +63,7 @@ public class IngredientsWidgetConfigActivity extends AppCompatActivity implement
       mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
           AppWidgetManager.INVALID_APPWIDGET_ID);
 
-      RecipeListViewModel mViewModel = ViewModelProviders.of(this, mViewModelFactory)
+      RecipeListViewModel mViewModel = ViewModelProviders.of(this, viewModelFactory)
           .get(RecipeListViewModel.class);
 
       mViewModel.getAllRecipes().observe(this, recipes -> {

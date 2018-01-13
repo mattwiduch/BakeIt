@@ -16,7 +16,7 @@ import javax.inject.Inject;
 public class RecipeSyncIntentService extends IntentService {
 
   @Inject
-  RecipeNetworkDataSource mRecipeNetworkDataSource;
+  RecipeNetworkDataSource recipeNetworkDataSource;
 
   private static final String LOG_TAG = RecipeSyncIntentService.class.getSimpleName();
 
@@ -33,6 +33,6 @@ public class RecipeSyncIntentService extends IntentService {
   @Override
   protected void onHandleIntent(@Nullable Intent intent) {
     Log.d(LOG_TAG, "Recipe IntentService started");
-    mRecipeNetworkDataSource.fetchRecipes();
+    recipeNetworkDataSource.fetchRecipes();
   }
 }

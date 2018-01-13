@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mattwiduch.bakeit.di;
+package com.mattwiduch.bakeit.di.modules;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
@@ -26,7 +26,7 @@ import dagger.Module;
 import dagger.multibindings.IntoMap;
 
 @Module
-abstract class ViewModelModule {
+public abstract class ViewModelModule {
   @Binds
   @IntoMap
   @ViewModelKey(RecipeListViewModel.class)

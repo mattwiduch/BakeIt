@@ -13,23 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mattwiduch.bakeit.di;
+package com.mattwiduch.bakeit.di.modules;
 
-import android.arch.lifecycle.ViewModel;
-import dagger.MapKey;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.mattwiduch.bakeit.di.scopes.FragmentScope;
+import com.mattwiduch.bakeit.ui.recipe_list.RecipeListFragment;
+import com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment;
+import dagger.Module;
+import dagger.android.ContributesAndroidInjector;
 
-/**
- * Map key type used for ViewModel multi-binding.
- */
-@Documented
-@Target({ElementType.METHOD})
-@Retention(RetentionPolicy.RUNTIME)
-@MapKey
-@interface ViewModelKey {
-  Class<? extends ViewModel> value();
+@Module
+public abstract class FragmentBuilderModule {
+  @FragmentScope
+  @ContributesAndroidInjector
+  abstract RecipeListFragment contributeRecipeListFragment();
+
+  @FragmentScope
+  @ContributesAndroidInjector
+  abstract StepDetailFragment contributeStepDetailFragment();
 }

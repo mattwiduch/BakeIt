@@ -30,7 +30,7 @@ public class StepDetailActivity extends AppCompatActivity implements HasSupportF
   @Inject
   DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
   @Inject
-  ViewModelProvider.Factory factory;
+  ViewModelProvider.Factory viewModelFactory;
 
   private StepDetailViewModel mViewModel;
   private int mRecipeId;
@@ -52,7 +52,7 @@ public class StepDetailActivity extends AppCompatActivity implements HasSupportF
     mStepNumber = getIntent().getIntExtra(StepDetailFragment.RECIPE_STEP_NUMBER, -1);
 
     // Set up ViewModel
-    mViewModel = ViewModelProviders.of(this, factory).get(StepDetailViewModel.class);
+    mViewModel = ViewModelProviders.of(this, viewModelFactory).get(StepDetailViewModel.class);
     mViewModel.setStepData(mRecipeId, mStepNumber);
 
     // Observe changes in recipe data

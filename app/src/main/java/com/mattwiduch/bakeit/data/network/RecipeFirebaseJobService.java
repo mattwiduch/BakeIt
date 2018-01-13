@@ -15,7 +15,7 @@ import javax.inject.Inject;
 public class RecipeFirebaseJobService extends JobService {
 
   @Inject
-  RecipeNetworkDataSource mRecipeNetworkDataSource;
+  RecipeNetworkDataSource recipeNetworkDataSource;
 
   private static final String LOG_TAG = RecipeFirebaseJobService.class.getSimpleName();
 
@@ -39,7 +39,7 @@ public class RecipeFirebaseJobService extends JobService {
   public boolean onStartJob(JobParameters job) {
     Log.d(LOG_TAG, "Started recipe job service");
 
-    mRecipeNetworkDataSource.fetchRecipes();
+    recipeNetworkDataSource.fetchRecipes();
 
     jobFinished(job, false);
 

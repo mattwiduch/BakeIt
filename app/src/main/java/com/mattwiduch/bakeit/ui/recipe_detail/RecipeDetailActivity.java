@@ -47,7 +47,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
   TextView recipeServingsTv;
 
   @Inject
-  ViewModelProvider.Factory factory;
+  ViewModelProvider.Factory viewModelFactory;
 
   public static final String RECIPE_ID_EXTRA = "RECIPE_ID_EXTRA";
   private static final String KEY_CURRENT_STEP = "KEY_CURRENT_STEP";
@@ -87,7 +87,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     mRecipeId = getIntent().getIntExtra(RECIPE_ID_EXTRA, -1);
 
     // Setup ViewModel
-    mViewModel = ViewModelProviders.of(this, factory).get(RecipeDetailViewModel.class);
+    mViewModel = ViewModelProviders.of(this, viewModelFactory).get(RecipeDetailViewModel.class);
     mViewModel.setRecipeId(getIntent().getIntExtra(RECIPE_ID_EXTRA, -1));
 
     // Observe changes in recipe data

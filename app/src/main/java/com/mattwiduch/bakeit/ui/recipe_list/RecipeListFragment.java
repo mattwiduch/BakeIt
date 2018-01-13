@@ -40,9 +40,9 @@ public class RecipeListFragment extends Fragment implements RecipeAdapterOnItemC
   LinearLayout recipesEmptyList;
 
   @Inject
-  ViewModelProvider.Factory mViewModelFactory;
+  ViewModelProvider.Factory viewModelFactory;
   @Inject
-  RecipeNetworkDataSource mRecipeNetworkDataSource;
+  RecipeNetworkDataSource recipeNetworkDataSource;
 
   private RecipeListViewModel mViewModel;
   private RecipeAdapter mRecipeAdapter;
@@ -71,7 +71,7 @@ public class RecipeListFragment extends Fragment implements RecipeAdapterOnItemC
     super.onActivityCreated(savedInstanceState);
 
     // Get ViewModel for this fragment
-    mViewModel = ViewModelProviders.of(this, mViewModelFactory)
+    mViewModel = ViewModelProviders.of(this, viewModelFactory)
         .get(RecipeListViewModel.class);
 
     // Recipe list RecyclerView setup
@@ -93,7 +93,7 @@ public class RecipeListFragment extends Fragment implements RecipeAdapterOnItemC
       if (status != null && status.getIsConnected()) {
         // Request new data only if recipe list is empty
         if (mRecipeAdapter.getItemCount() < 1) {
-          mRecipeNetworkDataSource.startFetchRecipesService();
+          recipeNetworkDataSource.startFetchRecipesService();
         }
         snackbar.dismiss();
       } else {

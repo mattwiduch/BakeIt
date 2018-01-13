@@ -17,6 +17,8 @@ package com.mattwiduch.bakeit.di;
 
 import android.app.Application;
 import com.mattwiduch.bakeit.BakeitApp;
+import com.mattwiduch.bakeit.di.modules.ActivityBuilderModule;
+import com.mattwiduch.bakeit.di.modules.ServiceBuilderModule;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.support.AndroidSupportInjectionModule;
