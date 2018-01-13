@@ -18,7 +18,6 @@ package com.mattwiduch.bakeit.utils;
 
 import android.content.Context;
 import com.mattwiduch.bakeit.data.RecipeRepository;
-import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailModelFactory;
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailModelFactory;
 
 /**
@@ -44,11 +43,11 @@ public class InjectorUtils {
 //    return RecipeNetworkDataSource.getInstance(context.getApplicationContext(), executors);
 //  }
 
-  public static RecipeDetailModelFactory provideRecipeDetailViewModelFactory(Context context,
-      int recipeId) {
-    RecipeRepository repository = null; //provideRepository(context.getApplicationContext());
-    return new RecipeDetailModelFactory(repository, recipeId);
-  }
+//  public static RecipeDetailModelFactory provideRecipeDetailViewModelFactory(Context context,
+//      int recipeId) {
+//    RecipeRepository repository = null; //provideRepository(context.getApplicationContext());
+//    return new RecipeDetailModelFactory(repository, recipeId);
+//  }
 
   public static StepDetailModelFactory provideStepDetailViewModelFactory(Context context,
       int recipeId, int stepId) {

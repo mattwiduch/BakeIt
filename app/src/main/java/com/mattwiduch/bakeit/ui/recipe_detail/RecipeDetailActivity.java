@@ -1,5 +1,6 @@
 package com.mattwiduch.bakeit.ui.recipe_detail;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +18,8 @@ import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeStepAdapter.RecipeStepAdapterOnItemClickHandler;
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailActivity;
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment;
-import com.mattwiduch.bakeit.utils.InjectorUtils;
+import dagger.android.AndroidInjection;
+import javax.inject.Inject;
 import net.cachapa.expandablelayout.ExpandableLayout;
 
 /**
@@ -44,6 +46,9 @@ public class RecipeDetailActivity extends AppCompatActivity implements
   @BindView(R.id.recipe_servings)
   TextView recipeServingsTv;
 
+  @Inject
+  ViewModelProvider.Factory factory;
+
   public static final String RECIPE_ID_EXTRA = "RECIPE_ID_EXTRA";
   private static final String KEY_CURRENT_STEP = "KEY_CURRENT_STEP";
 
@@ -60,6 +65,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_recipe_detail);
     ButterKnife.bind(this);
@@ -80,10 +86,9 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     // Retrieve recipe id from intent extras
     mRecipeId = getIntent().getIntExtra(RECIPE_ID_EXTRA, -1);
 
-    // Get the ViewModel from the factory
-    RecipeDetailModelFactory factory = InjectorUtils.provideRecipeDetailViewModelFactory(
-        this.getApplicationContext(), mRecipeId);
+    // Setup ViewModel
     mViewModel = ViewModelProviders.of(this, factory).get(RecipeDetailViewModel.class);
+    mViewModel.setRecipeId(getIntent().getIntExtra(RECIPE_ID_EXTRA, -1));
 
     // Observe changes in recipe data
     mViewModel.getRecipe().observe(this, recipe -> {
