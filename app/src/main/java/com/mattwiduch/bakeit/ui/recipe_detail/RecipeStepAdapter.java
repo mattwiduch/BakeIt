@@ -31,6 +31,8 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
   private final RecipeStepAdapterOnItemClickHandler mClickHandler;
   // Context used to load resources
   private Context mContext;
+  //
+  private boolean mTwoPane;
   // List of recipe steps to display in Recycler View
   private List<Step> mStepList;
   // Currently selected item's position
@@ -41,10 +43,12 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
    *
    * @param clickHandler The on-click handler for this adapter
    */
-  RecipeStepAdapter(RecipeStepAdapterOnItemClickHandler clickHandler, Context context) {
+  RecipeStepAdapter(RecipeStepAdapterOnItemClickHandler clickHandler, Context context,
+      boolean twoPane) {
     mClickHandler = clickHandler;
     mStepList = new ArrayList<>();
     mContext = context;
+    mTwoPane = twoPane;
   }
 
   /**
@@ -64,27 +68,33 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
   @Override
   public void onBindViewHolder(final RecipeStepViewHolder holder, int position) {
     Step step = mStepList.get(position);
-    holder.stepNumberTv.setText(String.format(Locale.getDefault(),"%d",
+    holder.stepNumberTv.setText(String.format(Locale.getDefault(), "%d",
         step.getStepNumber() + 1));
     holder.stepDescriptionTv.setText(step.getShortDescription());
 
-    // Highlight currently selected item
-    if (position == mSelectedPosition) {
-      holder.stepNumberFrame.setImageResource(R.color.colorAccent);
-      holder.stepNumberFrame.setBorderColor(mContext.getResources().getColor(R.color.colorAccent));
-      holder.stepNumberTv.setTextColor(
-          mContext.getResources().getColor(R.color.colorCardBackground));
-      holder.stepNumberTv.setTypeface(holder.stepNumberTv.getTypeface(), Typeface.BOLD);
-      holder.stepDescriptionTv.setTypeface(ResourcesCompat.getFont(mContext, R.font.poppins_medium));
-      holder.stepArrowIv.setColorFilter(mContext.getResources().getColor(R.color.colorAccent));
-    } else {
-      holder.stepNumberFrame.setImageResource(R.color.colorCardBackground);
-      holder.stepNumberFrame.setBorderColor(mContext.getResources().getColor(R.color.colorSecondary));
-      holder.stepNumberTv.setTextColor(
-          mContext.getResources().getColor(R.color.colorAccent));
-      holder.stepNumberTv.setTypeface(holder.stepNumberTv.getTypeface(), Typeface.NORMAL);
-      holder.stepDescriptionTv.setTypeface(ResourcesCompat.getFont(mContext, R.font.poppins_light));
-      holder.stepArrowIv.setColorFilter(mContext.getResources().getColor(R.color.colorSecondary));
+    // Highlight currently selected item (in two pane mode only)
+    if (mTwoPane) {
+      if (position == mSelectedPosition) {
+        holder.stepNumberFrame.setImageResource(R.color.colorAccent);
+        holder.stepNumberFrame
+            .setBorderColor(mContext.getResources().getColor(R.color.colorAccent));
+        holder.stepNumberTv.setTextColor(
+            mContext.getResources().getColor(R.color.colorCardBackground));
+        holder.stepNumberTv.setTypeface(holder.stepNumberTv.getTypeface(), Typeface.BOLD);
+        holder.stepDescriptionTv
+            .setTypeface(ResourcesCompat.getFont(mContext, R.font.poppins_medium));
+        holder.stepArrowIv.setColorFilter(mContext.getResources().getColor(R.color.colorAccent));
+      } else {
+        holder.stepNumberFrame.setImageResource(R.color.colorCardBackground);
+        holder.stepNumberFrame
+            .setBorderColor(mContext.getResources().getColor(R.color.colorSecondary));
+        holder.stepNumberTv.setTextColor(
+            mContext.getResources().getColor(R.color.colorAccent));
+        holder.stepNumberTv.setTypeface(holder.stepNumberTv.getTypeface(), Typeface.NORMAL);
+        holder.stepDescriptionTv
+            .setTypeface(ResourcesCompat.getFont(mContext, R.font.poppins_light));
+        holder.stepArrowIv.setColorFilter(mContext.getResources().getColor(R.color.colorSecondary));
+      }
     }
   }
 

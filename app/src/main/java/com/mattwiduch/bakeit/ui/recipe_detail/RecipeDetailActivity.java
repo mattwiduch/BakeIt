@@ -141,7 +141,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     ingredientsRecyclerView.setHasFixedSize(true);
     // Steps recycler view
     stepsRecyclerView.addItemDecoration(new StepItemDecoration(getApplicationContext()));
-    mStepsAdapter = new RecipeStepAdapter(this, this);
+    mStepsAdapter = new RecipeStepAdapter(this, this, mTwoPane);
     stepsRecyclerView.setAdapter(mStepsAdapter);
     stepsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     stepsRecyclerView.setHasFixedSize(true);
