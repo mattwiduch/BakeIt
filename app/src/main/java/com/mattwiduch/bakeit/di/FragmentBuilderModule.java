@@ -22,9 +22,11 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class FragmentBuilderModule {
+  @FragmentScope
   @ContributesAndroidInjector
   abstract RecipeListFragment contributeRecipeListFragment();
 
+  @FragmentScope
   @ContributesAndroidInjector
   abstract StepDetailFragment contributeStepDetailFragment();
 }

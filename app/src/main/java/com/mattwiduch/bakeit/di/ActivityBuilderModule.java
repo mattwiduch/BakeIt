@@ -24,15 +24,19 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class ActivityBuilderModule {
+  @ActivityScope
   @ContributesAndroidInjector(modules = FragmentBuilderModule.class)
   abstract MainActivity contributeMainActivity();
 
+  @ActivityScope
   @ContributesAndroidInjector(modules = FragmentBuilderModule.class)
   abstract RecipeDetailActivity contributeRecipeDetailActivity();
 
+  @ActivityScope
   @ContributesAndroidInjector(modules = FragmentBuilderModule.class)
   abstract StepDetailActivity contributeStepDetailActivity();
 
+  @ActivityScope
   @ContributesAndroidInjector
   abstract IngredientsWidgetConfigActivity contributeIngredientsWidgetConfigAbility();
 }
