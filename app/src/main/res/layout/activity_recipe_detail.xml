@@ -36,13 +36,6 @@
     </android.support.v7.widget.Toolbar>
   </android.support.design.widget.AppBarLayout>
 
-  <FrameLayout
-    android:id="@+id/frameLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    <include layout="@layout/container_recipe_detail" />
-  </FrameLayout>
+  <include layout="@layout/container_recipe_detail" />
 
 </android.support.design.widget.CoordinatorLayout>

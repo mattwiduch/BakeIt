@@ -7,6 +7,7 @@
   android:divider="?android:attr/dividerHorizontal"
   android:orientation="horizontal"
   android:showDividers="middle"
+  app:layout_behavior="@string/appbar_scrolling_view_behavior"
   tools:context="com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity">
 
   <!--
@@ -15,15 +16,11 @@
     
     -->
 
-  <android.support.v4.widget.NestedScrollView
+  <FrameLayout
+    android:id="@+id/recipe_details_fragment"
     android:layout_width="0dp"
     android:layout_height="match_parent"
-    android:layout_weight="1"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    <include layout="@layout/content_recipe_detail" />
-
-  </android.support.v4.widget.NestedScrollView>
+    android:layout_weight="1" />
 
   <FrameLayout
     android:id="@+id/step_detail_container"

@@ -16,6 +16,7 @@
 package com.mattwiduch.bakeit.di.modules;
 
 import com.mattwiduch.bakeit.di.scopes.FragmentScope;
+import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailFragment;
 import com.mattwiduch.bakeit.ui.recipe_list.RecipeListFragment;
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment;
 import dagger.Module;
@@ -26,6 +27,10 @@ public abstract class FragmentBuilderModule {
   @FragmentScope
   @ContributesAndroidInjector
   abstract RecipeListFragment contributeRecipeListFragment();
+
+  @FragmentScope
+  @ContributesAndroidInjector
+  abstract RecipeDetailFragment contributeRecipeDetailFragment();
 
   @FragmentScope
   @ContributesAndroidInjector
