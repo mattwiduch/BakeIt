@@ -13,6 +13,7 @@ import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailFragment.OnRecipeLoade
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailFragment.OnStepSelectedListener;
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailActivity;
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment;
+import com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment.OnStepLoadedListener;
 import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
@@ -27,7 +28,7 @@ import javax.inject.Inject;
  * item details side-by-side using two vertical panes.
  */
 public class RecipeDetailActivity extends AppCompatActivity implements HasSupportFragmentInjector,
-    OnStepSelectedListener, OnRecipeLoadedListener {
+    OnStepSelectedListener, OnRecipeLoadedListener, OnStepLoadedListener {
 
   @BindView(R.id.recipe_name)
   TextView recipeNameTv;
@@ -135,5 +136,10 @@ public class RecipeDetailActivity extends AppCompatActivity implements HasSuppor
   @Override
   public void onRecipeLoaded(String recipeName) {
     recipeNameTv.setText(recipeName);
+  }
+
+  @Override
+  public void onStepLoaded(String recipeName) {
+    // Do nothing. Not needed in two pane mode.
   }
 }
