@@ -1,7 +1,5 @@
 package com.mattwiduch.bakeit.ui.step_detail;
 
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +9,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
+import com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment.OnStepLoadedListener;
 import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
@@ -22,17 +21,15 @@ import javax.inject.Inject;
  * item details are presented side-by-side with a list of items
  * in a {@link RecipeDetailActivity}.
  */
-public class StepDetailActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+public class StepDetailActivity extends AppCompatActivity implements HasSupportFragmentInjector,
+    OnStepLoadedListener {
 
   @BindView(R.id.recipe_name)
   TextView recipeNameTv;
 
   @Inject
   DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
-  @Inject
-  ViewModelProvider.Factory viewModelFactory;
 
-  private StepDetailViewModel mViewModel;
   private int mRecipeId;
   private int mStepNumber;
 
@@ -50,17 +47,6 @@ public class StepDetailActivity extends AppCompatActivity implements HasSupportF
     // Get extras passed on to this activity
     mRecipeId = getIntent().getIntExtra(RecipeDetailActivity.RECIPE_ID_EXTRA, -1);
     mStepNumber = getIntent().getIntExtra(StepDetailFragment.RECIPE_STEP_NUMBER, -1);
-
-    // Set up ViewModel
-    mViewModel = ViewModelProviders.of(this, viewModelFactory).get(StepDetailViewModel.class);
-    mViewModel.setStepData(mRecipeId, mStepNumber);
-
-    // Observe changes in recipe data
-    mViewModel.getRecipe().observe(this, recipe -> {
-      if (recipe != null) {
-        recipeNameTv.setText(recipe.getName());
-      }
-    });
 
     // savedInstanceState is non-null when there is fragment state
     // saved from previous configurations of this activity
@@ -88,5 +74,10 @@ public class StepDetailActivity extends AppCompatActivity implements HasSupportF
   @Override
   public DispatchingAndroidInjector<Fragment> supportFragmentInjector() {
     return dispatchingAndroidInjector;
+  }
+
+  @Override
+  public void onStepLoaded(String recipeName) {
+    recipeNameTv.setText(recipeName);
   }
 }

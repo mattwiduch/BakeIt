@@ -78,6 +78,7 @@ public class StepDetailFragment extends Fragment {
   private static final String KEY_VIDEO_FULLSCREEN = "KEY_VIDEO_FULLSCREEN";
 
   private StepDetailViewModel mViewModel;
+  private OnStepLoadedListener mStepLoadedCallback;
   private int mRecipeId;
   private int mStepNumber;
   private boolean mPlaying;
@@ -98,6 +99,15 @@ public class StepDetailFragment extends Fragment {
   public void onAttach(Context context) {
     AndroidSupportInjection.inject(this);
     super.onAttach(context);
+
+    // This makes sure that the container activity has implemented
+    // the callback interface. If not, it throws an exception
+    try {
+      mStepLoadedCallback = (OnStepLoadedListener) context;
+    } catch (ClassCastException e) {
+      throw new ClassCastException(context.toString()
+          + " must implement OnStepLoadedListener.");
+    }
   }
 
   @Override
@@ -133,6 +143,12 @@ public class StepDetailFragment extends Fragment {
     // Setup ViewModel
     mViewModel = ViewModelProviders.of(this, viewModelFactory).get(StepDetailViewModel.class);
     mViewModel.setStepData(mRecipeId, mStepNumber);
+
+    mViewModel.getRecipe().observe(this, recipe -> {
+      if (recipe != null) {
+        mStepLoadedCallback.onStepLoaded(recipe.getName());
+      }
+    });
 
     // Observe changes in step data
     mViewModel.getCurrentStep().observe(this, step -> {
@@ -208,6 +224,13 @@ public class StepDetailFragment extends Fragment {
     super.onSaveInstanceState(outState);
     outState.putBoolean(KEY_VIDEO_PLAYING, mPlaying);
     outState.putBoolean(KEY_VIDEO_FULLSCREEN, mVideoFullscreen);
+  }
+
+  /**
+   * Container Activity must implement these interfaces.
+   */
+  public interface OnStepLoadedListener {
+    void onStepLoaded(String recipeName);
   }
 
   /**
