@@ -70,10 +70,10 @@ public class StepDetailFragment extends Fragment {
   ViewModelProvider.Factory viewModelFactory;
 
   /**
-   * The fragment argument representing the step ID that this fragment
+   * The fragment argument representing the step number of given recipe this fragment
    * represents.
    */
-  public static final String RECIPE_STEP_NUMBER = "recipe_step_id";
+  public static final String RECIPE_STEP_NUMBER = "recipe_step_number";
   private static final String KEY_VIDEO_PLAYING = "KEY_VIDEO_PLAYING";
   private static final String KEY_VIDEO_FULLSCREEN = "KEY_VIDEO_FULLSCREEN";
 
