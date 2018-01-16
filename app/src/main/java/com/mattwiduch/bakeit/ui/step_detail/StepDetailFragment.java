@@ -31,10 +31,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.mattwiduch.bakeit.R;
+import com.mattwiduch.bakeit.data.database.entries.Recipe;
+import com.mattwiduch.bakeit.data.database.entries.Step;
 import com.mattwiduch.bakeit.ui.VideoPlayer;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
+import com.mattwiduch.bakeit.utils.ConnectionDetector;
 import com.mattwiduch.bakeit.utils.StringUtils;
 import dagger.android.support.AndroidSupportInjection;
+import java.util.List;
 import javax.inject.Inject;
 
 /**
@@ -44,6 +48,14 @@ import javax.inject.Inject;
  * on handsets.
  */
 public class StepDetailFragment extends Fragment {
+
+  /**
+   * The fragment argument representing the step number of given recipe this fragment
+   * represents.
+   */
+  public static final String RECIPE_STEP_NUMBER = "recipe_step_number";
+  private static final String KEY_VIDEO_PLAYING = "KEY_VIDEO_PLAYING";
+  private static final String KEY_VIDEO_FULLSCREEN = "KEY_VIDEO_FULLSCREEN";
 
   @BindView(R.id.step_image)
   ImageView stepImageIv;
@@ -61,6 +73,8 @@ public class StepDetailFragment extends Fragment {
   CardView playbackController;
   @BindView(R.id.play_video_btn)
   ImageView playButton;
+  @BindView(R.id.retry_video_btn)
+  ImageView retryButton;
   @BindView(R.id.exo_fullscreen)
   ImageButton fullscreenButton;
   @BindView(R.id.step_video_container)
@@ -68,14 +82,6 @@ public class StepDetailFragment extends Fragment {
 
   @Inject
   ViewModelProvider.Factory viewModelFactory;
-
-  /**
-   * The fragment argument representing the step number of given recipe this fragment
-   * represents.
-   */
-  public static final String RECIPE_STEP_NUMBER = "recipe_step_number";
-  private static final String KEY_VIDEO_PLAYING = "KEY_VIDEO_PLAYING";
-  private static final String KEY_VIDEO_FULLSCREEN = "KEY_VIDEO_FULLSCREEN";
 
   private StepDetailViewModel mViewModel;
   private OnStepLoadedListener mStepLoadedCallback;
@@ -144,58 +150,73 @@ public class StepDetailFragment extends Fragment {
     mViewModel = ViewModelProviders.of(this, viewModelFactory).get(StepDetailViewModel.class);
     mViewModel.setStepData(mRecipeId, mStepNumber);
 
-    mViewModel.getRecipe().observe(this, recipe -> {
-      if (recipe != null) {
-        mStepLoadedCallback.onStepLoaded(recipe.getName());
-      }
-    });
-
-    // Observe changes in step data
-    mViewModel.getCurrentStep().observe(this, step -> {
-      if (step != null) {
-        if (mStepNumber == 0) {
-          previousStepBtn.setVisibility(View.INVISIBLE);
-        }
-        stepNumberTv.setText(getString(R.string.step_number, step.getStepNumber() + 1));
-        stepDescriptionTv.setText(StringUtils.removeStepNumber(step.getDescription()));
-
-        String imageUrl = step.getThumbnailURL();
-        String videoUrl = step.getVideoURL();
-
-        if (StringUtils.checkUrl(videoUrl)) {
-          mVideoDialog = initialiseVideoDialog(getActivity());
-          if (mVideoFullscreen) {showFullscreenVideo();}
-
-          videoPlayerContainer.setVisibility(View.VISIBLE);
-          if (!mPlaying) {
-            playButton.setVisibility(View.VISIBLE);
-          } else {
-            playbackController.setVisibility(View.VISIBLE);
-          }
-
-          VideoPlayer.getInstance().initialiseExoPlayer(getActivity(), Uri.parse(videoUrl),
-              videoPlayerView);
-        } else if (StringUtils.checkUrl(imageUrl)) {
-          // If image is available, load it using Glide
-          stepImageIv.setVisibility(View.VISIBLE);
-          RequestOptions glideOptions = new RequestOptions().centerCrop()
-              .error(R.drawable.error_image);
-          Glide.with(this)
-              .load(imageUrl)
-              .apply(glideOptions)
-              .transition(withCrossFade())
-              .into(stepImageIv);
-        } else {
-          // If both video and image are not available, remove image view
-          stepImageIv.setVisibility(View.GONE);
+    // Add network connection observer to step mediator live data
+    mViewModel.getStepMediator().addSource(new ConnectionDetector(getContext()), status -> {
+      if (status != null) {
+        CompositeStep compositeStep = mViewModel.getStepMediator().getValue();
+        if (compositeStep != null) {
+          compositeStep.setConnected(status.getIsConnected());
+          mViewModel.getStepMediator().postValue(compositeStep);
         }
       }
     });
 
-    mViewModel.getRecipeSteps().observe(this, steps -> {
-      if (steps != null) {
-        if (mStepNumber == steps.size() - 1) {
+    mViewModel.getStepMediator().observe(this, compositeStep -> {
+      if (compositeStep != null) {
+        Recipe recipe = compositeStep.getRecipe();
+        if (recipe != null) {
+          mStepLoadedCallback.onStepLoaded(recipe.getName());
+        }
+
+        List<Step> steps = compositeStep.getStepList();
+        if (steps != null && mStepNumber == steps.size() - 1) {
           nextStepBtn.setVisibility(View.INVISIBLE);
+        }
+
+        Step step = compositeStep.getStep();
+        if (step != null) {
+          if (mStepNumber == 0) {
+            previousStepBtn.setVisibility(View.INVISIBLE);
+          }
+          stepNumberTv.setText(getString(R.string.step_number, step.getStepNumber() + 1));
+          stepDescriptionTv.setText(StringUtils.removeStepNumber(step.getDescription()));
+
+          String imageUrl = step.getThumbnailURL();
+          String videoUrl = step.getVideoURL();
+
+          if (StringUtils.checkUrl(videoUrl)) {
+            if (compositeStep.isConnected()) {
+              mVideoDialog = initialiseVideoDialog(getActivity());
+              if (mVideoFullscreen) {
+                showFullscreenVideo();
+              }
+
+              videoPlayerContainer.setVisibility(View.VISIBLE);
+              if (!mPlaying) {
+                playButton.setVisibility(View.VISIBLE);
+              } else {
+                playbackController.setVisibility(View.VISIBLE);
+              }
+
+              VideoPlayer.getInstance().initialiseExoPlayer(getActivity(), Uri.parse(videoUrl),
+                  videoPlayerView);
+            } else {
+              // TODO: retryButton.setVisibility(View.VISIBLE);
+            }
+          } else if (StringUtils.checkUrl(imageUrl)) {
+            // If image is available, load it using Glide
+            stepImageIv.setVisibility(View.VISIBLE);
+            RequestOptions glideOptions = new RequestOptions().centerCrop()
+                .error(R.drawable.error_image);
+            Glide.with(this)
+                .load(imageUrl)
+                .apply(glideOptions)
+                .transition(withCrossFade())
+                .into(stepImageIv);
+          } else {
+            // If both video and image are not available, remove image view
+            stepImageIv.setVisibility(View.GONE);
+          }
         }
       }
     });
@@ -227,14 +248,8 @@ public class StepDetailFragment extends Fragment {
   }
 
   /**
-   * Container Activity must implement these interfaces.
-   */
-  public interface OnStepLoadedListener {
-    void onStepLoaded(String recipeName);
-  }
-
-  /**
    * Reloads step data for given step number.
+   *
    * @param stepNumber number of step to load
    */
   private void loadStepFragment(int stepNumber) {
@@ -247,7 +262,7 @@ public class StepDetailFragment extends Fragment {
     fragment.setEnterTransition(new Explode());
     FragmentManager fragmentManager = getFragmentManager();
     if (fragmentManager != null) {
-          fragmentManager.beginTransaction()
+      fragmentManager.beginTransaction()
           .replace(R.id.step_detail_container, fragment)
           .commit();
     }
@@ -282,13 +297,15 @@ public class StepDetailFragment extends Fragment {
 
   /**
    * Initialises Dialog that shows ExoPlayer in fullscreen mode.
+   *
    * @return Dialog
    */
   private Dialog initialiseVideoDialog(Context context) {
     return new Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen) {
       public void onBackPressed() {
-        if (mVideoFullscreen)
+        if (mVideoFullscreen) {
           closeFullscreenVideo();
+        }
         super.onBackPressed();
       }
     };
@@ -300,7 +317,7 @@ public class StepDetailFragment extends Fragment {
   private void showFullscreenVideo() {
     ((ViewGroup) videoPlayerView.getParent()).removeView(videoPlayerView);
     mVideoDialog.addContentView(videoPlayerView, new ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     fullscreenButton.setImageDrawable(getActivity().getDrawable(R.drawable.ic_fullscreen_exit));
     mVideoFullscreen = true;
     mVideoDialog.show();
@@ -322,10 +339,18 @@ public class StepDetailFragment extends Fragment {
    */
   @OnClick(R.id.exo_fullscreen)
   public void playVideoFullscreen() {
-    if(!mVideoFullscreen) {
+    if (!mVideoFullscreen) {
       showFullscreenVideo();
     } else {
       closeFullscreenVideo();
     }
+  }
+
+  /**
+   * Container Activity must implement these interfaces.
+   */
+  public interface OnStepLoadedListener {
+
+    void onStepLoaded(String recipeName);
   }
 }
