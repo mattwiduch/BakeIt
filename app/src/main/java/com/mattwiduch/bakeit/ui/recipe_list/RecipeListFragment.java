@@ -82,7 +82,7 @@ public class RecipeListFragment extends Fragment implements RecipeAdapterOnItemC
     recipesRecyclerView.setAdapter(mRecipeAdapter);
 
     // Create snack bar that shows connection error messages
-    final Snackbar snackbar = Snackbar.make(getView(), R.string.connection_error,
+    final Snackbar snackbar = Snackbar.make(getView(), R.string.snackbar_no_network,
         Snackbar.LENGTH_INDEFINITE);
     View snackbarView = snackbar.getView();
     snackbarView.setBackgroundColor(getResources().getColor(R.color.colorAccent));

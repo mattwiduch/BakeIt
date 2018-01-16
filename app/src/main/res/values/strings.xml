@@ -34,7 +34,9 @@
   <string name="widget_config_apply">Apply</string>
   <string name="empty_recipe_database">There are no recipes saved in Bake It. Please connect to the Internet first.</string>
 
-  <!-- Snackbar -->
-  <string name="connection_error">Please connect to the internet to get latest recipes.</string>
+  <!-- Error Messages -->
+  <string name="snackbar_no_network">Please connect to the internet to get latest recipes.</string>
+  <string name="video_no_network">Internet connection is required to play this video</string>
+  <string name="video_playback_paused">Playback paused due to lost connection</string>
 
 </resources>

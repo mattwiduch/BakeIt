@@ -24,6 +24,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -73,8 +74,6 @@ public class StepDetailFragment extends Fragment {
   CardView playbackController;
   @BindView(R.id.play_video_btn)
   ImageView playButton;
-  @BindView(R.id.retry_video_btn)
-  ImageView retryButton;
   @BindView(R.id.exo_fullscreen)
   ImageButton fullscreenButton;
   @BindView(R.id.step_video_container)
@@ -92,6 +91,7 @@ public class StepDetailFragment extends Fragment {
   // Used to play video in full screen
   private Dialog mVideoDialog;
   private boolean mVideoFullscreen;
+  private boolean mVideoReady;
 
   /**
    * Mandatory empty constructor for the fragment manager to instantiate the
@@ -151,7 +151,8 @@ public class StepDetailFragment extends Fragment {
     mViewModel.setStepData(mRecipeId, mStepNumber);
 
     // Add network connection observer to step mediator live data
-    mViewModel.getStepMediator().addSource(new ConnectionDetector(getContext()), status -> {
+    ConnectionDetector connectionDetector = new ConnectionDetector(getContext().getApplicationContext());
+    mViewModel.getStepMediator().addSource(connectionDetector, status -> {
       if (status != null) {
         CompositeStep compositeStep = mViewModel.getStepMediator().getValue();
         if (compositeStep != null) {
@@ -185,23 +186,38 @@ public class StepDetailFragment extends Fragment {
           String videoUrl = step.getVideoURL();
 
           if (StringUtils.checkUrl(videoUrl)) {
-            if (compositeStep.isConnected()) {
+
               mVideoDialog = initialiseVideoDialog(getActivity());
               if (mVideoFullscreen) {
                 showFullscreenVideo();
               }
 
               videoPlayerContainer.setVisibility(View.VISIBLE);
+
+            if (compositeStep.isConnected()) {
               if (!mPlaying) {
                 playButton.setVisibility(View.VISIBLE);
               } else {
+                playButton.setVisibility(View.GONE);
                 playbackController.setVisibility(View.VISIBLE);
               }
 
               VideoPlayer.getInstance().initialiseExoPlayer(getActivity(), Uri.parse(videoUrl),
                   videoPlayerView);
+
+              if (!mVideoReady) {
+                VideoPlayer.getInstance().prepareVideo(Uri.parse(videoUrl), false);
+                VideoPlayer.getInstance().resume();
+                mVideoReady = true;
+              }
             } else {
-              // TODO: retryButton.setVisibility(View.VISIBLE);
+              if (mPlaying) {
+                Toast.makeText(getContext(), R.string.video_playback_paused, Toast.LENGTH_SHORT).show();
+                playbackController.setVisibility(View.INVISIBLE);
+              }
+              mVideoReady = false;
+              VideoPlayer.getInstance().suspend();
+              playButton.setVisibility(View.VISIBLE);
             }
           } else if (StringUtils.checkUrl(imageUrl)) {
             // If image is available, load it using Glide
@@ -289,10 +305,15 @@ public class StepDetailFragment extends Fragment {
    */
   @OnClick(R.id.play_video_btn)
   public void playVideo() {
-    playButton.setVisibility(View.GONE);
-    playbackController.setVisibility(View.VISIBLE);
-    VideoPlayer.getInstance().play();
-    mPlaying = true;
+    if (mVideoReady) {
+      playButton.setVisibility(View.GONE);
+      playbackController.setVisibility(View.VISIBLE);
+      VideoPlayer.getInstance().play();
+      mPlaying = true;
+    } else {
+      playbackController.setVisibility(View.INVISIBLE);
+      Toast.makeText(getContext(), R.string.video_no_network, Toast.LENGTH_SHORT).show();
+    }
   }
 
   /**

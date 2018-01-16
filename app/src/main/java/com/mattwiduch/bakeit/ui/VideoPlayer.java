@@ -2,7 +2,6 @@ package com.mattwiduch.bakeit.ui;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.SurfaceView;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -69,7 +68,7 @@ public class VideoPlayer {
             new DefaultLoadControl());
 
         mVideoUri = videoUrl;
-        prepareVideo(mVideoUri);
+        prepareVideo(mVideoUri, true);
 
         videoPlayerView.setPlayer(mVideoPlayer);
         videoPlayerView.hideController();
@@ -85,10 +84,11 @@ public class VideoPlayer {
    * Prepares recipe step video.
    *
    * @param videoUrl of video to play
+   * @param resetPosition true to reset
    */
-  private void prepareVideo(Uri videoUrl) {
+  public void prepareVideo(Uri videoUrl, boolean resetPosition) {
       MediaSource mediaSource = buildMediaSource(videoUrl);
-      mVideoPlayer.prepare(mediaSource, true, false);
+      mVideoPlayer.prepare(mediaSource, resetPosition, false);
   }
 
   /**
@@ -119,8 +119,8 @@ public class VideoPlayer {
    */
   public void resume() {
     if (mVideoPlayer != null) {
-      mVideoPlayer.setPlayWhenReady(mPlayWhenReady);
       mVideoPlayer.seekTo(mPlaybackPosition);
+      mVideoPlayer.setPlayWhenReady(mPlayWhenReady);
     }
   }
 
