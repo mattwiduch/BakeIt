@@ -96,14 +96,12 @@ public class RecipeListFragment extends Fragment implements RecipeAdapterOnItemC
     });
 
     mViewModel.getAllRecipes().observe(this, recipes -> {
-      mRecipeAdapter.updateRecipes(recipes);
-
-      if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
-      recipesRecyclerView.smoothScrollToPosition(mPosition);
-
       if (recipes != null) {
         if (!recipes.isEmpty()) {
           showRecipes();
+          mRecipeAdapter.updateRecipes(recipes);
+          if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+          recipesRecyclerView.smoothScrollToPosition(mPosition);
         } else {
           showEmpty();
         }
