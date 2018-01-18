@@ -3,7 +3,7 @@ package com.mattwiduch.bakeit;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Service;
-import com.mattwiduch.bakeit.di.DaggerAppComponent;
+import com.mattwiduch.bakeit.di.injector.AppInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 import dagger.android.HasServiceInjector;
@@ -22,7 +22,7 @@ public class BakeitApp extends Application implements HasActivityInjector, HasSe
   @Override
   public void onCreate() {
     super.onCreate();
-    DaggerAppComponent.builder().application(this).build().inject(this);
+    AppInjector.init(this);
   }
 
   @Override

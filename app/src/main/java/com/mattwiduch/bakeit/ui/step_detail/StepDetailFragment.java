@@ -34,11 +34,11 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.data.database.entries.Recipe;
 import com.mattwiduch.bakeit.data.database.entries.Step;
+import com.mattwiduch.bakeit.di.injector.Injectable;
 import com.mattwiduch.bakeit.ui.VideoPlayer;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
 import com.mattwiduch.bakeit.utils.ConnectionDetector;
 import com.mattwiduch.bakeit.utils.StringUtils;
-import dagger.android.support.AndroidSupportInjection;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -48,7 +48,7 @@ import javax.inject.Inject;
  * in two-pane mode (on tablets) or a {@link StepDetailActivity}
  * on handsets.
  */
-public class StepDetailFragment extends Fragment {
+public class StepDetailFragment extends Fragment implements Injectable {
 
   /**
    * The fragment argument representing the step number of given recipe this fragment
@@ -103,7 +103,6 @@ public class StepDetailFragment extends Fragment {
 
   @Override
   public void onAttach(Context context) {
-    AndroidSupportInjection.inject(this);
     super.onAttach(context);
 
     // This makes sure that the container activity has implemented

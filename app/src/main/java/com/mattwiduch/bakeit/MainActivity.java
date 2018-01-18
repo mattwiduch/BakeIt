@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import com.mattwiduch.bakeit.ui.recipe_list.RecipeListFragment;
-import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import javax.inject.Inject;
@@ -19,7 +18,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
-    AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_recipe_list);
 

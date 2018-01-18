@@ -14,7 +14,6 @@ import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailFragment.OnStepSelecte
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailActivity;
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment;
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment.OnStepLoadedListener;
-import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import javax.inject.Inject;
@@ -49,7 +48,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements HasSuppor
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_recipe_detail);
     ButterKnife.bind(this);

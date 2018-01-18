@@ -24,8 +24,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.mattwiduch.bakeit.R;
+import com.mattwiduch.bakeit.di.injector.Injectable;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeStepAdapter.RecipeStepAdapterOnItemClickHandler;
-import dagger.android.support.AndroidSupportInjection;
 import javax.inject.Inject;
 import net.cachapa.expandablelayout.ExpandableLayout;
 
@@ -33,7 +33,8 @@ import net.cachapa.expandablelayout.ExpandableLayout;
  * A fragment representing a single Recipe detail screen.
  * This fragment is contained in a {@link RecipeDetailActivity}.
  */
-public class RecipeDetailFragment extends Fragment implements RecipeStepAdapterOnItemClickHandler {
+public class RecipeDetailFragment extends Fragment implements RecipeStepAdapterOnItemClickHandler,
+    Injectable {
 
   @BindView(R.id.steps_recycler_view)
   RecyclerView stepsRecyclerView;
@@ -68,7 +69,6 @@ public class RecipeDetailFragment extends Fragment implements RecipeStepAdapterO
 
   @Override
   public void onAttach(Context context) {
-    AndroidSupportInjection.inject(this);
     super.onAttach(context);
 
     // This makes sure that the container activity has implemented
