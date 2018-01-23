@@ -3,6 +3,7 @@ package com.mattwiduch.bakeit.util;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import com.mattwiduch.bakeit.data.database.entries.Ingredient;
 import com.mattwiduch.bakeit.data.database.entries.Recipe;
 import com.mattwiduch.bakeit.data.database.entries.Step;
 import com.mattwiduch.bakeit.ui.step_detail.CompositeStep;
@@ -49,6 +50,14 @@ public class TestUtils {
       recipeList.add(createRecipe(i, TEST_RECIPE_NAME, i, ""));
     }
     return recipeList;
+  }
+
+  public static List<Ingredient> createIngredientsList(int size) {
+    List<Ingredient> ingredientList = new ArrayList<>();
+    for (int i = 0; i < size; i++) {
+      ingredientList.add(new Ingredient(TEST_RECIPE_ID, "Fancy ingredient", i, "TSP"));
+    }
+    return ingredientList;
   }
 
   public static List<Step> createStepList(int recipeId, int size) {
