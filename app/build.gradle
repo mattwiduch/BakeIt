@@ -106,6 +106,7 @@ task bakeitTestReport(type: JacocoReport, dependsOn: "createDebugCoverageReport"
                       '**/*_MembersInjector*',
                       '**/*Fake*',
                       '**/*_ViewBinding*',
+                      '**/*_Impl*',
                       '**/com/mattwiduch/bakeit/di/**']
 
     def debugTree = fileTree(dir:
