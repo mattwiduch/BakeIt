@@ -23,11 +23,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import com.mattwiduch.bakeit.R;
+import com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment.OnStepLoadedListener;
 
 /**
  * Used for testing fragments inside a fake activity.
  */
-public class SingleFragmentActivity extends AppCompatActivity {
+public class SingleFragmentActivity extends AppCompatActivity implements OnStepLoadedListener {
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -47,5 +48,10 @@ public class SingleFragmentActivity extends AppCompatActivity {
   public void replaceFragment(Fragment fragment) {
     getSupportFragmentManager().beginTransaction()
         .replace(R.id.container, fragment).commit();
+  }
+
+  @Override
+  public void onStepLoaded(String recipeName) {
+    // Do nothing
   }
 }
