@@ -5,10 +5,12 @@ import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
+import android.content.Context;
 import com.mattwiduch.bakeit.data.RecipeRepository;
 import com.mattwiduch.bakeit.data.database.entries.Recipe;
 import com.mattwiduch.bakeit.data.database.entries.Step;
 import com.mattwiduch.bakeit.utils.AbsentLiveData;
+import com.mattwiduch.bakeit.utils.ConnectionDetector;
 import java.util.List;
 import java.util.Objects;
 import javax.inject.Inject;
@@ -17,6 +19,7 @@ import javax.inject.Inject;
  * {@link ViewModel} for {@link StepDetailActivity}
  */
 public class StepDetailViewModel extends ViewModel {
+
   private final MutableLiveData<StepData> mStepData = new MutableLiveData<>();
   private MediatorLiveData<CompositeStep> mStepMediator;
 
@@ -28,12 +31,12 @@ public class StepDetailViewModel extends ViewModel {
   private final LiveData<List<Step>> mRecipeSteps;
 
   @Inject
-  StepDetailViewModel (RecipeRepository repository) {
+  StepDetailViewModel(RecipeRepository repository, Context context) {
     mRecipe = Transformations.switchMap(mStepData, stepData -> {
       if (stepData == null) {
         return AbsentLiveData.create();
       } else {
-       return repository.getRecipe(stepData.getRecipeId());
+        return repository.getRecipe(stepData.getRecipeId());
       }
     });
 
@@ -58,31 +61,51 @@ public class StepDetailViewModel extends ViewModel {
 
     mStepMediator.addSource(mRecipe, recipe -> {
       CompositeStep compositeStep = mStepMediator.getValue();
-      compositeStep.setRecipe(recipe);
-      mStepMediator.postValue(compositeStep);
+      if (compositeStep != null) {
+        compositeStep.setRecipe(recipe);
+        mStepMediator.postValue(compositeStep);
+      }
     });
 
     mStepMediator.addSource(mRecipeSteps, steps -> {
       CompositeStep compositeStep = mStepMediator.getValue();
-      compositeStep.setStepList(steps);
-      mStepMediator.postValue(compositeStep);
+      if (compositeStep != null) {
+        compositeStep.setStepList(steps);
+        mStepMediator.postValue(compositeStep);
+      }
     });
 
     mStepMediator.addSource(mCurrentStep, step -> {
       CompositeStep compositeStep = mStepMediator.getValue();
-      compositeStep.setStep(step);
-      mStepMediator.postValue(compositeStep);
+      if (compositeStep != null) {
+        compositeStep.setStep(step);
+        mStepMediator.postValue(compositeStep);
+      }
+    });
+
+    // Add network connection observer to step mediator live data
+    ConnectionDetector connectionDetector = new ConnectionDetector(context);
+    mStepMediator.addSource(connectionDetector, status -> {
+      if (status != null) {
+        CompositeStep compositeStep = mStepMediator.getValue();
+        if (compositeStep != null) {
+          compositeStep.setConnected(status.getIsConnected());
+          mStepMediator.postValue(compositeStep);
+        }
+      }
     });
   }
 
-  MediatorLiveData<CompositeStep> getStepMediator() {return mStepMediator;}
+  LiveData<CompositeStep> getCompositeStep() {
+    return mStepMediator;
+  }
 
   void setStepData(int recipeId, int stepNumber) {
     StepData stepData = new StepData(recipeId, stepNumber);
     if (Objects.equals(this.mStepData.getValue(), stepData)) {
       return;
     }
-    this.mStepData.setValue(stepData);
+    this.mStepData.postValue(stepData);
   }
 }
 
@@ -90,6 +113,7 @@ public class StepDetailViewModel extends ViewModel {
  * Helper class to observe step data properties.
  */
 class StepData {
+
   private int mRecipeId;
   private int mStepNumber;
 
@@ -104,51 +128,5 @@ class StepData {
 
   public int getStepNumber() {
     return mStepNumber;
-  }
-}
-
-/**
- * A helper class that connects all LiveData objects providing step data.
- */
-class CompositeStep {
-  private boolean isConnected;
-  private Recipe recipe;
-  private Step step;
-  private List<Step> stepList;
-
-  CompositeStep() {
-    isConnected = true;
-  }
-
-  boolean isConnected() {
-    return isConnected;
-  }
-
-  void setConnected(boolean connected) {
-    isConnected = connected;
-  }
-
-  public Recipe getRecipe() {
-    return recipe;
-  }
-
-  public void setRecipe(Recipe recipe) {
-    this.recipe = recipe;
-  }
-
-  public Step getStep() {
-    return step;
-  }
-
-  public void setStep(Step step) {
-    this.step = step;
-  }
-
-  List<Step> getStepList() {
-    return stepList;
-  }
-
-  void setStepList(List<Step> stepList) {
-    this.stepList = stepList;
   }
 }
