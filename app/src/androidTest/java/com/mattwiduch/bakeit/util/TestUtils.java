@@ -20,7 +20,7 @@ public class TestUtils {
   public static final String TEST_RECIPE_NAME = "Doughnuts";
   public static final String TEST_IMAGE_URL = "http://lorempixel.com/200/200/food";
   public static final String TEST_STEP_NAME = "Make Dough";
-  public static final String TEST_STEP_DESC = "Step Description";
+  public static final String TEST_STEP_DESC = "Step description";
 
   public static boolean isConnected(Context context) {
     ConnectivityManager connectivityManager
