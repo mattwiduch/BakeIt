@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.support.transition.Explode;
 import android.support.transition.Fade;
 import android.support.v4.app.Fragment;
@@ -34,11 +35,10 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.data.database.entries.Recipe;
 import com.mattwiduch.bakeit.data.database.entries.Step;
+import com.mattwiduch.bakeit.di.injector.Injectable;
 import com.mattwiduch.bakeit.ui.VideoPlayer;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
-import com.mattwiduch.bakeit.utils.ConnectionDetector;
 import com.mattwiduch.bakeit.utils.StringUtils;
-import dagger.android.support.AndroidSupportInjection;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -48,7 +48,7 @@ import javax.inject.Inject;
  * in two-pane mode (on tablets) or a {@link StepDetailActivity}
  * on handsets.
  */
-public class StepDetailFragment extends Fragment {
+public class StepDetailFragment extends Fragment implements Injectable {
 
   /**
    * The fragment argument representing the step number of given recipe this fragment
@@ -92,6 +92,8 @@ public class StepDetailFragment extends Fragment {
   private Dialog mVideoDialog;
   private boolean mVideoFullscreen;
   private boolean mVideoReady;
+  @VisibleForTesting
+  Toast mToast;
 
   /**
    * Mandatory empty constructor for the fragment manager to instantiate the
@@ -103,7 +105,6 @@ public class StepDetailFragment extends Fragment {
 
   @Override
   public void onAttach(Context context) {
-    AndroidSupportInjection.inject(this);
     super.onAttach(context);
 
     // This makes sure that the container activity has implemented
@@ -150,19 +151,7 @@ public class StepDetailFragment extends Fragment {
     mViewModel = ViewModelProviders.of(this, viewModelFactory).get(StepDetailViewModel.class);
     mViewModel.setStepData(mRecipeId, mStepNumber);
 
-    // Add network connection observer to step mediator live data
-    ConnectionDetector connectionDetector = new ConnectionDetector(getContext().getApplicationContext());
-    mViewModel.getStepMediator().addSource(connectionDetector, status -> {
-      if (status != null) {
-        CompositeStep compositeStep = mViewModel.getStepMediator().getValue();
-        if (compositeStep != null) {
-          compositeStep.setConnected(status.getIsConnected());
-          mViewModel.getStepMediator().postValue(compositeStep);
-        }
-      }
-    });
-
-    mViewModel.getStepMediator().observe(this, compositeStep -> {
+    mViewModel.getCompositeStep().observe(this, compositeStep -> {
       if (compositeStep != null) {
         Recipe recipe = compositeStep.getRecipe();
         if (recipe != null) {
@@ -212,7 +201,9 @@ public class StepDetailFragment extends Fragment {
               }
             } else {
               if (mPlaying) {
-                Toast.makeText(getContext(), R.string.video_playback_paused, Toast.LENGTH_SHORT).show();
+                mToast = Toast.makeText(getContext(), R.string.video_playback_paused,
+                    Toast.LENGTH_SHORT);
+                mToast.show();
                 playbackController.setVisibility(View.INVISIBLE);
               }
               mVideoReady = false;
@@ -268,7 +259,7 @@ public class StepDetailFragment extends Fragment {
    *
    * @param stepNumber number of step to load
    */
-  private void loadStepFragment(int stepNumber) {
+  void loadStepFragment(int stepNumber) {
     Bundle arguments = new Bundle();
     arguments.putInt(RECIPE_ID_EXTRA, mRecipeId);
     arguments.putInt(StepDetailFragment.RECIPE_STEP_NUMBER, stepNumber);
@@ -312,7 +303,9 @@ public class StepDetailFragment extends Fragment {
       mPlaying = true;
     } else {
       playbackController.setVisibility(View.INVISIBLE);
-      Toast.makeText(getContext(), R.string.video_no_network, Toast.LENGTH_SHORT).show();
+      mToast = Toast.makeText(getContext(), R.string.video_no_network,
+          Toast.LENGTH_SHORT);
+      mToast.show();
     }
   }
 

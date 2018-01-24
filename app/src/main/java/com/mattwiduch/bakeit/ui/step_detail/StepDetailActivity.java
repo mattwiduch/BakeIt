@@ -10,7 +10,6 @@ import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment.OnStepLoadedListener;
-import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import javax.inject.Inject;
@@ -35,7 +34,6 @@ public class StepDetailActivity extends AppCompatActivity implements HasSupportF
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_step_detail);
     ButterKnife.bind(this);

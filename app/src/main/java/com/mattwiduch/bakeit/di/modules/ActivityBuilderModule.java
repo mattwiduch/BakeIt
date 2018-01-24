@@ -38,6 +38,6 @@ public abstract class ActivityBuilderModule {
   abstract StepDetailActivity contributeStepDetailActivity();
 
   @ActivityScope
-  @ContributesAndroidInjector
+  @ContributesAndroidInjector(modules = FragmentBuilderModule.class)
   abstract IngredientsWidgetConfigActivity contributeIngredientsWidgetConfigAbility();
 }

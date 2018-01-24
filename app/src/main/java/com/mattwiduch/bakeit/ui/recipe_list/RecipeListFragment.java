@@ -3,7 +3,6 @@ package com.mattwiduch.bakeit.ui.recipe_list;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,16 +20,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.data.network.RecipeNetworkDataSource;
+import com.mattwiduch.bakeit.di.injector.Injectable;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
 import com.mattwiduch.bakeit.ui.recipe_list.RecipeAdapter.RecipeAdapterOnItemClickHandler;
 import com.mattwiduch.bakeit.utils.ConnectionDetector;
-import dagger.android.support.AndroidSupportInjection;
 import javax.inject.Inject;
 
 /**
  * Displays a list of baking recipes.
  */
-public class RecipeListFragment extends Fragment implements RecipeAdapterOnItemClickHandler {
+public class RecipeListFragment extends Fragment implements RecipeAdapterOnItemClickHandler,
+    Injectable {
 
   @BindView(R.id.recipes_recycler_view)
   RecyclerView recipesRecyclerView;
@@ -50,12 +50,6 @@ public class RecipeListFragment extends Fragment implements RecipeAdapterOnItemC
 
   public RecipeListFragment() {
     // Required empty public constructor
-  }
-
-  @Override
-  public void onAttach(Context context) {
-    AndroidSupportInjection.inject(this);
-    super.onAttach(context);
   }
 
   @Override
@@ -102,14 +96,12 @@ public class RecipeListFragment extends Fragment implements RecipeAdapterOnItemC
     });
 
     mViewModel.getAllRecipes().observe(this, recipes -> {
-      mRecipeAdapter.updateRecipes(recipes);
-
-      if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
-      recipesRecyclerView.smoothScrollToPosition(mPosition);
-
       if (recipes != null) {
         if (!recipes.isEmpty()) {
           showRecipes();
+          mRecipeAdapter.updateRecipes(recipes);
+          if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+          recipesRecyclerView.smoothScrollToPosition(mPosition);
         } else {
           showEmpty();
         }

@@ -1,10 +1,5 @@
 package com.mattwiduch.bakeit.ui.widget;
 
-import static com.mattwiduch.bakeit.ui.widget.IngredientsWidgetConfigActivity.PREFS_NAME;
-import static com.mattwiduch.bakeit.ui.widget.IngredientsWidgetConfigActivity.PREF_ID_KEY;
-import static com.mattwiduch.bakeit.ui.widget.IngredientsWidgetConfigActivity.PREF_NAME_KEY;
-import static com.mattwiduch.bakeit.ui.widget.IngredientsWidgetConfigActivity.PREF_SERVINGS_KEY;
-
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -19,6 +14,10 @@ import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
  * Implementation of App Widget functionality.
  */
 public class IngredientsWidget extends AppWidgetProvider {
+  static final String PREFS_NAME = "com.mattwiduch.bakeit.ui.widget.IngredientsWidget";
+  static final String PREF_ID_KEY = "recipeId_";
+  static final String PREF_NAME_KEY = "recipeName_";
+  static final String PREF_SERVINGS_KEY = "recipeServings_";
 
   static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
       int appWidgetId) {
