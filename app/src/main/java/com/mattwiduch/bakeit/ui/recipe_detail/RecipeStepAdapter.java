@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2018 Mateusz Widuch
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.mattwiduch.bakeit.ui.recipe_detail;
 
 import android.content.Context;
@@ -31,6 +46,8 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
   private final RecipeStepAdapterOnItemClickHandler mClickHandler;
   // Context used to load resources
   private Context mContext;
+  //
+  private boolean mTwoPane;
   // List of recipe steps to display in Recycler View
   private List<Step> mStepList;
   // Currently selected item's position
@@ -41,10 +58,12 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
    *
    * @param clickHandler The on-click handler for this adapter
    */
-  RecipeStepAdapter(RecipeStepAdapterOnItemClickHandler clickHandler, Context context) {
+  RecipeStepAdapter(RecipeStepAdapterOnItemClickHandler clickHandler, Context context,
+      boolean twoPane) {
     mClickHandler = clickHandler;
     mStepList = new ArrayList<>();
     mContext = context;
+    mTwoPane = twoPane;
   }
 
   /**
@@ -58,38 +77,44 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
   }
 
   /**
-   *  Replaces the content in the views that make up the recipe item view. This method is invoked
-   *  by the layout manager.
+   * Replaces the content in the views that make up the recipe item view. This method is invoked
+   * by the layout manager.
    */
   @Override
   public void onBindViewHolder(final RecipeStepViewHolder holder, int position) {
     Step step = mStepList.get(position);
-    holder.stepNumberTv.setText(String.format(Locale.getDefault(),"%d",
+    holder.stepNumberTv.setText(String.format(Locale.getDefault(), "%d",
         step.getStepNumber() + 1));
     holder.stepDescriptionTv.setText(step.getShortDescription());
 
-    // Highlight currently selected item
-    if (position == mSelectedPosition) {
-      holder.stepNumberFrame.setImageResource(R.color.colorAccent);
-      holder.stepNumberFrame.setBorderColor(mContext.getResources().getColor(R.color.colorAccent));
-      holder.stepNumberTv.setTextColor(
-          mContext.getResources().getColor(R.color.colorCardBackground));
-      holder.stepNumberTv.setTypeface(holder.stepNumberTv.getTypeface(), Typeface.BOLD);
-      holder.stepDescriptionTv.setTypeface(ResourcesCompat.getFont(mContext, R.font.poppins_medium));
-      holder.stepArrowIv.setColorFilter(mContext.getResources().getColor(R.color.colorAccent));
-    } else {
-      holder.stepNumberFrame.setImageResource(R.color.colorCardBackground);
-      holder.stepNumberFrame.setBorderColor(mContext.getResources().getColor(R.color.colorSecondary));
-      holder.stepNumberTv.setTextColor(
-          mContext.getResources().getColor(R.color.colorAccent));
-      holder.stepNumberTv.setTypeface(holder.stepNumberTv.getTypeface(), Typeface.NORMAL);
-      holder.stepDescriptionTv.setTypeface(ResourcesCompat.getFont(mContext, R.font.poppins_light));
-      holder.stepArrowIv.setColorFilter(mContext.getResources().getColor(R.color.colorSecondary));
+    // Highlight currently selected item (in two pane mode only)
+    if (mTwoPane) {
+      if (position == mSelectedPosition) {
+        holder.stepNumberFrame.setImageResource(R.color.colorAccent);
+        holder.stepNumberFrame
+            .setBorderColor(mContext.getResources().getColor(R.color.colorAccent));
+        holder.stepNumberTv.setTextColor(
+            mContext.getResources().getColor(R.color.colorCardBackground));
+        holder.stepNumberTv.setTypeface(holder.stepNumberTv.getTypeface(), Typeface.BOLD);
+        holder.stepDescriptionTv
+            .setTypeface(ResourcesCompat.getFont(mContext, R.font.poppins_medium));
+        holder.stepArrowIv.setColorFilter(mContext.getResources().getColor(R.color.colorAccent));
+      } else {
+        holder.stepNumberFrame.setImageResource(R.color.colorCardBackground);
+        holder.stepNumberFrame
+            .setBorderColor(mContext.getResources().getColor(R.color.colorSecondary));
+        holder.stepNumberTv.setTextColor(
+            mContext.getResources().getColor(R.color.colorAccent));
+        holder.stepNumberTv.setTypeface(holder.stepNumberTv.getTypeface(), Typeface.NORMAL);
+        holder.stepDescriptionTv
+            .setTypeface(ResourcesCompat.getFont(mContext, R.font.poppins_light));
+        holder.stepArrowIv.setColorFilter(mContext.getResources().getColor(R.color.colorSecondary));
+      }
     }
   }
 
   /**
-   *  Returns the size of the dataset.
+   * Returns the size of the dataset.
    */
   @Override
   public int getItemCount() {
@@ -98,6 +123,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
 
   /**
    * Update list of recipe steps to display.
+   *
    * @param steps List of steps
    */
   void updateSteps(List<Step> steps) {
@@ -107,6 +133,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
 
   /**
    * Sets currently selected item's position.
+   *
    * @param position of currently selected item
    */
   void setSelectedItem(int position) {
@@ -117,6 +144,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
    * The interface that receives onItemClick messages.
    */
   public interface RecipeStepAdapterOnItemClickHandler {
+
     void onItemClick(int stepId);
   }
 
@@ -144,6 +172,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
     /**
      * This gets called by the child views during a click. It passes recipe id to onItemClickHandler
      * registered with this adapter.
+     *
      * @param v the View that was clicked
      */
     @Override

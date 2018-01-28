@@ -1,32 +1,51 @@
+/*
+ * Copyright (C) 2018 Mateusz Widuch
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.mattwiduch.bakeit.ui.recipe_list;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
+import com.mattwiduch.bakeit.data.network.RecipeNetworkDataSource;
+import com.mattwiduch.bakeit.di.injector.Injectable;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
 import com.mattwiduch.bakeit.ui.recipe_list.RecipeAdapter.RecipeAdapterOnItemClickHandler;
 import com.mattwiduch.bakeit.utils.ConnectionDetector;
-import com.mattwiduch.bakeit.utils.InjectorUtils;
+import javax.inject.Inject;
 
 /**
  * Displays a list of baking recipes.
  */
-public class RecipeListActivity extends AppCompatActivity implements
-    RecipeAdapterOnItemClickHandler {
+public class RecipeListFragment extends Fragment implements RecipeAdapterOnItemClickHandler,
+    Injectable {
 
-  @BindView(R.id.recipes_coordinator)
-  CoordinatorLayout recipesCoordinator;
   @BindView(R.id.recipes_recycler_view)
   RecyclerView recipesRecyclerView;
   @BindView(R.id.recipes_loading_indicator)
@@ -34,42 +53,55 @@ public class RecipeListActivity extends AppCompatActivity implements
   @BindView(R.id.recipes_empty_list)
   LinearLayout recipesEmptyList;
 
-  private static final String LOG_TAG = RecipeListActivity.class.getSimpleName();
+  @Inject
+  ViewModelProvider.Factory viewModelFactory;
+  @Inject
+  RecipeNetworkDataSource recipeNetworkDataSource;
 
   private RecipeListViewModel mViewModel;
   private RecipeAdapter mRecipeAdapter;
   private int mPosition = RecyclerView.NO_POSITION;
 
+  public RecipeListFragment() {
+    // Required empty public constructor
+  }
+
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_recipe_list);
-    ButterKnife.bind(this);
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    View rootView = inflater.inflate(R.layout.fragment_recipe_list, container, false);
+    ButterKnife.bind(this, rootView);
+    return rootView;
+  }
+
+  @Override
+  public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+
+    // Get ViewModel for this fragment
+    mViewModel = ViewModelProviders.of(this, viewModelFactory)
+        .get(RecipeListViewModel.class);
 
     // Recipe list RecyclerView setup
-    recipesRecyclerView.setLayoutManager(new GridLayoutManager(this,
+    recipesRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),
         getResources().getInteger(R.integer.recipe_list_columns)));
     recipesRecyclerView.setHasFixedSize(true);
-    mRecipeAdapter = new RecipeAdapter(this, this);
+    mRecipeAdapter = new RecipeAdapter(getContext(), this);
     recipesRecyclerView.setAdapter(mRecipeAdapter);
 
-    RecipeListModelFactory factory = InjectorUtils.provideRecipeListViewModelFactory(
-        this.getApplicationContext());
-    mViewModel = ViewModelProviders.of(this, factory).get(RecipeListViewModel.class);
-
     // Create snack bar that shows connection error messages
-    final Snackbar snackbar = Snackbar.make(recipesCoordinator, R.string.connection_error,
+    final Snackbar snackbar = Snackbar.make(getView(), R.string.snackbar_no_network,
         Snackbar.LENGTH_INDEFINITE);
     View snackbarView = snackbar.getView();
     snackbarView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
 
     // Observe device connectivity
-    ConnectionDetector connectionDetector = new ConnectionDetector(getApplicationContext());
+    ConnectionDetector connectionDetector = new ConnectionDetector(getContext());
     connectionDetector.observe(this, status -> {
       if (status != null && status.getIsConnected()) {
         // Request new data only if recipe list is empty
         if (mRecipeAdapter.getItemCount() < 1) {
-          InjectorUtils.provideNetworkDataSource(this).startFetchRecipesService();
+          recipeNetworkDataSource.startFetchRecipesService();
         }
         snackbar.dismiss();
       } else {
@@ -78,16 +110,16 @@ public class RecipeListActivity extends AppCompatActivity implements
     });
 
     mViewModel.getAllRecipes().observe(this, recipes -> {
-      mRecipeAdapter.updateRecipes(recipes);
-
-      if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
-      recipesRecyclerView.smoothScrollToPosition(mPosition);
-
       if (recipes != null) {
         if (!recipes.isEmpty()) {
           showRecipes();
+          mRecipeAdapter.updateRecipes(recipes);
+          if (mPosition == RecyclerView.NO_POSITION) {
+            mPosition = 0;
+          }
+          recipesRecyclerView.smoothScrollToPosition(mPosition);
         } else {
-         showEmpty();
+          showEmpty();
         }
       } else {
         showLoading();
@@ -102,7 +134,7 @@ public class RecipeListActivity extends AppCompatActivity implements
    */
   @Override
   public void onItemClick(int recipeId) {
-    Intent recipeDetailIntent = new Intent(RecipeListActivity.this,
+    Intent recipeDetailIntent = new Intent(getActivity(),
         RecipeDetailActivity.class);
     recipeDetailIntent.putExtra(RecipeDetailActivity.RECIPE_ID_EXTRA, recipeId);
     startActivity(recipeDetailIntent);

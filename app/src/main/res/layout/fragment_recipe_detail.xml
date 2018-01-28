@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2018 Mateusz Widuch
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/recipe_details_container"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+  <android.support.constraint.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+      android:id="@+id/ingredients_btn"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/ingredients_btn_height"
+      android:background="@color/colorBackground"
+      android:clickable="true"
+      android:elevation="@dimen/ingredients_btn_elevation"
+      android:focusable="true"
+      android:focusableInTouchMode="true"
+      android:foreground="?attr/selectableItemBackground"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+      android:id="@+id/recipe_ingredients_label"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/ingredients_label_offset"
+      android:layout_marginStart="@dimen/content_spacing"
+      android:text="@string/recipe_ingredients_label"
+      android:textAppearance="@style/AppText.RecipeDetails.Label"
+      android:translationZ="@dimen/ingredients_btn_elevation"
+      app:layout_constraintBottom_toBottomOf="@+id/ingredients_btn"
+      app:layout_constraintEnd_toStartOf="@+id/recipe_ingredients_for"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintHorizontal_chainStyle="packed"
+      app:layout_constraintStart_toEndOf="@+id/ingredients_btn"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@id/ingredients_btn" />
+
+    <TextView
+      android:id="@+id/recipe_ingredients_for"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/ingredients_servings_offset"
+      android:layout_marginStart="@dimen/ingredients_label_offset"
+      android:text="@string/recipe_ingredients_for"
+      android:textAppearance="@style/AppText.Body"
+      android:translationZ="@dimen/ingredients_btn_elevation"
+      app:layout_constraintBottom_toBottomOf="@+id/ingredients_btn"
+      app:layout_constraintEnd_toStartOf="@+id/recipe_servings"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toEndOf="@+id/recipe_ingredients_label"
+      app:layout_constraintTop_toTopOf="@id/ingredients_btn"
+      app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+      android:id="@+id/recipe_servings"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/ingredients_servings_offset"
+      android:layout_marginStart="@dimen/ingredients_label_offset"
+      android:layout_marginEnd="@dimen/content_spacing"
+      android:text="@string/recipe_servings"
+      android:textAppearance="@style/AppText.RecipeDetails.Servings"
+      android:translationZ="@dimen/ingredients_btn_elevation"
+      app:layout_constraintBottom_toBottomOf="@+id/ingredients_btn"
+      app:layout_constraintEnd_toStartOf="@+id/recipe_ingredients_arrow"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toEndOf="@+id/recipe_ingredients_for"
+      app:layout_constraintTop_toTopOf="@id/ingredients_btn" />
+
+    <ImageView
+      android:id="@+id/recipe_ingredients_arrow"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="@dimen/content_spacing"
+      android:contentDescription="@string/a11y_toggle_ingredients_list"
+      android:src="@drawable/ic_arrow_drop_down_black_36dp"
+      android:tint="@color/colorAccent"
+      android:translationZ="@dimen/ingredients_btn_elevation"
+      app:layout_constraintBottom_toBottomOf="@+id/ingredients_btn"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@id/ingredients_btn" />
+
+    <net.cachapa.expandablelayout.ExpandableLayout
+      android:id="@+id/ingredients_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@drawable/pattern"
+      android:backgroundTint="@color/colorCardBackground"
+      android:backgroundTintMode="multiply"
+      app:el_duration="800"
+      app:el_expanded="false"
+      app:el_parallax="0.5"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/ingredients_btn">
+
+      <android.support.v7.widget.RecyclerView
+        android:id="@+id/ingredients_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/ingredients_list_margin"
+        android:layout_marginBottom="@dimen/ingredients_list_margin"
+        android:name="com.mattwiduch.bakeit.ui.recipe_details.StepListFragment"
+        tools:context="com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity"
+        tools:listitem="@layout/list_item_ingredient" />
+
+    </net.cachapa.expandablelayout.ExpandableLayout>
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/steps_recycler_view"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingTop="@dimen/step_list_offset"
+      android:background="@color/colorBackground"
+      android:elevation="@dimen/ingredients_btn_elevation"
+      android:name="com.mattwiduch.bakeit.ui.recipe_details.StepListFragment"
+      android:nestedScrollingEnabled="false"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/ingredients_container"
+      tools:context="com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity"
+      tools:listitem="@layout/list_item_step" />
+
+    <TextView
+      android:id="@+id/recipe_steps_label"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/recipe_steps_label_offset"
+      android:layout_marginStart="@dimen/content_spacing"
+      android:layout_marginEnd="@dimen/content_spacing"
+      android:elevation="@dimen/ingredients_btn_elevation"
+      android:text="@string/recipe_steps_label"
+      android:textAppearance="@style/AppText.RecipeDetails.Label"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@id/steps_recycler_view" />
+
+  </android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.NestedScrollView>

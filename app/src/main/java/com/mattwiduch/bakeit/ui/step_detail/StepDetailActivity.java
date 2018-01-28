@@ -1,7 +1,22 @@
+/*
+ * Copyright (C) 2018 Mateusz Widuch
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.mattwiduch.bakeit.ui.step_detail;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -9,7 +24,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
 import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
-import com.mattwiduch.bakeit.utils.InjectorUtils;
+import com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment.OnStepLoadedListener;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
+import javax.inject.Inject;
 
 /**
  * An activity representing a single Step detail screen. This
@@ -17,12 +35,15 @@ import com.mattwiduch.bakeit.utils.InjectorUtils;
  * item details are presented side-by-side with a list of items
  * in a {@link RecipeDetailActivity}.
  */
-public class StepDetailActivity extends AppCompatActivity {
+public class StepDetailActivity extends AppCompatActivity implements HasSupportFragmentInjector,
+    OnStepLoadedListener {
 
   @BindView(R.id.recipe_name)
   TextView recipeNameTv;
 
-  private StepDetailViewModel mViewModel;
+  @Inject
+  DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
+
   private int mRecipeId;
   private int mStepNumber;
 
@@ -39,18 +60,6 @@ public class StepDetailActivity extends AppCompatActivity {
     // Get extras passed on to this activity
     mRecipeId = getIntent().getIntExtra(RecipeDetailActivity.RECIPE_ID_EXTRA, -1);
     mStepNumber = getIntent().getIntExtra(StepDetailFragment.RECIPE_STEP_NUMBER, -1);
-
-    // Get the ViewModel from the factory
-    StepDetailModelFactory factory = InjectorUtils.provideStepDetailViewModelFactory(
-        this, mRecipeId, mStepNumber);
-    mViewModel = ViewModelProviders.of(this, factory).get(StepDetailViewModel.class);
-
-    // Observe changes in recipe data
-    mViewModel.getRecipe().observe(this, recipe -> {
-      if (recipe != null) {
-        recipeNameTv.setText(recipe.getName());
-      }
-    });
 
     // savedInstanceState is non-null when there is fragment state
     // saved from previous configurations of this activity
@@ -73,5 +82,15 @@ public class StepDetailActivity extends AppCompatActivity {
           .add(R.id.step_detail_container, fragment)
           .commit();
     }
+  }
+
+  @Override
+  public DispatchingAndroidInjector<Fragment> supportFragmentInjector() {
+    return dispatchingAndroidInjector;
+  }
+
+  @Override
+  public void onStepLoaded(String recipeName) {
+    recipeNameTv.setText(recipeName);
   }
 }

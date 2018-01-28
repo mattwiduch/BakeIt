@@ -1,13 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2018 Mateusz Widuch
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
 <resources>
-  <color name="colorPrimary">#00B5B7</color>
-  <color name="colorPrimaryDark">#009C9D</color>
-  <color name="colorSecondary">#B2B9C4</color>
-  <color name="colorAccent">#F94E36</color>
-  <color name="colorBackground">#F7F8F9</color>
-  <color name="colorBackgroundSecondary">#E3FCFC</color>
-  <color name="colorCardBackground">#FFFFFF</color>
-  <color name="colorText">#414144</color>
-  <color name="colorTextSecondary">#BABAC4</color>
-  <color name="colorDivider">#0f000000</color>
+  <color name="colorPrimary">#785654</color>
+  <color name="colorPrimaryDark">#6E4F4D</color>
+  <color name="colorSecondary">#C3C49E</color>
+  <color name="colorAccent">#F06449</color>
+  <color name="colorBackground">#F2F3D5</color>
+  <color name="colorCardBackground">#FEFFE5</color>
+  <color name="colorText">#525348</color>
+  <color name="colorTextSecondary">#909380</color>
+  <color name="colorDivider">#1f525348</color>
 </resources>

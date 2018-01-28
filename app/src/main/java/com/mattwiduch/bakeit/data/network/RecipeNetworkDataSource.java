@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2018 Mateusz Widuch
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.mattwiduch.bakeit.data.network;
 
 import android.arch.lifecycle.LiveData;
@@ -18,6 +33,8 @@ import com.mattwiduch.bakeit.data.database.entries.Step;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,19 +42,18 @@ import retrofit2.Response;
 /**
  * Provides an API for doing all operations with the server data.
  */
+@Singleton
 public class RecipeNetworkDataSource {
 
   private static final String LOG_TAG = RecipeNetworkDataSource.class.getSimpleName();
   // Interval at which to sync with the weather. Use TimeUnit for convenience, rather than
   // writing out a bunch of multiplication ourselves and risk making a silly mistake.
   private static final int SYNC_INTERVAL_HOURS = 3;
-  private static final int SYNC_INTERVAL_SECONDS = (int) TimeUnit.HOURS.toSeconds(SYNC_INTERVAL_HOURS);
+  private static final int SYNC_INTERVAL_SECONDS = (int) TimeUnit.HOURS
+      .toSeconds(SYNC_INTERVAL_HOURS);
   private static final int SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS / 3;
   private static final String BAKEIT_SYNC_TAG = "bakeit-sync";
 
-  // For Singleton instantiation
-  private static final Object LOCK = new Object();
-  private static RecipeNetworkDataSource sInstance;
   private final Context mContext;
 
   // LiveData storing the latest downloaded recipes
@@ -47,21 +63,8 @@ public class RecipeNetworkDataSource {
 
   private final AppExecutors mExecutors;
 
-  /**
-   * Get the singleton for this class.
-   */
-  public static RecipeNetworkDataSource getInstance(Context context, AppExecutors executors) {
-    Log.d(LOG_TAG, "Getting the network data source");
-    if (sInstance == null) {
-      synchronized (LOCK) {
-        sInstance = new RecipeNetworkDataSource(context.getApplicationContext(), executors);
-        Log.d(LOG_TAG, "Made new network data source");
-      }
-    }
-    return sInstance;
-  }
-
-  private RecipeNetworkDataSource(Context context, AppExecutors executors) {
+  @Inject
+  public RecipeNetworkDataSource(Context context, AppExecutors executors) {
     mContext = context;
     mExecutors = executors;
     mDownloadedRecipes = new MutableLiveData<>();

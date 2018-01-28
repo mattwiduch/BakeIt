@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2018 Mateusz Widuch
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.mattwiduch.bakeit.ui.recipe_detail;
 
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +36,7 @@ import java.util.Locale;
  * The adapter provides access to the items in the {@link RecipeIngredientViewHolder}.
  */
 public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredientViewHolder> {
+
   // List of recipe ingredients to display in Recycler View
   private List<Ingredient> mIngredientList;
 
@@ -43,8 +59,8 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
   }
 
   /**
-   *  Replaces the content in the views that make up the recipe item view. This method is invoked
-   *  by the layout manager.
+   * Replaces the content in the views that make up the recipe item view. This method is invoked
+   * by the layout manager.
    */
   @Override
   public void onBindViewHolder(RecipeIngredientViewHolder holder, int position) {
@@ -57,7 +73,7 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
   }
 
   /**
-   *  Returns the size of the dataset.
+   * Returns the size of the dataset.
    */
   @Override
   public int getItemCount() {
@@ -66,6 +82,7 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
 
   /**
    * Update list of recipe ingredients to display.
+   *
    * @param ingredients List of ingredients
    */
   void updateIngredients(List<Ingredient> ingredients) {

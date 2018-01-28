@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2018 Mateusz Widuch
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.mattwiduch.bakeit.ui.recipe_list;
 
 import android.content.Context;
@@ -24,6 +39,7 @@ import java.util.List;
  * The adapter provides access to the items in the {@link RecipeViewHolder}.
  */
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
+
   // Interface to handle clicks on items within this Adapter
   private final RecipeAdapterOnItemClickHandler mClickHandler;
   // List of recipes to display in Recycler View
@@ -60,8 +76,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
   }
 
   /**
-   *  Replaces the content in the views that make up the recipe item view. This method is invoked
-   *  by the layout manager.
+   * Replaces the content in the views that make up the recipe item view. This method is invoked
+   * by the layout manager.
    */
   @Override
   public void onBindViewHolder(RecipeViewHolder holder, int position) {
@@ -79,7 +95,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
   }
 
   /**
-   *  Returns the size of the dataset.
+   * Returns the size of the dataset.
    */
   @Override
   public int getItemCount() {
@@ -96,6 +112,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
    * The interface that receives onItemClick messages.
    */
   public interface RecipeAdapterOnItemClickHandler {
+
     void onItemClick(int recipeId);
   }
 
@@ -103,6 +120,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
    * The {@link RecipeViewHolder} class. Provides a reference to each view in the recipe item view.
    */
   class RecipeViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
+
     @BindView(R.id.recipe_name)
     TextView recipeName;
     @BindView(R.id.recipe_servings)
@@ -119,6 +137,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
     /**
      * This gets called by the child views during a click. It passes recipe id to onItemClickHandler
      * registered with this adapter.
+     *
      * @param v the View that was clicked
      */
     @Override

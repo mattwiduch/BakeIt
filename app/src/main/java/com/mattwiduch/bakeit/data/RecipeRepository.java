@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2018 Mateusz Widuch
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.mattwiduch.bakeit.data;
 
 import android.arch.lifecycle.LiveData;
@@ -10,36 +25,25 @@ import com.mattwiduch.bakeit.data.database.entries.Step;
 import com.mattwiduch.bakeit.data.network.RecipeNetworkDataSource;
 import com.mattwiduch.bakeit.data.network.RecipeService;
 import java.util.List;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Handles data operations in Bake It. Acts as a mediator between {@link RecipeService}
  * and {@link RecipeDao}
  */
+@Singleton
 public class RecipeRepository {
 
   private static final String LOG_TAG = RecipeRepository.class.getSimpleName();
 
-  // Singleton instantiation
-  private static final Object LOCK = new Object();
-  private static RecipeRepository sInstance;
   private final RecipeDao mRecipeDao;
   private final RecipeNetworkDataSource mRecipeNetworkDataSource;
   private final AppExecutors mExecutors;
   private boolean mInitialized = false;
 
-  public static synchronized RecipeRepository getInstance(RecipeDao recipeDao,
-      RecipeNetworkDataSource recipeNetworkDataSource, AppExecutors executors) {
-    Log.d(LOG_TAG, "Getting the repository");
-    if (sInstance == null) {
-      synchronized (LOCK) {
-        sInstance = new RecipeRepository(recipeDao, recipeNetworkDataSource, executors);
-        Log.d(LOG_TAG, "Created new repository");
-      }
-    }
-    return sInstance;
-  }
-
-  private RecipeRepository(RecipeDao recipeDao, RecipeNetworkDataSource recipeNetworkDataSource,
+  @Inject
+  RecipeRepository(RecipeDao recipeDao, RecipeNetworkDataSource recipeNetworkDataSource,
       AppExecutors executors) {
     mRecipeDao = recipeDao;
     mRecipeNetworkDataSource = recipeNetworkDataSource;
@@ -78,7 +82,9 @@ public class RecipeRepository {
 
     // Only perform initialization once per app lifetime. If initialization has already been
     // performed, we have nothing to do in this method.
-    if (mInitialized) return;
+    if (mInitialized) {
+      return;
+    }
     mInitialized = true;
 
     // This method call triggers Sunshine to create its task to synchronize weather data
@@ -95,22 +101,27 @@ public class RecipeRepository {
     initialiseData();
     return mRecipeDao.getAllRecipes();
   }
+
   public LiveData<Recipe> getRecipe(int recipeId) {
     initialiseData();
     return mRecipeDao.getRecipe(recipeId);
   }
+
   public LiveData<List<Ingredient>> getIngredientsForRecipe(int recipeId) {
     initialiseData();
     return mRecipeDao.getIngredientsForRecipe(recipeId);
   }
+
   public LiveData<List<Step>> getStepsForRecipe(int recipeId) {
     initialiseData();
     return mRecipeDao.getStepsForRecipe(recipeId);
   }
+
   public LiveData<Step> getStep(int recipeId, int stepNumber) {
     initialiseData();
     return mRecipeDao.getStep(recipeId, stepNumber);
   }
+
   public List<Ingredient> getIngredientsData(int recipeId) {
     initialiseData();
     return mRecipeDao.getIngredientsData(recipeId);

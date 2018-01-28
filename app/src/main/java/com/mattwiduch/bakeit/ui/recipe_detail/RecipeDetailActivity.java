@@ -1,24 +1,37 @@
+/*
+ * Copyright (C) 2018 Mateusz Widuch
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.mattwiduch.bakeit.ui.recipe_detail;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mattwiduch.bakeit.R;
-import com.mattwiduch.bakeit.ui.recipe_detail.RecipeStepAdapter.RecipeStepAdapterOnItemClickHandler;
+import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailFragment.OnRecipeLoadedListener;
+import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailFragment.OnStepSelectedListener;
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailActivity;
 import com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment;
-import com.mattwiduch.bakeit.utils.InjectorUtils;
-import net.cachapa.expandablelayout.ExpandableLayout;
+import com.mattwiduch.bakeit.ui.step_detail.StepDetailFragment.OnStepLoadedListener;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
+import javax.inject.Inject;
 
 /**
  * An activity representing a list of Steps. This activity
@@ -28,35 +41,22 @@ import net.cachapa.expandablelayout.ExpandableLayout;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class RecipeDetailActivity extends AppCompatActivity implements
-    RecipeStepAdapterOnItemClickHandler {
-
-  @BindView(R.id.steps_recycler_view)
-  RecyclerView stepsRecyclerView;
-  @BindView(R.id.recipe_ingredients_arrow)
-  ImageView expandIngredientsBtn;
-  @BindView(R.id.ingredients_container)
-  ExpandableLayout ingredientsContainer;
-  @BindView(R.id.ingredients_recycler_view)
-  RecyclerView ingredientsRecyclerView;
-  @BindView(R.id.recipe_name)
-  TextView recipeNameTv;
-  @BindView(R.id.recipe_servings)
-  TextView recipeServingsTv;
+public class RecipeDetailActivity extends AppCompatActivity implements HasSupportFragmentInjector,
+    OnStepSelectedListener, OnRecipeLoadedListener, OnStepLoadedListener {
 
   public static final String RECIPE_ID_EXTRA = "RECIPE_ID_EXTRA";
-  private static final String KEY_CURRENT_STEP = "KEY_CURRENT_STEP";
-
+  public static final String KEY_CURRENT_STEP = "KEY_CURRENT_STEP";
+  public static final String KEY_TWO_PANE_MODE = "KEY_TWO_PANE_MODE";
+  @BindView(R.id.recipe_name)
+  TextView recipeNameTv;
+  @Inject
+  DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
   /**
    * Whether or not the activity is in two-pane mode, i.e. running on a tablet
    * device.
    */
   private boolean mTwoPane;
-  private RecipeDetailViewModel mViewModel;
-  private RecipeStepAdapter mStepsAdapter;
-  private RecipeIngredientAdapter mIngredientsAdapter;
   private int mRecipeId;
-  private int mCurrentStep = 0;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -74,82 +74,33 @@ public class RecipeDetailActivity extends AppCompatActivity implements
       mTwoPane = true;
     }
 
-    // Setup recycler view
-    setupRecyclerViews();
-
     // Retrieve recipe id from intent extras
     mRecipeId = getIntent().getIntExtra(RECIPE_ID_EXTRA, -1);
 
-    // Get the ViewModel from the factory
-    RecipeDetailModelFactory factory = InjectorUtils.provideRecipeDetailViewModelFactory(
-        this.getApplicationContext(), mRecipeId);
-    mViewModel = ViewModelProviders.of(this, factory).get(RecipeDetailViewModel.class);
-
-    // Observe changes in recipe data
-    mViewModel.getRecipe().observe(this, recipe -> {
-      if (recipe != null) {
-        recipeNameTv.setText(recipe.getName());
-        recipeServingsTv.setText(getString(R.string.recipe_servings, recipe.getServings()));
-      }
-    });
-
-    mViewModel.getRecipeIngredients().observe(this, ingredients -> {
-      if (ingredients != null) {
-        mIngredientsAdapter.updateIngredients(ingredients);
-      }
-    });
-    mViewModel.getRecipeSteps().observe(this, steps -> {
-      if (steps != null) {
-        mStepsAdapter.updateSteps(steps);
-      }
-    });
-
     // Show first step upon launch in two pane mode
-    if (mTwoPane) {
-      if (savedInstanceState == null) {
-        loadStepFragment(mCurrentStep);
-        mStepsAdapter.setSelectedItem(mCurrentStep);
-      } else {
-        // Or restore previously opened recipe step
-        mCurrentStep = savedInstanceState.getInt(KEY_CURRENT_STEP);
-        mStepsAdapter.setSelectedItem(mCurrentStep);
+    if (savedInstanceState == null) {
+      // Load fragment that displays recipe data
+      loadDetailFragment(mRecipeId);
+
+      if (mTwoPane) {
+        loadStepFragment(0);
       }
     }
   }
 
   @Override
-  protected void onSaveInstanceState(Bundle outState) {
-    if (mTwoPane) {
-      outState.putInt(KEY_CURRENT_STEP, mCurrentStep);
-    }
-    super.onSaveInstanceState(outState);
+  public DispatchingAndroidInjector<Fragment> supportFragmentInjector() {
+    return dispatchingAndroidInjector;
   }
 
   /**
-   * Prepares recycler views that display list of recipe ingredients and recipe steps.
-   */
-  private void setupRecyclerViews() {
-    // Ingredients recycler view
-    mIngredientsAdapter = new RecipeIngredientAdapter();
-    ingredientsRecyclerView.setAdapter(mIngredientsAdapter);
-    ingredientsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-    ingredientsRecyclerView.setHasFixedSize(true);
-    // Steps recycler view
-    stepsRecyclerView.addItemDecoration(new StepItemDecoration(getApplicationContext()));
-    mStepsAdapter = new RecipeStepAdapter(this, this);
-    stepsRecyclerView.setAdapter(mStepsAdapter);
-    stepsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-    stepsRecyclerView.setHasFixedSize(true);
-  }
-
-  /**.
    * Responds to item clicks on recipes in the list.
+   *
    * @param stepNumber Id of recipe step that has been clicked
    */
   @Override
-  public void onItemClick(int stepNumber) {
+  public void onStepSelected(int stepNumber) {
     if (mTwoPane) {
-      mCurrentStep = stepNumber;
       loadStepFragment(stepNumber);
     } else {
       Intent intent = new Intent(this, StepDetailActivity.class);
@@ -161,6 +112,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 
   /**
    * Loads fragment that displays step data in two pane mode.
+   *
    * @param stepNumber of step to display
    */
   private void loadStepFragment(int stepNumber) {
@@ -175,17 +127,33 @@ public class RecipeDetailActivity extends AppCompatActivity implements
   }
 
   /**
-   * Expands and collapses list of ingredients.
+   * Loads fragment that displays recipe data.
+   *
+   * @param recipeId of recipe to display
    */
-  public void toggleIngredients(View view) {
-    ingredientsContainer.toggle();
-    Animation rotate = AnimationUtils.loadAnimation(this, R.anim.ingredients_button);
-    if (ingredientsContainer.isExpanded()) {
-      expandIngredientsBtn.startAnimation(rotate);
-      expandIngredientsBtn.setImageResource(R.drawable.ic_arrow_drop_down_black_36dp);
-    } else {
-      expandIngredientsBtn.startAnimation(rotate);
-      expandIngredientsBtn.setImageResource(R.drawable.ic_arrow_drop_up_black_36dp);
-    }
+  private void loadDetailFragment(int recipeId) {
+    Bundle arguments = new Bundle();
+    arguments.putInt(RECIPE_ID_EXTRA, recipeId);
+    arguments.putBoolean(KEY_TWO_PANE_MODE, mTwoPane);
+    RecipeDetailFragment fragment = new RecipeDetailFragment();
+    fragment.setArguments(arguments);
+    getSupportFragmentManager().beginTransaction()
+        .replace(R.id.recipe_details_fragment, fragment)
+        .commit();
+  }
+
+  /**
+   * Sets toolbar text to recipe's name.
+   *
+   * @param recipeName to display
+   */
+  @Override
+  public void onRecipeLoaded(String recipeName) {
+    recipeNameTv.setText(recipeName);
+  }
+
+  @Override
+  public void onStepLoaded(String recipeName) {
+    // Do nothing. Not needed in two pane mode.
   }
 }

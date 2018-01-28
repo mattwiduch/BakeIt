@@ -1,8 +1,22 @@
+/*
+ * Copyright (C) 2018 Mateusz Widuch
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.mattwiduch.bakeit.ui;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.SurfaceView;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -23,16 +37,15 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
  */
 public class VideoPlayer {
 
+  // bandwidth meter to measure and estimate bandwidth
+  private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
   // Singleton instance
   private static VideoPlayer sInstance;
-
   // ExoPlayer
   private SimpleExoPlayer mVideoPlayer;
   private long mPlaybackPosition;
   private boolean mPlayWhenReady;
   private Uri mVideoUri;
-  // bandwidth meter to measure and estimate bandwidth
-  private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
   private VideoPlayer() {
   }
@@ -51,6 +64,7 @@ public class VideoPlayer {
 
   /**
    * Creates a player instance and a media source needed for streaming recipe step media.
+   *
    * @param context App context
    * @param videoUrl link to video
    * @param videoPlayerView ExoPlayerView
@@ -69,7 +83,7 @@ public class VideoPlayer {
             new DefaultLoadControl());
 
         mVideoUri = videoUrl;
-        prepareVideo(mVideoUri);
+        prepareVideo(mVideoUri, true);
 
         videoPlayerView.setPlayer(mVideoPlayer);
         videoPlayerView.hideController();
@@ -85,10 +99,11 @@ public class VideoPlayer {
    * Prepares recipe step video.
    *
    * @param videoUrl of video to play
+   * @param resetPosition true to reset
    */
-  private void prepareVideo(Uri videoUrl) {
-      MediaSource mediaSource = buildMediaSource(videoUrl);
-      mVideoPlayer.prepare(mediaSource, true, false);
+  public void prepareVideo(Uri videoUrl, boolean resetPosition) {
+    MediaSource mediaSource = buildMediaSource(videoUrl);
+    mVideoPlayer.prepare(mediaSource, resetPosition, false);
   }
 
   /**
@@ -119,8 +134,8 @@ public class VideoPlayer {
    */
   public void resume() {
     if (mVideoPlayer != null) {
-      mVideoPlayer.setPlayWhenReady(mPlayWhenReady);
       mVideoPlayer.seekTo(mPlaybackPosition);
+      mVideoPlayer.setPlayWhenReady(mPlayWhenReady);
     }
   }
 
