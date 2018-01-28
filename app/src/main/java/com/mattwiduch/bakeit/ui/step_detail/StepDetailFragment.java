@@ -56,6 +56,7 @@ public class StepDetailFragment extends Fragment implements Injectable {
    */
   public static final String RECIPE_STEP_NUMBER = "recipe_step_number";
   private static final String KEY_VIDEO_PLAYING = "KEY_VIDEO_PLAYING";
+  private static final String KEY_VIDEO_RESET_POSITION = "KEY_VIDEO_RESET_POSITION";
   private static final String KEY_VIDEO_FULLSCREEN = "KEY_VIDEO_FULLSCREEN";
 
   @BindView(R.id.step_image)
@@ -82,18 +83,21 @@ public class StepDetailFragment extends Fragment implements Injectable {
   @Inject
   ViewModelProvider.Factory viewModelFactory;
 
+  @VisibleForTesting
+  Toast mToast;
+
   private StepDetailViewModel mViewModel;
   private OnStepLoadedListener mStepLoadedCallback;
   private int mRecipeId;
   private int mStepNumber;
   private boolean mPlaying;
+  private boolean mVideoReady;
+  private boolean mResetPosition;
 
   // Used to play video in full screen
   private Dialog mVideoDialog;
   private boolean mVideoFullscreen;
-  private boolean mVideoReady;
-  @VisibleForTesting
-  Toast mToast;
+
 
   /**
    * Mandatory empty constructor for the fragment manager to instantiate the
@@ -123,7 +127,10 @@ public class StepDetailFragment extends Fragment implements Injectable {
 
     if (savedInstanceState != null) {
       mPlaying = savedInstanceState.getBoolean(KEY_VIDEO_PLAYING);
+      mResetPosition = savedInstanceState.getBoolean(KEY_VIDEO_RESET_POSITION);
       mVideoFullscreen = savedInstanceState.getBoolean(KEY_VIDEO_FULLSCREEN);
+    } else {
+      mResetPosition = true;
     }
 
     if (getArguments() != null) {
@@ -196,8 +203,10 @@ public class StepDetailFragment extends Fragment implements Injectable {
 
               if (!mVideoReady) {
                 VideoPlayer.getInstance().prepareVideo(Uri.parse(videoUrl), false);
-                VideoPlayer.getInstance().resume();
                 mVideoReady = true;
+                if (mPlaying) {
+                  VideoPlayer.getInstance().resume();
+                }
               }
             } else {
               if (mPlaying) {
@@ -207,6 +216,7 @@ public class StepDetailFragment extends Fragment implements Injectable {
                 playbackController.setVisibility(View.INVISIBLE);
               }
               mVideoReady = false;
+              mResetPosition = false;
               VideoPlayer.getInstance().suspend();
               playButton.setVisibility(View.VISIBLE);
             }
@@ -251,6 +261,7 @@ public class StepDetailFragment extends Fragment implements Injectable {
   public void onSaveInstanceState(@NonNull Bundle outState) {
     super.onSaveInstanceState(outState);
     outState.putBoolean(KEY_VIDEO_PLAYING, mPlaying);
+    outState.putBoolean(KEY_VIDEO_RESET_POSITION, mResetPosition);
     outState.putBoolean(KEY_VIDEO_FULLSCREEN, mVideoFullscreen);
   }
 
