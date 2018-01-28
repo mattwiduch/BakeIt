@@ -13,6 +13,7 @@
     android:layout_marginEnd="@dimen/widget_margin"
     android:layout_marginBottom="@dimen/widget_config_title_margin_bottom"
     android:textAppearance="@style/AppText.RecipeListItem.Name"
+    android:textColor="@color/colorPrimary"
     android:text="@string/widget_config_label"/>
 
   <Spinner
@@ -20,7 +21,7 @@
     style="@style/Widget.AppCompat.Spinner"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/content_padding"
+    android:layout_marginStart="@dimen/widget_margin"
     android:layout_marginEnd="@dimen/content_padding"
     android:popupBackground="@color/colorBackground"/>
 
@@ -45,7 +46,7 @@
       style="?android:attr/borderlessButtonStyle"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginEnd="@dimen/content_spacing"
+      android:layout_marginEnd="@dimen/content_padding"
       android:minWidth="@dimen/widget_config_btn_min_width"
       android:text="@string/widget_config_apply"
       android:textColor="@color/colorAccent" />

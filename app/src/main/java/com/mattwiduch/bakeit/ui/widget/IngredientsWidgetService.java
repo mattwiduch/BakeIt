@@ -80,6 +80,8 @@ class IngredientsListRemoteViewsFactory implements RemoteViewsFactory {
 
     RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.list_item_widget);
 
+    views.setTextColor(R.id.ingredient_quantity, mContext.getResources().getColor(R.color.colorText));
+    views.setTextColor(R.id.ingredient_name, mContext.getResources().getColor(R.color.colorText));
     views.setTextViewText(R.id.ingredient_quantity, String.format(Locale.getDefault(),
         "%s%s ", quantity, measure));
     views.setTextViewText(R.id.ingredient_name, name);

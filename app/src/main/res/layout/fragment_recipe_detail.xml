@@ -92,6 +92,8 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@drawable/pattern"
+      android:backgroundTint="@color/colorCardBackground"
+      android:backgroundTintMode="multiply"
       app:el_duration="800"
       app:el_expanded="false"
       app:el_parallax="0.5"

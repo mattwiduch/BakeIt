@@ -3,7 +3,7 @@
   android:initialKeyguardLayout="@layout/ingredients_widget"
   android:initialLayout="@layout/ingredients_widget"
   android:configure="com.mattwiduch.bakeit.ui.widget.IngredientsWidgetConfigActivity"
-  android:minHeight="110dp"
+  android:minHeight="180dp"
   android:minWidth="250dp"
   android:previewImage="@drawable/widget_preview"
   android:resizeMode="horizontal|vertical"

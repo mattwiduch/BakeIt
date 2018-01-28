@@ -32,6 +32,7 @@
       android:importantForAccessibility="no"
       android:layout_gravity="center"
       android:layout_marginBottom="@dimen/content_spacing"
+      android:tint="@color/colorSecondary"
       android:src="@drawable/ic_recipe"/>
 
     <TextView

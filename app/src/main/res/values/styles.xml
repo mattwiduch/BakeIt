@@ -33,7 +33,7 @@
   <!-- Text Styles -->
   <style name="AppText.RecipeListItem.Name" parent="TextAppearance.AppCompat.Title">
     <item name="android:fontFamily">@font/poppins_medium</item>
-    <item name="android:textColor">@color/colorPrimary</item>
+    <item name="android:textColor">@color/colorAccent</item>
     <item name="android:textSize">16sp</item>
   </style>
 
