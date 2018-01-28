@@ -32,7 +32,7 @@ public class RecipeListViewModel extends ViewModel {
   private final LiveData<List<Recipe>> mAllRecipes;
 
   @Inject
-  RecipeListViewModel (RecipeRepository repository) {
+  RecipeListViewModel(RecipeRepository repository) {
     mAllRecipes = repository.getAllRecipes();
   }
 

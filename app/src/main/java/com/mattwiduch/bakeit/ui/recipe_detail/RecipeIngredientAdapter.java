@@ -36,6 +36,7 @@ import java.util.Locale;
  * The adapter provides access to the items in the {@link RecipeIngredientViewHolder}.
  */
 public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredientViewHolder> {
+
   // List of recipe ingredients to display in Recycler View
   private List<Ingredient> mIngredientList;
 
@@ -58,8 +59,8 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
   }
 
   /**
-   *  Replaces the content in the views that make up the recipe item view. This method is invoked
-   *  by the layout manager.
+   * Replaces the content in the views that make up the recipe item view. This method is invoked
+   * by the layout manager.
    */
   @Override
   public void onBindViewHolder(RecipeIngredientViewHolder holder, int position) {
@@ -72,7 +73,7 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
   }
 
   /**
-   *  Returns the size of the dataset.
+   * Returns the size of the dataset.
    */
   @Override
   public int getItemCount() {
@@ -81,6 +82,7 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
 
   /**
    * Update list of recipe ingredients to display.
+   *
    * @param ingredients List of ingredients
    */
   void updateIngredients(List<Ingredient> ingredients) {

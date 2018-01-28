@@ -29,6 +29,7 @@ import android.view.View;
  * License: MIT
  */
 public class RecyclerViewItemCountAssertion implements ViewAssertion {
+
   private final int expectedCount;
 
   public RecyclerViewItemCountAssertion(int expectedCount) {

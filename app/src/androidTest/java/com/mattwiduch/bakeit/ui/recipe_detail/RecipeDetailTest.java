@@ -61,6 +61,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class RecipeDetailTest {
+
   @Rule
   public ActivityTestRule<SingleFragmentActivity> activityTestRule =
       new ActivityTestRule<>(SingleFragmentActivity.class, true, true);
@@ -102,8 +103,10 @@ public class RecipeDetailTest {
 
     onView(withId(R.id.ingredients_btn)).check(matches(isDisplayed()));
     onView(withId(R.id.ingredients_btn)).check(matches(isClickable()));
-    onView(withId(R.id.recipe_ingredients_label)).check(matches(withText(R.string.recipe_ingredients_label)));
-    onView(withId(R.id.recipe_ingredients_for)).check(matches(withText(R.string.recipe_ingredients_for)));
+    onView(withId(R.id.recipe_ingredients_label))
+        .check(matches(withText(R.string.recipe_ingredients_label)));
+    onView(withId(R.id.recipe_ingredients_for))
+        .check(matches(withText(R.string.recipe_ingredients_for)));
     onView(withId(R.id.recipe_servings)).check(matches(withText("12 Servings")));
     onView(withId(R.id.recipe_ingredients_arrow)).check(matches(hasDrawable()));
     onView(withId(R.id.recipe_ingredients_arrow)).check(matches(
@@ -155,7 +158,8 @@ public class RecipeDetailTest {
     onView(withId(R.id.ingredients_btn)).perform(click());
     onView(withId(R.id.recipe_ingredients_label)).perform(click());
     onView(ingredientsMatcher().atPosition(3)).check(matches(hasDescendant(withText("3 tsp "))));
-    onView(ingredientsMatcher().atPosition(3)).check(matches(hasDescendant(withText("Fancy ingredient"))));
+    onView(ingredientsMatcher().atPosition(3))
+        .check(matches(hasDescendant(withText("Fancy ingredient"))));
   }
 
   @Test

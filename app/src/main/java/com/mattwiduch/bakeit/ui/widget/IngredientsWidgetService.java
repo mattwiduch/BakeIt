@@ -65,7 +65,8 @@ class IngredientsListRemoteViewsFactory implements RemoteViewsFactory {
   }
 
   @Override
-  public void onCreate() {}
+  public void onCreate() {
+  }
 
   /**
    * Called on start and when notifyAppWidgetViewDataChanged is called.
@@ -76,17 +77,22 @@ class IngredientsListRemoteViewsFactory implements RemoteViewsFactory {
   }
 
   @Override
-  public void onDestroy() {}
+  public void onDestroy() {
+  }
 
   @Override
   public int getCount() {
-    if (mIngredients == null) return 0;
+    if (mIngredients == null) {
+      return 0;
+    }
     return mIngredients.size();
   }
 
   @Override
   public RemoteViews getViewAt(int i) {
-    if (mIngredients == null) return null;
+    if (mIngredients == null) {
+      return null;
+    }
 
     Ingredient ingredient = mIngredients.get(i);
     String quantity = StringUtils.formatQuantity(ingredient.getQuantity().toString());
@@ -95,7 +101,8 @@ class IngredientsListRemoteViewsFactory implements RemoteViewsFactory {
 
     RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.list_item_widget);
 
-    views.setTextColor(R.id.ingredient_quantity, mContext.getResources().getColor(R.color.colorText));
+    views.setTextColor(R.id.ingredient_quantity,
+        mContext.getResources().getColor(R.color.colorText));
     views.setTextColor(R.id.ingredient_name, mContext.getResources().getColor(R.color.colorText));
     views.setTextViewText(R.id.ingredient_quantity, String.format(Locale.getDefault(),
         "%s%s ", quantity, measure));

@@ -65,6 +65,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class WidgetConfigTest {
+
   @Rule
   public ActivityTestRule<SingleFragmentActivity> activityTestRule =
       new ActivityTestRule<>(SingleFragmentActivity.class, true, true);
@@ -133,7 +134,8 @@ public class WidgetConfigTest {
 
     onView(withId(R.id.widget_config_spinner)).perform(click());
     onData(is(instanceOf(Recipe.class))).atPosition(1).perform(click());
-    onView(withId(R.id.widget_config_spinner)).check(matches(hasDescendant(withText("Shortbread"))));
+    onView(withId(R.id.widget_config_spinner))
+        .check(matches(hasDescendant(withText("Shortbread"))));
   }
 
   @Test

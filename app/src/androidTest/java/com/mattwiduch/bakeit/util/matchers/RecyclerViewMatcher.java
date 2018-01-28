@@ -18,7 +18,6 @@ package com.mattwiduch.bakeit.util.matchers;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -55,7 +54,8 @@ public class RecyclerViewMatcher {
           }
         }
 
-        description.appendText("RecyclerView with id: " + idDescription + " at position: " + position);
+        description
+            .appendText("RecyclerView with id: " + idDescription + " at position: " + position);
       }
 
       public boolean matchesSafely(View view) {
@@ -65,12 +65,12 @@ public class RecyclerViewMatcher {
         if (childView == null) {
           RecyclerView recyclerView = view.getRootView().findViewById(recyclerViewId);
           if (recyclerView != null && recyclerView.getId() == recyclerViewId) {
-            RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(position);
+            RecyclerView.ViewHolder viewHolder = recyclerView
+                .findViewHolderForAdapterPosition(position);
             if (viewHolder != null) {
               childView = viewHolder.itemView;
             }
-          }
-          else {
+          } else {
             return false;
           }
         }

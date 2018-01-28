@@ -9,6 +9,7 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class ServiceBuilderModule {
+
   @ActivityScope
   @ContributesAndroidInjector
   abstract IngredientsWidgetService contributeIngredientsWidgetService();

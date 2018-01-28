@@ -22,7 +22,10 @@ import android.arch.lifecycle.ViewModelProvider;
  * Creates a one off view model factory for the given view model instance.
  */
 public class ViewModelUtil {
-  private ViewModelUtil() {}
+
+  private ViewModelUtil() {
+  }
+
   public static <T extends ViewModel> ViewModelProvider.Factory createFor(T model) {
     return new ViewModelProvider.Factory() {
       @Override

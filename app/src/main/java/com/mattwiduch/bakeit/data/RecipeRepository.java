@@ -82,7 +82,9 @@ public class RecipeRepository {
 
     // Only perform initialization once per app lifetime. If initialization has already been
     // performed, we have nothing to do in this method.
-    if (mInitialized) return;
+    if (mInitialized) {
+      return;
+    }
     mInitialized = true;
 
     // This method call triggers Sunshine to create its task to synchronize weather data
@@ -99,22 +101,27 @@ public class RecipeRepository {
     initialiseData();
     return mRecipeDao.getAllRecipes();
   }
+
   public LiveData<Recipe> getRecipe(int recipeId) {
     initialiseData();
     return mRecipeDao.getRecipe(recipeId);
   }
+
   public LiveData<List<Ingredient>> getIngredientsForRecipe(int recipeId) {
     initialiseData();
     return mRecipeDao.getIngredientsForRecipe(recipeId);
   }
+
   public LiveData<List<Step>> getStepsForRecipe(int recipeId) {
     initialiseData();
     return mRecipeDao.getStepsForRecipe(recipeId);
   }
+
   public LiveData<Step> getStep(int recipeId, int stepNumber) {
     initialiseData();
     return mRecipeDao.getStep(recipeId, stepNumber);
   }
+
   public List<Ingredient> getIngredientsData(int recipeId) {
     initialiseData();
     return mRecipeDao.getIngredientsData(recipeId);

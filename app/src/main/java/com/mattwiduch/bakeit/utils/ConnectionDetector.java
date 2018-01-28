@@ -27,7 +27,26 @@ import android.net.NetworkInfo;
  * Connection detection utility based on LivaData object.
  */
 public class ConnectionDetector extends LiveData<ConnectionModel> {
+
   private Context mContext;
+  private BroadcastReceiver networkReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      if (intent.getExtras() != null) {
+        ConnectivityManager connectivityManager =
+            (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork =
+            connectivityManager != null ? connectivityManager.getActiveNetworkInfo() : null;
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
+        if (isConnected) {
+          postValue(new ConnectionModel(activeNetwork.getType(), true));
+        } else {
+          postValue(new ConnectionModel(0, false));
+        }
+      }
+    }
+  };
 
   public ConnectionDetector(Context context) {
     mContext = context;
@@ -45,23 +64,4 @@ public class ConnectionDetector extends LiveData<ConnectionModel> {
     super.onInactive();
     mContext.unregisterReceiver(networkReceiver);
   }
-
-  private BroadcastReceiver networkReceiver = new BroadcastReceiver() {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-      if(intent.getExtras()!=null) {
-        ConnectivityManager connectivityManager =
-            (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork =
-            connectivityManager != null ? connectivityManager.getActiveNetworkInfo() : null;
-        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-
-        if(isConnected) {
-          postValue(new ConnectionModel(activeNetwork.getType(), true));
-        } else {
-          postValue(new ConnectionModel(0,false));
-        }
-      }
-    }
-  };
 }

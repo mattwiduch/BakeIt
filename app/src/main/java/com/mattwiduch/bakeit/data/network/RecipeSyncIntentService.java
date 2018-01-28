@@ -30,10 +30,9 @@ import javax.inject.Inject;
  */
 public class RecipeSyncIntentService extends IntentService {
 
+  private static final String LOG_TAG = RecipeSyncIntentService.class.getSimpleName();
   @Inject
   RecipeNetworkDataSource recipeNetworkDataSource;
-
-  private static final String LOG_TAG = RecipeSyncIntentService.class.getSimpleName();
 
   public RecipeSyncIntentService() {
     super("RecipeSyncIntentService");

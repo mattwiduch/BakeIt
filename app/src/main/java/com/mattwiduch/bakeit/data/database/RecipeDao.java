@@ -38,7 +38,7 @@ public interface RecipeDao {
    *
    * @param recipes A list of recipes to insert
    */
-  @Insert (onConflict = OnConflictStrategy.REPLACE)
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
   void insertRecipes(Recipe... recipes);
 
   /**

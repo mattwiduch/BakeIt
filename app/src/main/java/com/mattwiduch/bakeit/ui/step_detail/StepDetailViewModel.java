@@ -36,14 +36,13 @@ import javax.inject.Inject;
 public class StepDetailViewModel extends ViewModel {
 
   private final MutableLiveData<StepData> mStepData = new MutableLiveData<>();
-  private MediatorLiveData<CompositeStep> mStepMediator;
-
   // Current recipe
   private final LiveData<Recipe> mRecipe;
   // Current recipe step
   private final LiveData<Step> mCurrentStep;
   // List of all steps
   private final LiveData<List<Step>> mRecipeSteps;
+  private MediatorLiveData<CompositeStep> mStepMediator;
 
   @Inject
   StepDetailViewModel(RecipeRepository repository, Context context) {

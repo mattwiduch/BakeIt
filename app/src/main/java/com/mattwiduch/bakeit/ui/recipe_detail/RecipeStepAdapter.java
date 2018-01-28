@@ -77,8 +77,8 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
   }
 
   /**
-   *  Replaces the content in the views that make up the recipe item view. This method is invoked
-   *  by the layout manager.
+   * Replaces the content in the views that make up the recipe item view. This method is invoked
+   * by the layout manager.
    */
   @Override
   public void onBindViewHolder(final RecipeStepViewHolder holder, int position) {
@@ -114,7 +114,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
   }
 
   /**
-   *  Returns the size of the dataset.
+   * Returns the size of the dataset.
    */
   @Override
   public int getItemCount() {
@@ -123,6 +123,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
 
   /**
    * Update list of recipe steps to display.
+   *
    * @param steps List of steps
    */
   void updateSteps(List<Step> steps) {
@@ -132,6 +133,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
 
   /**
    * Sets currently selected item's position.
+   *
    * @param position of currently selected item
    */
   void setSelectedItem(int position) {
@@ -142,6 +144,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
    * The interface that receives onItemClick messages.
    */
   public interface RecipeStepAdapterOnItemClickHandler {
+
     void onItemClick(int stepId);
   }
 
@@ -169,6 +172,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
     /**
      * This gets called by the child views during a click. It passes recipe id to onItemClickHandler
      * registered with this adapter.
+     *
      * @param v the View that was clicked
      */
     @Override

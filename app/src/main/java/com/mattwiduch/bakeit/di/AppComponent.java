@@ -36,13 +36,16 @@ import javax.inject.Singleton;
     ServiceBuilderModule.class
 })
 public interface AppComponent {
+
+  void inject(BakeitApp bakeitApp);
+
   // Adds method to the builder that binds application instance to Dagger graph
   @Component.Builder
   interface Builder {
+
     @BindsInstance
     Builder application(Application application);
+
     AppComponent build();
   }
-
-  void inject(BakeitApp bakeitApp);
 }

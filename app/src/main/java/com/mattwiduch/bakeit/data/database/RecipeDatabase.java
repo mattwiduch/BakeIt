@@ -27,7 +27,8 @@ import com.mattwiduch.bakeit.data.database.entries.Step;
  */
 
 // List of the entry classes
-@Database(entities = {Recipe.class, Ingredient.class, Step.class}, version = 1, exportSchema = false)
+@Database(entities = {Recipe.class, Ingredient.class,
+    Step.class}, version = 1, exportSchema = false)
 public abstract class RecipeDatabase extends RoomDatabase {
 
   public static final String DATABASE_NAME = "recipe_database";

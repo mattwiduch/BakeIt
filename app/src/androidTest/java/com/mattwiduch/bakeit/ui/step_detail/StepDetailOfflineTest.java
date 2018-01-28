@@ -22,8 +22,8 @@ import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.mattwiduch.bakeit.util.TestUtils.TEST_RECIPE_ID;
 import static com.mattwiduch.bakeit.util.TestUtils.TEST_CURRENT_STEP;
+import static com.mattwiduch.bakeit.util.TestUtils.TEST_RECIPE_ID;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.not;
@@ -50,6 +50,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class StepDetailOfflineTest {
+
   @Rule
   public ActivityTestRule<SingleFragmentActivity> activityTestRule =
       new ActivityTestRule<>(SingleFragmentActivity.class, true, true);

@@ -198,12 +198,12 @@ public class StepDetailFragment extends Fragment implements Injectable {
 
           if (StringUtils.checkUrl(videoUrl)) {
 
-              mVideoDialog = initialiseVideoDialog(getActivity());
-              if (mVideoFullscreen) {
-                showFullscreenVideo();
-              }
+            mVideoDialog = initialiseVideoDialog(getActivity());
+            if (mVideoFullscreen) {
+              showFullscreenVideo();
+            }
 
-              videoPlayerContainer.setVisibility(View.VISIBLE);
+            videoPlayerContainer.setVisibility(View.VISIBLE);
 
             if (compositeStep.isConnected()) {
               if (!mPlaying) {

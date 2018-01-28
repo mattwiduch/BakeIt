@@ -19,6 +19,7 @@ package com.mattwiduch.bakeit.utils;
  * Connection model that contains connection state as well as its type.
  */
 public class ConnectionModel {
+
   private int mConnectionType;
   private boolean mIsConnected;
 

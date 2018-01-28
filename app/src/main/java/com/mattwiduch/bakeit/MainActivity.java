@@ -28,6 +28,7 @@ import javax.inject.Inject;
  * Holds the fragment containing recipe list.
  */
 public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+
   @Inject
   DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 

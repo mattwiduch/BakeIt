@@ -29,10 +29,9 @@ import javax.inject.Inject;
 
 public class RecipeFirebaseJobService extends JobService {
 
+  private static final String LOG_TAG = RecipeFirebaseJobService.class.getSimpleName();
   @Inject
   RecipeNetworkDataSource recipeNetworkDataSource;
-
-  private static final String LOG_TAG = RecipeFirebaseJobService.class.getSimpleName();
 
   @Override
   public void onCreate() {

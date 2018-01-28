@@ -36,8 +36,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
 /**
- * Created by F1sherKK on 07/03/2017.
- * Source: https://medium.com/azimolabs/guide-to-make-custom-viewaction-solving-problem-of-nestedscrollview-in-espresso-35b133850254
+ * Created by F1sherKK on 07/03/2017. Source: https://medium.com/azimolabs/guide-to-make-custom-viewaction-solving-problem-of-nestedscrollview-in-espresso-35b133850254
  */
 
 public class EspressoScrollActions {

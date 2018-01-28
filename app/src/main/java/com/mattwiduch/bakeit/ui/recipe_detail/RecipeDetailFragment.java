@@ -171,17 +171,6 @@ public class RecipeDetailFragment extends Fragment implements RecipeStepAdapterO
   }
 
   /**
-   * Container Activity must implement these interfaces.
-   */
-  public interface OnRecipeLoadedListener {
-    void onRecipeLoaded(String recipeName);
-  }
-
-  public interface OnStepSelectedListener {
-    void onStepSelected(int stepNumber);
-  }
-
-  /**
    * Prepares recycler views that display list of recipe ingredients and recipe steps.
    */
   private void setupRecyclerViews() {
@@ -213,5 +202,18 @@ public class RecipeDetailFragment extends Fragment implements RecipeStepAdapterO
       expandIngredientsBtn.startAnimation(rotate);
       expandIngredientsBtn.setImageResource(R.drawable.ic_arrow_drop_up_black_36dp);
     }
+  }
+
+  /**
+   * Container Activity must implement these interfaces.
+   */
+  public interface OnRecipeLoadedListener {
+
+    void onRecipeLoaded(String recipeName);
+  }
+
+  public interface OnStepSelectedListener {
+
+    void onStepSelected(int stepNumber);
   }
 }

@@ -54,6 +54,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class RecipeDetailTabletTest {
+
   @Rule
   public ActivityTestRule<SingleFragmentActivity> activityTestRule =
       new ActivityTestRule<>(SingleFragmentActivity.class, true, true);

@@ -19,5 +19,6 @@ package com.mattwiduch.bakeit.di.injector;
  * Marks an activity / fragment injectable.
  */
 public interface Injectable {
+
 }
 

@@ -23,8 +23,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.mattwiduch.bakeit.util.TestUtils.TEST_RECIPE_ID;
 import static com.mattwiduch.bakeit.util.TestUtils.TEST_CURRENT_STEP;
+import static com.mattwiduch.bakeit.util.TestUtils.TEST_RECIPE_ID;
 import static com.mattwiduch.bakeit.util.matchers.DrawableMatcher.withDrawableId;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -163,7 +163,8 @@ public class StepDetailTest {
 
     onView(withId(R.id.play_video_btn)).perform(click());
     onView(withId(R.id.exo_fullscreen)).perform(click());
-    onView(withId(R.id.exo_fullscreen)).check(matches(withDrawableId(R.drawable.ic_fullscreen_exit)));
+    onView(withId(R.id.exo_fullscreen))
+        .check(matches(withDrawableId(R.drawable.ic_fullscreen_exit)));
     onView(withId(R.id.exo_fullscreen)).inRoot(isDialog()).perform(click());
     onView(allOf(instanceOf(SimpleExoPlayerView.class), withId(R.id.step_video_player)))
         .inRoot(not(isDialog()))

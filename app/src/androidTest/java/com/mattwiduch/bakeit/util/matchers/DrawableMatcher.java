@@ -38,6 +38,24 @@ public class DrawableMatcher extends TypeSafeMatcher<View> {
     this.expectedId = expectedId;
   }
 
+  public static Matcher<View> withDrawableId(final int resourceId) {
+    return new DrawableMatcher(resourceId);
+  }
+
+  public static BoundedMatcher<View, ImageView> hasDrawable() {
+    return new BoundedMatcher<View, ImageView>(ImageView.class) {
+      @Override
+      public void describeTo(Description description) {
+        description.appendText("has drawable");
+      }
+
+      @Override
+      public boolean matchesSafely(ImageView imageView) {
+        return imageView.getDrawable() != null;
+      }
+    };
+  }
+
   @Override
   protected boolean matchesSafely(View target) {
     if (!(target instanceof ImageView)) {
@@ -67,7 +85,8 @@ public class DrawableMatcher extends TypeSafeMatcher<View> {
   }
 
   private Bitmap getBitmap(Drawable drawable) {
-    Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+    Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(),
+        Bitmap.Config.ARGB_8888);
     Canvas canvas = new Canvas(bitmap);
     drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
     drawable.draw(canvas);
@@ -83,23 +102,5 @@ public class DrawableMatcher extends TypeSafeMatcher<View> {
       description.appendText(resourceName);
       description.appendText("]");
     }
-  }
-
-  public static Matcher<View> withDrawableId(final int resourceId) {
-    return new DrawableMatcher(resourceId);
-  }
-
-  public static BoundedMatcher<View, ImageView> hasDrawable() {
-    return new BoundedMatcher<View, ImageView>(ImageView.class) {
-      @Override
-      public void describeTo(Description description) {
-        description.appendText("has drawable");
-      }
-
-      @Override
-      public boolean matchesSafely(ImageView imageView) {
-        return imageView.getDrawable() != null;
-      }
-    };
   }
 }

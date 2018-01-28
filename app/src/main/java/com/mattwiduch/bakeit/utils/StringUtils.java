@@ -25,6 +25,7 @@ public class StringUtils {
 
   /**
    * Removes trailing decimal point and zeros from given string.
+   *
    * @param quantity string
    * @return Formatted quantity string
    */
@@ -34,6 +35,7 @@ public class StringUtils {
 
   /**
    * Formats measure string depending on units.
+   *
    * @param measure string
    * @return formatted measure string
    */
@@ -52,6 +54,7 @@ public class StringUtils {
 
   /**
    * Removes step number from step description.
+   *
    * @param description recipe step description
    * @return description without step number
    */
@@ -61,6 +64,7 @@ public class StringUtils {
 
   /**
    * Checks if supplied url is valid.
+   *
    * @param url String containing url
    * @return true if valid
    */

@@ -40,6 +40,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
+
   private RecipeDatabase database;
 
   @Before
@@ -58,7 +59,8 @@ public class DatabaseTest {
     try {
       database.recipeDao().insertIngredients(TestUtils.createIngredientsList(10));
       throw new AssertionError("must fail because recipe does not exist");
-    } catch (SQLiteException ex) {}
+    } catch (SQLiteException ex) {
+    }
   }
 
   @Test
@@ -66,13 +68,14 @@ public class DatabaseTest {
     try {
       database.recipeDao().insertSteps(TestUtils.createStepList(TEST_RECIPE_ID, 10));
       throw new AssertionError("must fail because recipe does not exist");
-    } catch (SQLiteException ex) {}
+    } catch (SQLiteException ex) {
+    }
   }
 
   @Test
   public void insertRecipesAndLoad() throws InterruptedException {
     database.recipeDao().insertRecipes(TestUtils.createRecipe(TEST_RECIPE_ID,
-          TestUtils.TEST_RECIPE_NAME, 6, ""));
+        TestUtils.TEST_RECIPE_NAME, 6, ""));
 
     Recipe recipe = getValue(database.recipeDao().getRecipe(TEST_RECIPE_ID));
     assertThat(recipe, notNullValue());
@@ -102,7 +105,7 @@ public class DatabaseTest {
     database.beginTransaction();
     try {
       database.recipeDao().insertRecipes(TestUtils.createRecipe(TEST_RECIPE_ID,
-        TestUtils.TEST_RECIPE_NAME, 6, ""));
+          TestUtils.TEST_RECIPE_NAME, 6, ""));
       database.recipeDao().insertIngredients(Arrays.asList(
           new Ingredient(1, "Flour", 2, "CUP"),
           new Ingredient(1, "Butter", 1, "TBSP")
@@ -112,7 +115,8 @@ public class DatabaseTest {
       database.endTransaction();
     }
 
-    List<Ingredient> ingredients = getValue(database.recipeDao().getIngredientsForRecipe(TEST_RECIPE_ID));
+    List<Ingredient> ingredients = getValue(
+        database.recipeDao().getIngredientsForRecipe(TEST_RECIPE_ID));
     assertThat(ingredients.size(), is(2));
 
     assertThat(ingredients.get(0).getRecipeId(), is(TEST_RECIPE_ID));
@@ -166,7 +170,7 @@ public class DatabaseTest {
               "", "imageUrl"),
           new Step(TEST_RECIPE_ID, 2, "Prep", "Description2",
               "videoUrl", "")
-          ));
+      ));
       database.setTransactionSuccessful();
     } finally {
       database.endTransaction();

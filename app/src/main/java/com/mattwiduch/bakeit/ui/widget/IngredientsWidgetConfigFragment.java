@@ -210,6 +210,7 @@ class RecipesAdapter extends ArrayAdapter<Recipe> {
   }
 
   private static class RecipeViewHolder {
+
     private TextView recipeName;
   }
 

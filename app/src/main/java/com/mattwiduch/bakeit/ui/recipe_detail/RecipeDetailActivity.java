@@ -44,16 +44,13 @@ import javax.inject.Inject;
 public class RecipeDetailActivity extends AppCompatActivity implements HasSupportFragmentInjector,
     OnStepSelectedListener, OnRecipeLoadedListener, OnStepLoadedListener {
 
-  @BindView(R.id.recipe_name)
-  TextView recipeNameTv;
-
-  @Inject
-  DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
-
   public static final String RECIPE_ID_EXTRA = "RECIPE_ID_EXTRA";
   public static final String KEY_CURRENT_STEP = "KEY_CURRENT_STEP";
   public static final String KEY_TWO_PANE_MODE = "KEY_TWO_PANE_MODE";
-
+  @BindView(R.id.recipe_name)
+  TextView recipeNameTv;
+  @Inject
+  DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
   /**
    * Whether or not the activity is in two-pane mode, i.e. running on a tablet
    * device.
@@ -98,6 +95,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements HasSuppor
 
   /**
    * Responds to item clicks on recipes in the list.
+   *
    * @param stepNumber Id of recipe step that has been clicked
    */
   @Override
@@ -114,6 +112,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements HasSuppor
 
   /**
    * Loads fragment that displays step data in two pane mode.
+   *
    * @param stepNumber of step to display
    */
   private void loadStepFragment(int stepNumber) {
@@ -129,6 +128,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements HasSuppor
 
   /**
    * Loads fragment that displays recipe data.
+   *
    * @param recipeId of recipe to display
    */
   private void loadDetailFragment(int recipeId) {
@@ -144,6 +144,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements HasSuppor
 
   /**
    * Sets toolbar text to recipe's name.
+   *
    * @param recipeName to display
    */
   @Override

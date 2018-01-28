@@ -26,8 +26,10 @@ import org.junit.runner.Description;
  * resource.
  */
 public class TaskExecutorWithIdlingResourceRule extends CountingTaskExecutorRule {
+
   private CopyOnWriteArrayList<IdlingResource.ResourceCallback> callbacks =
       new CopyOnWriteArrayList<>();
+
   @Override
   protected void starting(Description description) {
     IdlingRegistry.getInstance().register(new IdlingResource() {

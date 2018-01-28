@@ -38,7 +38,7 @@ public class RetrofitClient {
   private static Retrofit retrofit = builder.build();
 
   private static HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor()
-          .setLevel(Level.BASIC);
+      .setLevel(Level.BASIC);
 
   private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 

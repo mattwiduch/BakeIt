@@ -48,6 +48,7 @@ import org.mockito.Mockito;
 
 @RunWith(AndroidJUnit4.class)
 public class StepDetailNavigationTest {
+
   @Rule
   public ActivityTestRule<SingleFragmentActivity> activityTestRule =
       new ActivityTestRule<>(SingleFragmentActivity.class, true, true);

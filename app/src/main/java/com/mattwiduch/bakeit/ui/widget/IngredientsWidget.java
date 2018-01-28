@@ -29,6 +29,7 @@ import com.mattwiduch.bakeit.ui.recipe_detail.RecipeDetailActivity;
  * Implementation of App Widget functionality.
  */
 public class IngredientsWidget extends AppWidgetProvider {
+
   static final String PREFS_NAME = "com.mattwiduch.bakeit.ui.widget.IngredientsWidget";
   static final String PREF_ID_KEY = "recipeId_";
   static final String PREF_NAME_KEY = "recipeName_";

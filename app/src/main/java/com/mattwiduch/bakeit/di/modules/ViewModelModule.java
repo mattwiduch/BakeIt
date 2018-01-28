@@ -27,6 +27,7 @@ import dagger.multibindings.IntoMap;
 
 @Module
 public abstract class ViewModelModule {
+
   @Binds
   @IntoMap
   @ViewModelKey(RecipeListViewModel.class)

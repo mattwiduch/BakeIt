@@ -86,7 +86,7 @@ public class RecipeListFragment extends Fragment implements RecipeAdapterOnItemC
     recipesRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),
         getResources().getInteger(R.integer.recipe_list_columns)));
     recipesRecyclerView.setHasFixedSize(true);
-    mRecipeAdapter = new RecipeAdapter(getContext(),this);
+    mRecipeAdapter = new RecipeAdapter(getContext(), this);
     recipesRecyclerView.setAdapter(mRecipeAdapter);
 
     // Create snack bar that shows connection error messages
@@ -114,7 +114,9 @@ public class RecipeListFragment extends Fragment implements RecipeAdapterOnItemC
         if (!recipes.isEmpty()) {
           showRecipes();
           mRecipeAdapter.updateRecipes(recipes);
-          if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+          if (mPosition == RecyclerView.NO_POSITION) {
+            mPosition = 0;
+          }
           recipesRecyclerView.smoothScrollToPosition(mPosition);
         } else {
           showEmpty();

@@ -31,7 +31,10 @@ import dagger.android.support.HasSupportFragmentInjector;
  * Helper class to automatically inject fragments if they implement {@link Injectable}.
  */
 public class AppInjector {
-  private AppInjector() {}
+
+  private AppInjector() {
+  }
+
   public static void init(BakeitApp bakeitApp) {
     DaggerAppComponent.builder().application(bakeitApp)
         .build().inject(bakeitApp);

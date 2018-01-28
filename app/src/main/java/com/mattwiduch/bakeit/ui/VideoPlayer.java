@@ -37,16 +37,15 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
  */
 public class VideoPlayer {
 
+  // bandwidth meter to measure and estimate bandwidth
+  private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
   // Singleton instance
   private static VideoPlayer sInstance;
-
   // ExoPlayer
   private SimpleExoPlayer mVideoPlayer;
   private long mPlaybackPosition;
   private boolean mPlayWhenReady;
   private Uri mVideoUri;
-  // bandwidth meter to measure and estimate bandwidth
-  private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
   private VideoPlayer() {
   }
@@ -65,6 +64,7 @@ public class VideoPlayer {
 
   /**
    * Creates a player instance and a media source needed for streaming recipe step media.
+   *
    * @param context App context
    * @param videoUrl link to video
    * @param videoPlayerView ExoPlayerView
@@ -102,8 +102,8 @@ public class VideoPlayer {
    * @param resetPosition true to reset
    */
   public void prepareVideo(Uri videoUrl, boolean resetPosition) {
-      MediaSource mediaSource = buildMediaSource(videoUrl);
-      mVideoPlayer.prepare(mediaSource, resetPosition, false);
+    MediaSource mediaSource = buildMediaSource(videoUrl);
+    mVideoPlayer.prepare(mediaSource, resetPosition, false);
   }
 
   /**
