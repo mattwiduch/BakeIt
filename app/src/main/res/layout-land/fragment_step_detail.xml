@@ -22,16 +22,18 @@
 
   <ImageView
     android:id="@+id/step_image"
-    android:layout_width="0dp"
+    android:layout_width="wrap_content"
     android:layout_height="0dp"
     android:layout_margin="@dimen/content_padding"
     android:contentDescription="@string/a11y_recipe_picture"
+    android:scaleType="centerCrop"
     android:visibility="invisible"
     app:layout_constraintBottom_toTopOf="@id/step_buttons_frame"
+    app:layout_constraintDimensionRatio="H,16:9"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_bias="0.0"
-    app:layout_constraintWidth_percent="0.6" />
+    app:srcCompat="@drawable/loading_image" />
 
   <FrameLayout
     android:id="@+id/step_video_container"
@@ -40,10 +42,11 @@
     android:layout_margin="@dimen/content_padding"
     android:visibility="gone"
     app:layout_constraintBottom_toTopOf="@id/step_buttons_frame"
+    app:layout_constraintDimensionRatio="H,16:9"
+    app:layout_constraintEnd_toStartOf="@id/step_number"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.0"
-    app:layout_constraintWidth_percent="0.6">
+    app:layout_constraintVertical_bias="0.0">
 
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
       android:id="@+id/step_video_player"

@@ -22,11 +22,13 @@
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:contentDescription="@string/a11y_recipe_picture"
+    android:scaleType="centerCrop"
     android:visibility="invisible"
     app:layout_constraintDimensionRatio="H,16:9"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    app:layout_constraintTop_toTopOf="parent"
+    app:srcCompat="@drawable/loading_image" />
 
   <FrameLayout
     android:id="@+id/step_video_container"
