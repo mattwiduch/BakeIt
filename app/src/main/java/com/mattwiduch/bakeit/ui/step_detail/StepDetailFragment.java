@@ -267,8 +267,8 @@ public class StepDetailFragment extends Fragment implements Injectable {
   }
 
   @Override
-  public void onDestroyView() {
-    super.onDestroyView();
+  public void onStop() {
+    super.onStop();
     VideoPlayer.getInstance().release();
   }
 
